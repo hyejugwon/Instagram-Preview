@@ -15,8 +15,7 @@ html, body{
   margin: 0;
   background: #fff !important;
   color: #000 !important;
-  /* overflow: hidden; */ /*ad 지우면서 죽였음 아래 overflow 넣어둠*/
-  overflow: auto;
+  overflow: hidden;
 }
 
 body{
@@ -35,7 +34,10 @@ body{
   position: relative;
 
   /* 헤더/푸터 뺀 만큼만 콘텐츠 높이 확보 */
-  min-height: calc(100dvh - var(--header-h) - var(--footer-h));
+  /* min-height: calc(100dvh - var(--header-h) - var(--footer-h)); */
+  height: calc(100dvh - var(--header-h) - var(--footer-h));
+  min-height: 0;
+
   padding-top: var(--header-h);
   padding-bottom: var(--footer-h);
 
@@ -60,7 +62,7 @@ body{
 .empty-mode .app{
   min-height: 0 !important;
   height: calc(100dvh - var(--header-h)) !important;
-  overflow: hidden !important;
+  overflow: auto !important;
   padding-bottom: 0 !important;
 }
 
@@ -137,6 +139,7 @@ body{
   outline: 2px dashed #7F838C;
 }
 
+.grid, .cell { touch-action: pan-y; } 
 
 
 /* 빈 상태 메시지 */

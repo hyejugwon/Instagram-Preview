@@ -205,7 +205,7 @@
     if (isEmpty) {
       grid.classList.add('empty');
       document.body.classList.add('empty-mode');
-      if (app) app.style.overflow = 'hidden';
+      if (app) app.style.overflow = 'auto';
       if (spacer) spacer.style.display = 'none';
       if (editBtn) editBtn.disabled = true;
     } else {
@@ -298,7 +298,7 @@
     if (editMode) return;
     if (pointerId !== null) return;
     pointerId = ev.pointerId;
-    el.setPointerCapture(ev.pointerId);
+    // el.setPointerCapture(ev.pointerId);
     const startX = ev.clientX, startY = ev.clientY;
 
     longPressTimer = setTimeout(() => {
@@ -315,7 +315,7 @@
     const cancel = () => { clearTimeout(longPressTimer); longPressTimer = null; cleanup(); };
 
     function cleanup() {
-      try { el.releasePointerCapture(pointerId); } catch {}
+      // try { el.releasePointerCapture(pointerId); } catch {}
       window.removeEventListener('pointermove', move);
       window.removeEventListener('pointerup', up);
       window.removeEventListener('pointercancel', cancel);
