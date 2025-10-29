@@ -13,6 +13,7 @@ html, body{
   margin: 0;
   background: #fff !important;
   color: #000 !important;
+  overflow: hidden;
 }
 
 body{
@@ -29,17 +30,24 @@ body{
   max-width: var(--maxw);
   margin: 0 auto;
   position: relative;
-  min-height: calc(100vh - var(--footer-h));
+
+  /* 헤더/푸터 뺀 만큼만 콘텐츠 높이 확보 */
+  min-height: calc(100vh - var(--header-h) - var(--footer-h));
   padding-top: var(--header-h);
-  padding-bottom: var(--footer-h);   /* ← 이거만 있으면 충분 */
-  overflow: auto;
+  padding-bottom: var(--footer-h);
+
+  overflow-y: auto;                 /* 스크롤은 .app에서만 */
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+
+  /* 2) 스크롤바 생겨도 레이아웃 흔들리지 않게(아래 ‘왼쪽으로 밀림’ 방지 1단계) */
+  scrollbar-gutter: stable;         /* 필요하면 stable both-edges 로 바꿔도 됨 */
 }
 
 /* 콘텐츠가 비었을 때(필요 시) */
 .empty-mode .app{
   min-height: 0 !important;
-  height: calc(100vh - var(--header-h));
+  height: calc(100vh - var(--header-h)) !important;
   overflow: hidden !important;
   padding-bottom: 0 !important;
 }
@@ -117,28 +125,67 @@ body{
   outline: 2px dashed #7F838C;
 }
 
+
+
 /* 빈 상태 메시지 */
 .grid.empty{
   display:flex !important;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  min-height: calc(100vh - var(--header-h) - var(--footer-h));
+  min-height: 0 !important;
   gap:8px;
   background:transparent;
   overflow:hidden;
 }
-.grid.empty::before{
-  content: "You can add images with the [Add] button and change their order with the [Edit] button.";
-  white-space: pre-line;
-  color:#9EA1A8;
-  font-weight:400;
-  font-size:15px;
-  line-height:1.4;
-  text-align:center;
-  padding:0 20px;
-}
 .grid.empty > *{ display:none !important; }
+
+.empty-guide{
+  display: none;
+  text-align: center;
+  color: #555;
+  padding: 0 24px 24px;
+  margin-top: 60px;
+}
+.empty-guide.show { display: block; }
+.empty-guide .guide-inner {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.empty-guide .tag{
+  display: inline-block;
+  font-size: 12px;
+  color: #0094FF;
+  padding: 2px 6px;
+  background-color: #E5F5FF;
+  display: inline-block;
+  border-radius: 4px;
+  margin-bottom: -100px;
+}
+
+.empty-guide .title{
+  font-size: 18px;
+  line-height: 24px;
+  color: #5D626D;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.empty-guide .desc{
+  font-size: 15px;
+  color: #7F838C;
+  font-weight: 400;
+  line-height: 22px;
+  margin: 0;
+}
+
+.empty-guide .divider {
+  height: 1px;
+  background: #eee;
+  width: 100%;
+  margin: 28px auto;
+}
 
 /* 드래그 핸들/고스트 */
 .handle{
@@ -181,6 +228,8 @@ body{
   padding-bottom: env(safe-area-inset-bottom, 0px); /* iOS 안전영역만 더함(높이 유지) */
   pointer-events: auto;          /* 내부 클릭 가능 */
 }
+
+.footer-spacer { height: 0 !important; display: none !important; }
 
 /* Google Ads container */
 .footer .adsbygoogle {

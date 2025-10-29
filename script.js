@@ -11,6 +11,7 @@
   const closeAd = document.getElementById('closeAd');
   const dragGhost = document.getElementById('dragGhost');
   const app = document.querySelector('.app');
+  const emptyGuide = document.getElementById('emptyGuide');
 
   // === Global guards: drag / copy / select / contextmenu OFF ===
   ['dragstart', 'selectstart', 'contextmenu', 'copy', 'cut', 'paste'].forEach(type => {
@@ -18,7 +19,6 @@
       e.preventDefault();
     }, { passive: false });
   });
-
 
   // ===== State =====
   let editMode = false;
@@ -136,6 +136,7 @@
     grid.innerHTML = '';
     const [photos, order] = await Promise.all([dbGetAllPhotos(), dbGetOrder()]);
 
+    // order(사용자가 저장한 순서)에 있는 것은 뒤쪽에 유지, 새로 추가된 것(=map에 남은 것)은 createdAt 내림차순으로 앞에
     const map = new Map(photos.map(p => [p.id, p]));
     const orderedBySaved = [];
     order.forEach(id => {
@@ -151,10 +152,11 @@
     for (const rec of finalList) {
       grid.appendChild(createCellFromRecord(rec));
     }
+
     updateGridState();
-    if (editBtn) {
-      editBtn.disabled = grid.children.length === 0;
-    }
+    applyEmptyMode();
+    syncHeaderPaddingToScrollbar();
+    if (editBtn) editBtn.disabled = grid.children.length === 0;
   }
 
   function createCellFromRecord(rec) {
@@ -197,58 +199,46 @@
   }
 
   function updateGridState() {
-    const app = document.querySelector('.app');
     const spacer = document.querySelector('.footer-spacer');
-  
     const isEmpty = grid.children.length === 0;
-  
+
     if (isEmpty) {
       grid.classList.add('empty');
-      document.body.classList.add('empty-mode');   // ✅ 빈 상태 레이아웃 모드 ON
+      document.body.classList.add('empty-mode');
       if (app) app.style.overflow = 'hidden';
       if (spacer) spacer.style.display = 'none';
-      if (editBtn) editBtn.disabled = true;        // (이미 적용했으면 유지)
+      if (editBtn) editBtn.disabled = true;
     } else {
       grid.classList.remove('empty');
-      document.body.classList.remove('empty-mode'); // ✅ 복귀
+      document.body.classList.remove('empty-mode');
       if (app) app.style.overflow = 'auto';
       if (spacer) spacer.style.display = '';
       if (editBtn) editBtn.disabled = false;
     }
   }
-  
-  
 
   function scrollAppToTop() {
     if (!app) return;
-  
-    // 0) 포커스 해제(모바일 키보드/포커스가 스크롤 방해하는 케이스 방지)
+
     if (document.activeElement && typeof document.activeElement.blur === 'function') {
       document.activeElement.blur();
     }
-  
-    // 1) 현재 그리드 내 이미지가 있으면 디코드/로딩 완료까지 대기
+
     const imgs = Array.from(grid.querySelectorAll('img'));
     const decodePromises = imgs.map(img => {
-      // 이미 로드된 경우도 decode()가 reject될 수 있어 catch로 무시
       if ('decode' in img) return img.decode().catch(() => {});
-      // decode가 없으면 load 이벤트로 대체
       if (img.complete) return Promise.resolve();
       return new Promise(res => img.addEventListener('load', res, { once: true }));
     });
-  
+
     Promise.allSettled(decodePromises).then(() => {
-      // 2) 레이아웃 확정 후 프레임 두 번 넘긴 다음 스크롤
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          // iOS 관성스크롤이 남아있을 수 있으니 여러 타깃에 강제 적용
           try { app.scrollTo({ top: 0, left: 0, behavior: 'auto' }); } catch {}
           app.scrollTop = 0;
           document.scrollingElement && (document.scrollingElement.scrollTop = 0);
           document.documentElement.scrollTop = 0;
           document.body.scrollTop = 0;
-  
-          // 아주 드물게 튕기는 케이스 보강
           setTimeout(() => {
             app.scrollTop = 0;
             document.scrollingElement && (document.scrollingElement.scrollTop = 0);
@@ -257,7 +247,6 @@
       });
     });
   }
-  
 
   // ===== Header actions =====
   function setEditMode(on) {
@@ -266,15 +255,16 @@
     if (addBtn) addBtn.disabled = on;
     if (editBtn) {
       editBtn.innerHTML = on
-        ? '<img src="icons/check.svg" alt="" class="icon"> Done'
-        : '<img src="icons/switch.svg" alt="" class="icon"> Edit';
+        ? '<img src="icons/check.svg" alt="" class="icon"> <span>Done</span>'
+        : '<img src="icons/switch.svg" alt="" class="icon"> <span>Edit</span>';
       editBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
     }
   }
 
   editBtn?.addEventListener('click', async () => {
-    if (!editMode) setEditMode(true);
-    else {
+    if (!editMode) {
+      setEditMode(true);
+    } else {
       await saveCurrentOrder();
       setEditMode(false);
     }
@@ -293,7 +283,9 @@
     fileInput.value = '';
     await renderAll();
     await saveCurrentOrder();
-    scrollAppToTop(); // ✅ 새 사진 추가 후 스크롤 최상단 이동
+    applyEmptyMode();
+    syncHeaderPaddingToScrollbar();
+    scrollAppToTop(); // 새 사진 추가 후 스크롤 최상단 이동
   });
 
   // ===== Long press (delete) =====
@@ -395,6 +387,7 @@
     dragGhost.hidden = true;
     await saveCurrentOrder();
     updateGridState();
+    syncHeaderPaddingToScrollbar();
   }
 
   function indexOfCellEl(el) {
@@ -416,6 +409,8 @@
       deleteOverlay.classList.remove('show');
       await saveCurrentOrder();
       updateGridState();
+      applyEmptyMode();
+      syncHeaderPaddingToScrollbar();
     }
   });
 
@@ -449,18 +444,39 @@
     app.addEventListener('touchend', () => { startedAtTop = false; }, { passive: true });
   })();
 
+  // ===== Empty Mode & Header padding helpers =====
+  function applyEmptyMode() {
+    const isEmpty = grid.children.length === 0;
+    document.body.classList.toggle('empty-mode', isEmpty);
+    if (emptyGuide) emptyGuide.classList.toggle('show', isEmpty);
+    if (editBtn) editBtn.disabled = isEmpty;
+  }
+
+  function syncHeaderPaddingToScrollbar() {
+    const headerInner = document.querySelector('.header-inner');
+    if (!app || !headerInner) return;
+    const sbw = app.offsetWidth - app.clientWidth; // 세로 스크롤바 폭
+    headerInner.style.paddingRight = `calc(12px + ${sbw}px)`;
+  }
+
+  window.addEventListener('resize', syncHeaderPaddingToScrollbar);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) syncHeaderPaddingToScrollbar();
+  });
+
   // ===== Init =====
   (async function init() {
     setEditMode(false);
     await renderAll();
 
-    // 초기화 시 한 번만
+    // 헤더 아이콘 첫 로드 보정
     document.querySelectorAll('#editBtn .icon').forEach(img => {
       if (!img.complete || img.naturalWidth === 0) {
-        // 캐시/타이밍 문제 우회
         img.src = img.src.split('?')[0] + '?v=' + Date.now();
       }
     });
 
+    applyEmptyMode();
+    syncHeaderPaddingToScrollbar();
   })();
 })();

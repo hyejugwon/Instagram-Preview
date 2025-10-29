@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -14,10 +13,10 @@
   <!-- Header -->
   <div class="header">
     <div class="header-inner">
-      <div class="title">Feed Preview</div>
+      <div class="title">Instagram Preview</div>
       <div class="actions">
         <button class="btn" id="editBtn" aria-pressed="false">
-          <img src="icons/plus.svg" alt="" class="icon" width="16" height="16" />
+          <img src="icons/switch.svg" alt="" class="icon" width="16" height="16" />
           <span>Edit</span>
         </button>
         <button class="btn" id="addBtn">
@@ -26,13 +25,28 @@
         </button>
         <input id="fileInput" type="file" accept="image/*" multiple style="display:none" />
       </div>
-      
     </div>
   </div>
 
   <!-- Main (scroll container) -->
   <main class="app">
     <section id="grid" class="grid" aria-live="polite"></section>
+
+    <!-- ✅ 빈 상태 안내 -->
+    <div class="empty-guide" id="emptyGuide" aria-hidden="true">
+      <div class="guide-inner">
+        <p class="tag kr">꼭 확인해주세요</p>
+        <p class="title kr">이 페이지를 휴대폰 홈 화면에 추가하여<br>웹 앱처럼 사용하세요</p>
+        <p class="desc kr">추가했던 이미지들을 계속 볼 수 있습니다.</p>
+
+        <div class="divider"></div>
+
+        <p class="tag en">Please check this</p>
+        <p class="title en">Tap Share &gt; Add to Home Screen<br>to use it like a web app</p>
+        <p class="desc en">You can see<br>that you saved images continuously.</p>
+      </div>
+    </div>
+
     <!-- 고정 푸터와 겹침 방지용 스페이서 -->
     <div class="footer-spacer" aria-hidden="true"></div>
   </main>
@@ -48,7 +62,7 @@
     </div>
   </div>
 
-  <!-- Interstitial AD Modal (3분 후 자동 표시) -->
+  <!-- Interstitial AD Modal -->
   <div id="adOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="adTitle">
     <div class="modal-card">
       <div id="adTitle" class="modal-title">Sponsored</div>
@@ -63,22 +77,22 @@
   <!-- Drag ghost -->
   <div id="dragGhost" class="ghost" hidden></div>
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX"
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683"
         crossorigin="anonymous"></script>
 
   <!-- 고정 하단 Footer(AD) -->
   <div class="footer-wrap">
     <div class="footer">
       <ins class="adsbygoogle"
+           style="display:inline-block;width:430px;height:80px"
            data-ad-client="ca-pub-3906940826015683"
-           data-ad-slot="2467327374">
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
+           data-ad-slot="2467327374"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
   </div>
 
   <!-- Script -->
-  <script src="script.js"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
