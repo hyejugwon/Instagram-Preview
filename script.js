@@ -545,9 +545,48 @@
     // 광고 렌더(초기 1회) + 임계 통과 시 재렌더
     renderAdOnce();
     checkAndRerenderAds();
+
+    installPullToRefreshBlocker(document.querySelector('.app'));
   })();
 })();
 
+function isIOSSafari() {
+  const ua = navigator.userAgent;
+  const isSafari = /^((?!chrome|android).)*safari/i.test(ua);
+  const isIOS = /iP(hone|ad|od)/.test(navigator.platform) || 
+                (ua.includes('Mac') && 'ontouchend' in document);
+  return isSafari && isIOS;
+}
+
+function installPullToRefreshBlocker(el) {
+  if (!el || !isIOSSafari()) return;
+  let startY = 0, startX = 0;
+  let atTop = false, atBottom = false;
+  const canScroll = () => el.scrollHeight > el.clientHeight;
+
+  el.addEventListener('touchstart', (e) => {
+    if (!e.touches || e.touches.length !== 1) return;
+    startY = e.touches[0].clientY;
+    startX = e.touches[0].clientX;
+    atTop    = el.scrollTop <= 0;
+    atBottom = Math.ceil(el.scrollTop + el.clientHeight) >= el.scrollHeight - 1;
+  }, { passive: true });
+
+  el.addEventListener('touchmove', (e) => {
+    if (!e.cancelable) return;
+    if (!canScroll()) { e.preventDefault(); return; }
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    const dx = Math.abs(t.clientX - startX);
+    const dy = t.clientY - startY;
+    if (dx > 24) return;
+    if (dy > 0 && atTop) e.preventDefault();
+  }, { passive: false });
+
+  el.addEventListener('touchend', () => {
+    atTop = atBottom = false;
+  }, { passive: true });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const ins = document.querySelector('.footer .adsbygoogle');
