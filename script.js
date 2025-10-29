@@ -241,10 +241,10 @@
           document.scrollingElement && (document.scrollingElement.scrollTop = 0);
           document.documentElement.scrollTop = 0;
           document.body.scrollTop = 0;
-          setTimeout(() => {
-            app.scrollTop = 0;
-            document.scrollingElement && (document.scrollingElement.scrollTop = 0);
-          }, 80);
+          // setTimeout(() => {
+          //   app.scrollTop = 0;
+          //   document.scrollingElement && (document.scrollingElement.scrollTop = 0);
+          // }, 80);
         });
       });
     });
