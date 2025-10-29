@@ -8,11 +8,22 @@
 }
 
 /* 기본 세팅 */
-html, body { height: 100%; margin: 0; }
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  background: #fff !important;
+  color: #000 !important;
+}
+
 body {
   font-family: "Gotham", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
   background: #fff;
   color: #1A1E27;
+  max-width: var(--maxw);
+  margin: 0 auto;        
+  border-left: 1px solid #f0f0f0; /* 좌우 보더 */
+  border-right: 1px solid #f0f0f0;
+  box-sizing: border-box;
 }
 
 /* 다크모드 */
@@ -32,16 +43,14 @@ body {
   margin: 0 auto;
   position: relative;
   min-height: calc(100vh - var(--footer-h));
-  padding-top: 64px;
+  padding-top: var(--header-h);
   padding-bottom: var(--footer-h);
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   touch-action: pan-y;
   background-color: #fff;
-  border-left: 1px solid #F0F0F0;
-  border-right: 1px solid #F0F0F0;
-  box-sizing: border-box;
+  background: transparent;
 }
 
 .empty-mode .app {
@@ -55,6 +64,15 @@ body {
 .header {
   position: fixed; top: 0; left: 0; right: 0;
   display: flex; justify-content: center; z-index: 10;
+}
+
+.header,
+.footer-wrap{
+  position: fixed;
+  left: 0; right: 0;
+  z-index: 10;                 /* footer-wrap는 9 */
+  display: flex;
+  justify-content: center;     /* 가운데에 인너를 둠 */
 }
 
 .header-inner {
@@ -218,6 +236,7 @@ body {
   width: 100%; max-width: var(--maxw);
   box-sizing: border-box;
   background: #e0e0e0; color: #666;
+  justify-content: center;
   text-align: center; font-weight: 600;
   border-top: 1px solid rgba(0,0,0,.06);
 
@@ -231,9 +250,9 @@ body {
 }
 
 /* 고정 푸터와 겹침 방지용 스페이서 */
-.footer-spacer {
+/* .footer-spacer {
   height: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px));
-}
+} */
 
 .empty-mode .footer-spacer {
   display: none !important;
@@ -308,7 +327,4 @@ img, svg, canvas {
     color: #000 !important;
   }
 }
-html, body {
-  background: #fff !important;
-  color: #000 !important;
-}
+
