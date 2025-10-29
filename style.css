@@ -14,7 +14,7 @@ body {
 }
 
 /* 다크모드 */
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   body { background: #111; color: #f1f1f1; }
   .header-inner { background: #181818; border-bottom-color: rgba(255,255,255,.08); }
   .btn { background: #111; color: #fff; border-color: #2a2a2a; }
@@ -22,7 +22,7 @@ body {
   .footer { background: #2b2b2b; color: #bfbfbf; }
   .modal-card { background: #1e1e1e; color: #eaeaea; }
   .action.cancel { background: #2d2d2d; color: #ddd; }
-}
+} */
 
 /* 앱 전체 */
 .app {
