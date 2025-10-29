@@ -3,7 +3,7 @@
   --gap: 1px;
   --radius: 12px;
   --header-h: 64px;
-  --footer-h: 90px;            /* ← 광고 높이 */
+  --footer-h: 2px;            /*← 광고 높이 90이었는데 지금 바꿔놓음*/
   color-scheme: light;         /* CSS 쪽은 'light only' 대신 'light' */
 }
 
@@ -15,7 +15,8 @@ html, body{
   margin: 0;
   background: #fff !important;
   color: #000 !important;
-  overflow: hidden;
+  /* overflow: hidden; */ /*ad 지우면서 죽였음 아래 overflow 넣어둠*/
+  overflow: auto;
 }
 
 body{

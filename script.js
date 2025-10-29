@@ -326,6 +326,7 @@
     window.addEventListener('pointerup', up, { once: true });
     window.addEventListener('pointercancel', cancel, { once: true });
   }
+  
 
   // ===== Handle-based drag (reorder) =====
   function onPointerDownHandle(ev, el) {
