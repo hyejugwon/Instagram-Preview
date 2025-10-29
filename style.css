@@ -34,7 +34,7 @@ body{
   position: relative;
 
   /* 헤더/푸터 뺀 만큼만 콘텐츠 높이 확보 */
-  min-height: calc(100vh - var(--header-h) - var(--footer-h));
+  min-height: calc(100svh - var(--header-h) - var(--footer-h));
   padding-top: var(--header-h);
   padding-bottom: var(--footer-h);
 
@@ -49,7 +49,7 @@ body{
 /* 콘텐츠가 비었을 때(필요 시) */
 .empty-mode .app{
   min-height: 0 !important;
-  height: calc(100vh - var(--header-h)) !important;
+  height: calc(100svh - var(--header-h)) !important;
   overflow: hidden !important;
   padding-bottom: 0 !important;
 }
@@ -228,6 +228,8 @@ body{
   border-top: 1px solid rgba(0,0,0,.06);
   padding: 0 12px;
   pointer-events: auto;          /* 내부 클릭 가능 */
+  overflow: hidden;
+  pointer-events: auto;
 }
 
 .footer-spacer { height: 0 !important; display: none !important; }
@@ -277,6 +279,5 @@ img, svg, canvas{ -webkit-user-drag:none; }
   .footer{ max-width: 100%; }
   .footer .adsbygoogle{
     width: 100% !important;   /* 폭만 줄이고 */
-    height: 90px !important;  /* 높이는 고정 */
   }
 }

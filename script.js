@@ -136,7 +136,7 @@
     grid.innerHTML = '';
     const [photos, order] = await Promise.all([dbGetAllPhotos(), dbGetOrder()]);
 
-    // order(사용자가 저장한 순서)에 있는 것은 뒤쪽에 유지, 새로 추가된 것(=map에 남은 것)은 createdAt 내림차순으로 앞에
+    // order에 있는 건 뒤로 유지, 새로 추가된 건 createdAt 내림차순으로 앞으로
     const map = new Map(photos.map(p => [p.id, p]));
     const orderedBySaved = [];
     order.forEach(id => {
@@ -215,6 +215,8 @@
       if (spacer) spacer.style.display = '';
       if (editBtn) editBtn.disabled = false;
     }
+    // 빈 상태 안내 표시/숨김
+    if (emptyGuide) emptyGuide.classList.toggle('show', isEmpty);
   }
 
   function scrollAppToTop() {
@@ -414,9 +416,9 @@
     }
   });
 
-  // ===== Ads =====
-  setTimeout(() => adOverlay.classList.add('show'), 3 * 60 * 1000);
-  closeAd.addEventListener('click', () => adOverlay.classList.remove('show'));
+  // ===== Interstitial (샘플) =====
+  setTimeout(() => adOverlay?.classList.add('show'), 3 * 60 * 1000);
+  closeAd?.addEventListener('click', () => adOverlay?.classList.remove('show'));
 
   // ===== Pull-to-refresh guard =====
   (function () {
@@ -464,6 +466,66 @@
     if (!document.hidden) syncHeaderPaddingToScrollbar();
   });
 
+  // ====== AdSense: 데스크톱/모바일 고정크기 자동 선택 ======
+  const PUB_ID = 'ca-pub-3906940826015683';
+  const DESKTOP_SLOT = '2467327374';          // 430x90 (이미 생성된 슬롯)
+  const MOBILE_SLOT  = 'YOUR_MOBILE_SLOT_ID'; // 320x100 또는 320x50로 새로 만든 슬롯 ID로 교체
+  const BP = 430; // 화면 너비 임계값
+
+  function pickAdConfig() {
+    const w = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
+    if (w <= BP) {
+      // 모바일: 폭 100%로 두고 높이 100(또는 50) 픽셀
+      return { slot: MOBILE_SLOT, width: '100%', height: 100 };
+    } else {
+      // 데스크톱: 430x90
+      return { slot: DESKTOP_SLOT, width: 430, height: 90 };
+    }
+  }
+
+  function setCSSFooterH(h) {
+    document.documentElement.style.setProperty('--footer-h', h + 'px');
+  }
+
+  function renderAdOnce() {
+    const ins = document.querySelector('.footer .adsbygoogle');
+    if (!ins) return;
+
+    const { slot, width, height } = pickAdConfig();
+
+    // 스타일/속성 적용
+    ins.style.width  = (typeof width === 'number' ? width + 'px' : width);
+    ins.style.height = height + 'px';
+    ins.setAttribute('data-ad-client', PUB_ID);
+    ins.setAttribute('data-ad-slot', slot);
+    ins.setAttribute('data-full-width-responsive', 'false');
+
+    // 푸터 높이 동기화
+    setCSSFooterH(height);
+
+    // 이미 렌더된 상태면 초기화 후 재렌더
+    if (ins.getAttribute('data-adsbygoogle-status') === 'done') {
+      ins.removeAttribute('data-adsbygoogle-status');
+      ins.innerHTML = '';
+    }
+    try {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    } catch(e) {
+      console.debug('[ads]', e);
+    }
+  }
+
+  let lastIsMobile = null;
+  function checkAndRerenderAds() {
+    const isMobile = (Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth) <= BP);
+    if (lastIsMobile === null || lastIsMobile !== isMobile) {
+      lastIsMobile = isMobile;
+      renderAdOnce();
+    }
+  }
+  window.addEventListener('resize', checkAndRerenderAds);
+  window.addEventListener('orientationchange', checkAndRerenderAds);
+
   // ===== Init =====
   (async function init() {
     setEditMode(false);
@@ -478,5 +540,9 @@
 
     applyEmptyMode();
     syncHeaderPaddingToScrollbar();
+
+    // 광고 렌더(초기 1회) + 임계 통과 시 재렌더
+    renderAdOnce();
+    checkAndRerenderAds();
   })();
 })();
