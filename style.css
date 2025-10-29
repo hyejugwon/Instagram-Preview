@@ -1,0 +1,296 @@
+:root {
+  --maxw: 430px;
+  --gap: 1px;
+  --radius: 12px;
+  --footer-h: 56px; /* 고정 푸터 높이 기준 */
+}
+
+/* 기본 세팅 */
+html, body { height: 100%; margin: 0; }
+body {
+  font-family: "Gotham", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  background: #fff;
+  color: #1A1E27;
+}
+
+/* 다크모드 */
+@media (prefers-color-scheme: dark) {
+  body { background: #111; color: #f1f1f1; }
+  .header-inner { background: #181818; border-bottom-color: rgba(255,255,255,.08); }
+  .btn { background: #111; color: #fff; border-color: #2a2a2a; }
+  .cell { background: #2a2a2a; }
+  .footer { background: #2b2b2b; color: #bfbfbf; }
+  .modal-card { background: #1e1e1e; color: #eaeaea; }
+  .action.cancel { background: #2d2d2d; color: #ddd; }
+}
+
+/* 앱 전체 */
+.app {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  position: relative;
+  min-height: 100vh;
+  padding-top: 64px;
+  padding-bottom: 0; /* 스페이서가 대신 확보 */
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  background-color: #fff;
+}
+
+.empty-mode .app {
+  min-height: 0 !important;
+  height: calc(100vh - var(--header-h));  /* 헤더 만큼만 뺀 정확한 뷰포트 높이 */
+  overflow: hidden !important;
+  padding-bottom: 0 !important;           /* 스페이서도 숨기므로 패딩 제거 */
+}
+
+/* 헤더 */
+.header {
+  position: fixed; top: 0; left: 0; right: 0;
+  display: flex; justify-content: center; z-index: 10;
+}
+
+.header-inner {
+  width: 100%;
+  position: relative;
+  max-width: var(--maxw);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;         /* ⬅️ 가로로 배치 */
+  align-items: center;         /* 세로 중앙 정렬 */
+  justify-content: space-between; /* 좌우로 정렬 */
+  padding: 16px 12px;
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+
+.title { 
+  flex: 1;
+  font-weight: 700; 
+  font-size: 22px; 
+  line-height: 24px; 
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #000;
+}
+
+.actions { 
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 6px;
+  z-index: 1;
+}
+
+.btn {
+  display: inline-flex;            /* 텍스트+아이콘 정렬 */
+  align-items: center;             /* 세로 중앙 */
+  justify-content: center;         /* 가로 중앙 */
+  gap: 4px;                        /* 아이콘과 텍스트 간격 */
+  width: 78px;
+  height: 34px;
+  background: #000;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  text-align: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  border: 0px;
+}
+
+.icon-svg {
+  width: 16px; height: 16px; display: block; flex: 0 0 auto;
+  color: #fff; /* 버튼 텍스트와 같은 색 (currentColor) */
+}
+
+.btn .icon {
+  display: block !important;    /* 첫 버튼 위치에서 숨김 당하는 경우 방지 */
+  width: 16px !important;
+  height: 16px !important;
+  object-fit: contain;
+  flex: 0 0 auto;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.btn:active { transform: scale(0.98); }
+
+.btn[disabled] { 
+  background-color: #C6C8CD; 
+  pointer-events: none;
+}
+
+/* 이미지 그리드 */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap);
+}
+.cell {
+  position: relative; width: 100%; background: #fff;
+}
+.cell::before { content: ""; display: block; padding-top: calc(100% * 4 / 3); } /* 3:4 */
+.cell img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; border-radius: 2px;
+}
+.cell.dragging { 
+  opacity: 0.6; 
+  outline: 2px 
+  dashed #7F838C; }
+
+/* 빈 상태 */
+.grid.empty {
+  display: flex !important; 
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center;
+  min-height: calc(100vh - 140px);
+  gap: 8px; 
+  background: transparent; 
+  overflow: hidden;
+}
+.grid.empty::before {
+  content: "You can add images with the [Add] button and change their order with the [Edit] button.";
+  white-space: pre-line; 
+  color: #9EA1A8; 
+  font-weight: 400; 
+  font-size: 15px; 
+  line-height: 1.4;
+  text-align: center; padding: 0 20px;
+}
+.grid.empty > * { display: none !important; }
+.grid.empty ~ .footer-spacer { 
+  height: 0 !important; 
+  display: none !important;
+}
+
+/* 드래그 핸들 */
+.handle {
+  position: absolute; right: 6px; bottom: 6px;
+  width: 36px; height: 36px; border: 0; border-radius: 10px;
+  background: rgba(0,0,0,.45); color: #fff; font-size: 18px; font-weight: 700;
+  line-height: 36px; text-align: center; cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+  display: none;
+  touch-action: none;
+}
+.handle:active { cursor: grabbing; background: rgba(0,0,0,.55); }
+
+/* 편집 모드 */
+.editing .handle { display: block; }
+
+/* 드래그 고스트 */
+.ghost {
+  position: fixed; pointer-events: none; z-index: 1000;
+  width: 120px; height: 160px; transform: translate(-50%, -50%);
+  border-radius: 4px; box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  overflow: hidden; opacity: 0; transition: opacity .15s ease;
+}
+.ghost.show { opacity: 1; }
+.ghost img { width: 100%; height: 100%; object-fit: cover; }
+
+/* 하단 고정 Footer(AD) — header와 동일한 fixed 패턴 */
+.footer-wrap {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  display: flex; justify-content: center;
+  z-index: 9;
+
+  /* 스크롤 시작 방해 방지: 래퍼는 터치 비활성, 내부 박스만 활성 */
+  pointer-events: none;
+}
+.footer {
+  width: 100%; max-width: var(--maxw);
+  box-sizing: border-box;
+  background: #e0e0e0; color: #666;
+  text-align: center; font-weight: 600;
+  border-top: 1px solid rgba(0,0,0,.06);
+
+  /* iOS 안전영역 + 높이 */
+  padding: 10px 12px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  min-height: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px));
+
+  /* 내부는 클릭/터치 가능 */
+  pointer-events: auto;
+}
+
+/* 고정 푸터와 겹침 방지용 스페이서 */
+.footer-spacer {
+  height: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px));
+}
+
+.empty-mode .footer-spacer {
+  display: none !important;
+}
+
+/* 모달 공통 */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45);
+  display: none; align-items: center; justify-content: center;
+  z-index: 100; padding: 24px;
+}
+.overlay.show { display: flex; }
+
+.modal-card {
+  width: 100%; 
+  max-width: 360px; 
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25); padding: 20px;
+  padding: 16px 28px 16px 16px;
+  gap: 20px;
+}
+
+.modal-title { 
+  margin: 4px 0 16px;
+  text-align: center; 
+  font-weight: 700; 
+  font-size: 18px;
+  line-height: 26px;
+  color: #383E4A;
+}
+
+.actionsDelete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 8px;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 500;
+}
+
+.action {
+  flex: 1; 
+  padding: 12px 14px;
+  border-radius: 10px; 
+  border: none;
+}
+.action.cancel { background: #eee; color: #333; font-size: 15px; font-weight: 500;}
+.action.delete { background: #ef4444; color: #fff; font-size: 15px; font-weight: 500;}
+
+
+/* === Global: drag / copy / text selection OFF === */
+html, body, .app, .header, .header-inner, .title, .actions, .grid, .cell, .footer-wrap, .footer,
+button, .btn, img, canvas, svg {
+  -webkit-user-select: none;  /* iOS/Safari */
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  -webkit-touch-callout: none; /* iOS 길게눌러 '복사/저장' 콜아웃 차단 */
+}
+
+img, svg, canvas {
+  -webkit-user-drag: none;  /* 네이티브 드래그 고스트 차단 */
+}

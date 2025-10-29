@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Instagram Preview</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="title">Feed Preview</div>
+      <div class="actions">
+        <button class="btn" id="editBtn" aria-pressed="false">
+          <img src="icons/plus.svg" alt="" class="icon" width="16" height="16" />
+          <span>Edit</span>
+        </button>
+        <button class="btn" id="addBtn">
+          <img src="icons/plus.svg" alt="" class="icon" width="16" height="16" />
+          <span>Add</span>
+        </button>
+        <input id="fileInput" type="file" accept="image/*" multiple style="display:none" />
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- Main (scroll container) -->
+  <main class="app">
+    <section id="grid" class="grid" aria-live="polite"></section>
+    <!-- 고정 푸터와 겹침 방지용 스페이서 -->
+    <div class="footer-spacer" aria-hidden="true"></div>
+  </main>
+
+  <!-- Delete Modal -->
+  <div id="deleteOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+    <div class="modal-card">
+      <div id="deleteTitle" class="modal-title">Do you want to delete?</div>
+      <div class="actions">
+        <button class="action cancel" id="cancelDelete">Cancel</button>
+        <button class="action delete" id="confirmDelete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interstitial AD Modal (3분 후 자동 표시) -->
+  <div id="adOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="adTitle">
+    <div class="modal-card">
+      <div id="adTitle" class="modal-title">Sponsored</div>
+      <div class="ad-box" style="height:250px">Interstitial Ad Placeholder</div>
+      <div style="height:12px"></div>
+      <div class="actions">
+        <button class="action cancel" id="closeAd">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drag ghost -->
+  <div id="dragGhost" class="ghost" hidden></div>
+
+  <!-- 고정 하단 Footer(AD) -->
+  <div class="footer-wrap" role="contentinfo">
+    <div class="footer">Google AD</div>
+  </div>
+
+  <!-- Script -->
+  <script src="script.js"></script>
+</body>
+</html>
