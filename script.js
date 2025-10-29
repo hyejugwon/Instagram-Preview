@@ -546,3 +546,12 @@
     checkAndRerenderAds();
   })();
 })();
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  const ins = document.querySelector('.footer .adsbygoogle');
+  if (ins){
+    ins.style.width = '430px';
+    ins.style.height = '90px';
+  }
+});

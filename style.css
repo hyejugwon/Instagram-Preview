@@ -34,7 +34,7 @@ body{
   position: relative;
 
   /* 헤더/푸터 뺀 만큼만 콘텐츠 높이 확보 */
-  min-height: calc(100svh - var(--header-h) - var(--footer-h));
+  min-height: calc(100dvh - var(--header-h) - var(--footer-h));
   padding-top: var(--header-h);
   padding-bottom: var(--footer-h);
 
@@ -46,10 +46,19 @@ body{
   scrollbar-gutter: stable;         /* 필요하면 stable both-edges 로 바꿔도 됨 */
 }
 
+@supports not (height: 100dvh){
+  .app{
+    min-height: calc(100vh - var(--header-h) - var(--footer-h));
+  }
+  .empty-mode .app{
+    height: calc(100vh - var(--header-h)) !important;
+  }
+}
+
 /* 콘텐츠가 비었을 때(필요 시) */
 .empty-mode .app{
   min-height: 0 !important;
-  height: calc(100svh - var(--header-h)) !important;
+  height: calc(100dvh - var(--header-h)) !important;
   overflow: hidden !important;
   padding-bottom: 0 !important;
 }
@@ -229,7 +238,6 @@ body{
   padding: 0 12px;
   pointer-events: auto;          /* 내부 클릭 가능 */
   overflow: hidden;
-  pointer-events: auto;
 }
 
 .footer-spacer { height: 0 !important; display: none !important; }
@@ -240,6 +248,7 @@ body{
   width: 430px !important;
   height: 90px !important;
   vertical-align: top;
+  line-height: 0;
 }
 
 /* 모달 공통 */
