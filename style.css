@@ -2,7 +2,8 @@
   --maxw: 430px;
   --gap: 1px;
   --radius: 12px;
-  --footer-h: 56px; /* 고정 푸터 높이 기준 */
+  --footer-h: 64px; 
+  --header-h: 64px; 
   color-scheme: light only; 
 }
 
@@ -30,14 +31,17 @@ body {
   max-width: var(--maxw);
   margin: 0 auto;
   position: relative;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--footer-h));
   padding-top: 64px;
-  padding-bottom: 0; /* 스페이서가 대신 확보 */
+  padding-bottom: var(--footer-h);
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   touch-action: pan-y;
   background-color: #fff;
+  border-left: 1px solid #F0F0F0;
+  border-right: 1px solid #F0F0F0;
+  box-sizing: border-box;
 }
 
 .empty-mode .app {
@@ -64,7 +68,8 @@ body {
   justify-content: space-between; /* 좌우로 정렬 */
   padding: 16px 12px;
   background: #fff;
-  border-bottom: 1px solid rgba(0,0,0,.06);
+  border: 1px solid #F0F0F0;
+  box-sizing: border-box;
 }
 
 .title { 
@@ -153,9 +158,10 @@ body {
   flex-direction: column; 
   align-items: center; 
   justify-content: center;
-  min-height: calc(100vh - 140px);
-  gap: 8px; 
   background: transparent; 
+  overflow: hidden;
+  min-height: calc(100vh - var(--header-h) - var(--footer-h));
+  gap: 8px;
   overflow: hidden;
 }
 .grid.empty::before {
