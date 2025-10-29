@@ -294,3 +294,14 @@ button, .btn, img, canvas, svg {
 img, svg, canvas {
   -webkit-user-drag: none;  /* 네이티브 드래그 고스트 차단 */
 }
+
+@media (prefers-color-scheme: dark) {
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+}
+html, body {
+  background: #fff !important;
+  color: #000 !important;
+}
