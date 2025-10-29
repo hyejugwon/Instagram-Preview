@@ -7,6 +7,8 @@
   color-scheme: light;         /* CSS 쪽은 'light only' 대신 'light' */
 }
 
+html { -webkit-text-size-adjust: 100%; }
+
 /* 기본 세팅 */
 html, body{
   height: 100%;
@@ -219,13 +221,12 @@ body{
 .footer{
   width: 100%;
   max-width: var(--maxw);
-  height: var(--footer-h);            /* ← 단일 진실원 */
+  height: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px));
   box-sizing: border-box;             /* 패딩 포함 */
   display: flex; align-items: center; justify-content: center;
   background: #e0e0e0;                /* 로딩 전 배경(원하면 투명으로) */
   border-top: 1px solid rgba(0,0,0,.06);
   padding: 0 12px;
-  padding-bottom: env(safe-area-inset-bottom, 0px); /* iOS 안전영역만 더함(높이 유지) */
   pointer-events: auto;          /* 내부 클릭 가능 */
 }
 
@@ -235,7 +236,7 @@ body{
 .footer .adsbygoogle {
   display: inline-block !important;
   width: 430px !important;
-  height: var(--footer-h) !important;
+  height: 90px !important;
   vertical-align: top;
 }
 
@@ -270,4 +271,12 @@ img, svg, canvas{ -webkit-user-drag:none; }
 /* 다크모드 강제 무시 */
 @media (prefers-color-scheme: dark){
   html, body{ background:#fff !important; color:#000 !important; }
+}
+
+@media (max-width: 430px){
+  .footer{ max-width: 100%; }
+  .footer .adsbygoogle{
+    width: 100% !important;   /* 폭만 줄이고 */
+    height: 90px !important;  /* 높이는 고정 */
+  }
 }
