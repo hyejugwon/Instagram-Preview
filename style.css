@@ -3,6 +3,7 @@
   --gap: 1px;
   --radius: 12px;
   --footer-h: 56px; /* 고정 푸터 높이 기준 */
+  color-scheme: light only; 
 }
 
 /* 기본 세팅 */
