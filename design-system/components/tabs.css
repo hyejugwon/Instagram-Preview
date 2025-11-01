@@ -1,0 +1,158 @@
+@layer components {
+  /* ========== 탭 컨테이너 (tabs) ========== */
+  
+  /* 기본 탭 컨테이너 */
+  .tabs {
+    display: flex;
+    padding: 0 16px;
+    gap: 0px;
+    border-bottom: 1px solid var(--gray-30);
+  }
+
+  /* ========== 탭 형태 (line/box) ========== */
+  /* .tabs--line: line 형태 (기본값 또는 명시적) */
+
+  /* ========== 탭 레이아웃 타입 ========== */
+  /* Flex: 컨텐츠 크기만큼만 차지 */
+  .tabs--flex {
+    display: flex;
+  }
+
+  /* Block: 공간을 균등하게 분배 (전체 너비 아님) */
+  .tabs--block {
+    display: flex;
+  }
+  .tabs--block .tab {
+    flex: 0 1 auto;
+  }
+
+  /* Block(Full): 전체 너비를 균등하게 분배 */
+  .tabs--block-full {
+    display: flex;
+    width: 100%;
+  }
+  .tabs--block-full .tab {
+    flex: 1;
+  }
+
+  /* ========== 개별 탭 (tab) ========== */
+  
+  /* 기본 탭 스타일 */
+  .tab {
+    cursor: pointer;
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    padding: 14px 11px;
+    position: relative;
+    box-sizing: border-box;
+  }
+  
+  /* ========== 탭 크기 ========== */
+  
+  /* Large - h4-M */
+  .tab--lg {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 500;
+    letter-spacing: 0%;
+  }
+  
+  /* Medium (Default) - b1-M */
+  .tab--me {
+    font-size: 15px;
+    line-height: 22px;
+    font-weight: 500;
+    letter-spacing: 0%;
+  }
+  
+  /* Small - b2-M */
+  .tab--sm {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    letter-spacing: 0%;
+  }
+
+  /* ========== 탭 상태 ========== */
+  
+  /* 기본 탭 색상 */
+  .tab {
+    color: var(--gray-60);
+  }
+  
+  /* 활성 상태 - Line 형태 (기본) */
+  .tab.is-active {
+    font-weight: 700;
+    color: var(--gray-90);
+    border-bottom: 2px solid var(--gray-90);
+  }
+  
+  /* Line 형태 명시적 스타일 (선택사항) */
+  .tabs--line .tab.is-active {
+    font-weight: 700;
+    border-bottom: 2px solid var(--gray-90);
+  }
+
+  /* 비활성화 상태 */
+  .tab.is-disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
+
+  /* ========== 탭 컬러 변형 ========== */
+  
+  /* Default 상태 (기본값) - 위에서 이미 적용됨 */
+  
+  /* Line 형태 명시적 스타일 (선택사항) */
+  .tabs--line .tab {
+    color: var(--gray-60);
+  }
+  .tabs--line .tab.is-active {
+    color: var(--gray-90);
+    border-bottom-color: var(--gray-90);
+  }
+
+  /* Accent 상태 */
+  .tabs--line.tabs--accent .tab {
+    color: var(--gray-60);
+  }
+  .tabs--line.tabs--accent .tab.is-active {
+    color: var(--lime-60);
+    border-bottom-color: var(--lime-60);
+  }
+
+  /* ========== 알림 (Noti) 표시 ========== */
+  .tab--noti {
+    position: relative;
+  }
+  .tab--noti::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--lime-60);
+  }
+
+  /* ========== 탭 크기별 활성 상태 스타일 ========== */
+  
+  /* Large */
+  .tab--lg.is-active {
+    border-bottom-width: 3px;
+  }
+
+  /* Medium (Default) */
+  .tab--me.is-active,
+  .tab.is-active {
+    border-bottom-width: 2px;
+  }
+
+  /* Small */
+  .tab--sm.is-active {
+    border-bottom-width: 2px;
+  }
+}
+

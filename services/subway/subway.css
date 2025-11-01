@@ -1,0 +1,284 @@
+/* index.css의 .app 스타일 오버라이드 */
+.app {
+  background-color: unset !important;
+  padding: unset !important;
+  gap: 44px;
+}
+
+.selecArea {
+  padding: 32px 16px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 52px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Information 카드 스타일 */
+.card--information {
+  background-color: var(--gray-10);
+  border-left: 4px solid var(--yellow-50);
+  padding: 12px 12px 12px 16px;
+}
+
+.card--information .card__content-item {
+  color: var(--gray-70) !important;
+  position: relative;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.card--information .card__content-item::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 8.5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--gray-50);
+  display: block;
+  flex-shrink: 0;
+}
+
+.contentsArea{
+  border-left: 1px solid var(--gray-20);
+  border-right: 1px solid var(--gray-20);
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.result{
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  gap: 4px;
+  background: var(--lime-50-default);
+  position: sticky;
+  top: 120px; /* header-topbar (62px) + tabs (58px) + 여유 10px */
+  z-index: 10;
+}
+
+.result .btn{
+  margin-left: 8px;
+}
+
+.resultCalories{
+  flex: 1;
+  text-align: right;
+}
+
+.detailPage {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+}
+
+.detailPage > .card--information {
+  margin-top: 20px;
+  padding: 24px 16px;
+}
+
+/* 영양 정보 섹션 */
+.nutrition-info {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 500px;
+  z-index: 1000;
+  margin-top: 0;
+  pointer-events: none;
+}
+
+.nutrition-info__content {
+  position: relative;
+  z-index: 1001;
+  width: 100%;
+  background: var(--scrim-60);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 16px;
+  pointer-events: auto;
+}
+
+.nutrition-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.nutrition-label {
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 400;
+  color: var(--gray-0);
+}
+
+.nutrition-value {
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 400;
+  color: var(--gray-30);
+}
+
+/* ingredients.html 스타일 */
+
+/* ingredients.html의 카드 텍스트 가운데 정렬 */
+.selecArea > .card .card__content {
+  text-align: center;
+}
+
+/* doubleSelect: 한 줄에 2개씩 배치 */
+.doubleSelect {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.doubleSelect > .checkbox,
+.doubleSelect > .radio {
+  flex: 0 0 calc((100% - 8px) / 2);
+  box-sizing: border-box;
+  max-width: calc((100% - 8px) / 2);
+  min-width: 0;
+}
+
+/* 가로 정렬인 경우 한 줄에 1개씩 */
+.doubleSelect > .checkbox:has(.checkbox__content--horizontal),
+.doubleSelect > .radio:has(.radio__content--horizontal) {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
+  min-width: 0;
+}
+
+/* 쿠키 섹션: 2개씩 한 줄에 배치 */
+.doubleSelect .side:first-child {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.doubleSelect .side:first-child .sideTitle {
+  width: 100%;
+  flex: 0 0 100%;
+}
+
+.doubleSelect .side:first-child .checkbox {
+  flex: 0 0 calc((100% - 8px) / 2);
+  box-sizing: border-box;
+  max-width: calc((100% - 8px) / 2);
+  min-width: 0;
+}
+
+/* 사이드 섹션의 체크박스: 한 줄에 2개씩 배치 */
+.doubleSelect .side:last-child {
+  align-self: flex-start;
+  height: auto;
+  min-height: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.doubleSelect .side:last-child .sideTitle {
+  width: 100%;
+  flex: 0 0 100%;
+}
+
+.doubleSelect .side:last-child .checkbox {
+  flex: 0 0 calc((100% - 8px) / 2);
+  box-sizing: border-box;
+  max-width: calc((100% - 8px) / 2);
+  min-width: 0;
+}
+
+/* formHeader와 doubleSelect 사이 gap */
+.form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+/* formTitle이 formHeader 밖에 있을 때만 (빵, 메인 메뉴, 치즈) */
+.form > .formTitle,
+.form select {
+  display: block;
+  width: 100%;
+  margin: 0 !important;
+}
+
+/* formHeader: formTitle과 description 가로 정렬 */
+.formHeader {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 !important;
+}
+
+.form select {
+  margin: 0 !important;
+}
+
+/* formHeader는 margin-bottom 없음 */
+.formHeader {
+  margin-bottom: 0 !important;
+}
+
+.formHeader .formTitle {
+  color: var(--gray-70);
+  width: auto;
+  display: inline;
+}
+
+.formHeader .description {
+  color: var(--blue-40);
+}
+
+.side{
+  padding: 12px;
+  background-color: var(--gray-10);
+  border-radius: 8px;
+}
+.sideTitle{
+  color: var(--gray-60);
+}
+
+/* 야채 정보 카드 그리드 */
+.vegetableInfoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.vegetableInfoCard {
+  background-color: var(--gray-10);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vegetableInfoCard__name {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0%;
+  color: var(--gray-90);
+}
+
+.vegetableInfoCard__calorie {
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 400;
+  letter-spacing: 0%;
+  color: var(--gray-60);
+}

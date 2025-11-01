@@ -1,0 +1,74 @@
+/* index.html용 스타일 - .contentsArea가 없는 페이지에서만 적용 */
+body:not(:has(.contentsArea)) > .app {
+  background-color: var(--bg-20);
+  padding: 48px 20px;
+}
+
+body:not(:has(.contentsArea)) > .app .stack .hello{
+  font-size: 28px;
+  line-height: 40px;
+  font-weight: 800;
+  color: var(--gray-90);
+  margin-bottom: 8px;
+}
+
+body:not(:has(.contentsArea)) > .app .stack {
+  margin-bottom: 40px;
+}
+
+body:not(:has(.contentsArea)) > .app .stack .btn{
+  width: 100%;
+  padding: 16px;
+  justify-content: left;
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--scrim-35);
+  margin-bottom: 12px;
+}
+
+body:not(:has(.contentsArea)) > .app .stack .btn:hover {
+  background: var(--gray-90);
+  color: var(--lime-50-default);
+}
+
+body:not(:has(.contentsArea)) > .app .stack .btn:active {
+  background: var(--gray-90);
+  color: var(--lime-50-default);
+}
+
+/* menu-modal 내부에서만 적용되는 스타일 */
+.menu-modal .menu-content.app {
+  background-color: var(--bg-20);
+  padding: 48px 20px;
+}
+
+.menu-modal .menu-content .stack .hello{
+  font-size: 28px;
+  line-height: 40px;
+  font-weight: 800;
+  color: var(--gray-90);
+  margin-bottom: 8px;
+}
+
+.menu-modal .menu-content .stack {
+  margin-bottom: 40px;
+}
+
+.menu-modal .menu-content .stack .btn{
+  width: 100%;
+  padding: 16px;
+  justify-content: left;
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--scrim-35);
+  margin-bottom: 12px;
+}
+
+.menu-modal .menu-content .stack .btn:hover {
+  background: var(--gray-90);
+  color: var(--lime-50-default);
+}
+
+.menu-modal .menu-content .stack .btn:active {
+  background: var(--gray-90);
+  color: var(--lime-50-default);
+}
+

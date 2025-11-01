@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <script src="/js/head.js"></script>
+        <title>hakchips: Instagram Feed Preview</title>
+        <link rel="stylesheet" href="/services/instagram/instagram.css">
+    </head>  
+
+    <body>
+        <div class="app">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-topbar">
+                    <div class="title h2--B">Instagram Feed Preview</div>
+                    <img src="/icons/menudrop.svg" width="26" height="26" id="menuBtn" style="cursor: pointer;">
+                </div>
+                <div class="actions">
+                    <button class="btn btn--fill--teriGray btn--sz-me icon--me" id="editBtn" aria-pressed="false">
+                        <img src="/icons/switch.svg" alt="" class="icon" width="16" height="16">
+                        <span>Edit</span>
+                    </button>
+                    <button class="btn btn--fill--teriGray btn--sz-me icon--me" id="addBtn">
+                        <img src="/icons/plus.svg" alt="" class="icon" width="16" height="16">
+                        <span>Add</span>
+                    </button>
+                    <input id="fileInput" type="file" accept="image/*" multiple="" style="display:none">
+                </div>
+            </div>
+
+            <!-- Main (scroll container) -->
+            <main class="contentsArea">
+                <section id="grid" class="grid" aria-live="polite"></section>
+
+                <!-- ✅ 빈 상태 안내 -->
+                <div class="empty-guide" id="emptyGuide" aria-hidden="true">
+                <div class="guide-inner">
+                    <p class="tag kr">꼭 확인해주세요</p>
+                    <p class="title kr">이 페이지를 휴대폰 홈 화면에 추가하여<br>웹 앱처럼 사용하세요</p>
+                    <p class="desc kr">추가했던 이미지들을 계속 볼 수 있습니다.</p>
+
+                    <div class="divider"></div>
+
+                    <p class="tag en">Please check this</p>
+                    <p class="title en">Tap Share &gt; Add to Home Screen<br>to use it like a web app</p>
+                    <p class="desc en">You can see<br>that you saved images continuously.</p>
+                </div>
+                </div>
+
+                <!-- 고정 푸터와 겹침 방지용 스페이서 -->
+                <div class="footer-spacer" aria-hidden="true"></div>
+            </main>
+
+            <!-- Delete Modal -->
+            <div id="deleteOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+                <div class="modal-card">
+                <div id="deleteTitle" class="modal-title">Do you want to delete?</div>
+                <div class="actions">
+                    <button class="action cancel" id="cancelDelete">Cancel</button>
+                    <button class="action delete" id="confirmDelete">Delete</button>
+                </div>
+                </div>
+            </div>
+
+            <!-- Drag ghost -->
+            <div id="dragGhost" class="ghost" hidden=""></div>
+
+            <!-- Script -->
+            <script src="/services/instagram/instagram.js"></script>
+            <script src="/js/menu.js"></script>
+        </div>
+    </body>
+</html>

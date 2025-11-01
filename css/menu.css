@@ -1,0 +1,40 @@
+/* Menu Modal - 공통 스타일 */
+.menu-overlay{
+  position:fixed; inset:0; background:rgba(0,0,0,.45);
+  display:flex; align-items:flex-start; justify-content:center;
+  z-index:200; padding:0;
+  overflow-y: auto;
+}
+.menu-modal{
+  width:100%; max-width:500px; background:var(--bg-20);
+  min-height:100vh;
+  display:flex; flex-direction:column;
+}
+.menu-header{
+  display:flex; align-items:center; justify-content:flex-end;
+  height:62px;
+  padding:0 16px;
+  background:var(--bg-20);
+  border-bottom:1px solid var(--gray-20);
+  position:sticky; top:0; z-index:10;
+}
+.menu-title{
+  font-size:22px; font-weight:700; color:var(--gray-90);
+}
+.menu-close{
+  width:40px; height:40px;
+  display:flex; align-items:center; justify-content:center;
+  border:none; background:transparent;
+  font-size:32px; line-height:1;
+  color:var(--gray-90);
+  cursor:pointer;
+  border-radius:8px;
+  transition:background 0.2s;
+}
+.menu-close:hover{ background:var(--gray-10); }
+.menu-close:active{ background:var(--gray-20); }
+.menu-content{
+  flex:1;
+  padding:24px 16px;
+}
+
