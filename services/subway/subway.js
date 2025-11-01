@@ -49,10 +49,9 @@
           informationCard.className = 'card card--information card--multiple';
           informationCard.innerHTML = `
             <div class="card__content">
-              <p class="card__content-item kr">이 칼로리 계산기는 공식 Subway 계산기가 아니므로 공식 Data와 일치하지 않을 수 있습니다.</p>
-              <p class="card__content-item kr">매장에서 성분표에 기재된 정량을 주지 않으면 해당 계산기의 Data와 일치하지 않을 수 있습니다.</p>
-              <p class="card__content-item kr">Meat 메뉴의 경우, 한국 서브웨이의 각 상품페이지를 참고하여 작성하였습니다.</p>
-              <p class="card__content-item kr">한국 성분표에 공개되지 않은 데이터의 경우 호주의 성분표 데이터를 참고하였습니다.</p>
+              <p class="card__content-item kr">서브웨이 공식 홈페이지를 참고하였으나업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.</p>
+              <p class="card__content-item kr">서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.</p>
+              <p class="card__content-item kr">메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.</p>
             </div>
           `;
           detailPage.appendChild(informationCard);
@@ -100,207 +99,260 @@
       }
     }
     
-    // 탭 클릭 이벤트
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        showPanel(tab.dataset.target);
-      });
-    });
-    
-    // 초기 패널 표시
-    const activeTab = Array.from(tabs).find(t => t.classList.contains('is-active'));
-    if (activeTab) {
-      showPanel(activeTab.dataset.target);
-    }
-  }
-  
-  // 샐러드 탭일 때 정보 카드와 빵 선택 숨기기
-  function toggleSaladElements(isSalad) {
-    // 빵 선택 영역 찾기
-    const breadForm = document.querySelector('[data-field="bread"]') || 
-                     Array.from(document.querySelectorAll('.form')).find(form => {
-                       const title = form.querySelector('.formTitle');
-                       return title && title.textContent.includes('빵');
-                     });
-    
-    if (breadForm) {
-      breadForm.style.display = isSalad ? 'none !important' : '';
-    }
-    
-    // 정보 카드 숨기기
-    const infoCard = document.querySelector('.selecArea .card:first-child');
-    if (infoCard && infoCard.querySelector('.card__content') && 
-        infoCard.querySelector('.card__content').textContent.includes('샌드위치')) {
-      infoCard.style.display = isSalad ? 'none !important' : '';
-    }
-  }
-  
-  // checkbox 아이콘을 SVG로 변환 (currentColor 사용을 위해)
-  function convertCheckboxIcons() {
-    if (checkboxInitialized) return;
-    
-    document.querySelectorAll('.checkbox__icon img[src*="circleCheck"], .radio__icon img[src*="radio"]').forEach(img => {
-      const src = img.getAttribute('src');
-      if (src) {
-        fetch(src)
-          .then(res => res.text())
-          .then(svgText => {
-            const parser = new DOMParser();
-            const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
-            const svgElement = svgDoc.querySelector('svg');
-            if (svgElement) {
-              // img를 SVG로 교체
-              img.parentNode.replaceChild(svgElement, img);
-              // 크기 설정
-              svgElement.setAttribute('width', '18');
-              svgElement.setAttribute('height', '18');
-              svgElement.style.display = 'block';
-            }
-          })
-          .catch(err => console.error('Failed to convert icon:', err));
-      }
-    });
-    
-    checkboxInitialized = true;
-  }
-  
-  // select 이벤트 초기화
-  function initSelectEvents() {
-    document.querySelectorAll('.select select').forEach(select => {
-      select.addEventListener('change', () => {
-        calculateTotalCalories();
-      });
-    });
-  }
-  
-  // 체크박스/라디오 버튼 이벤트 초기화
-  function initCheckboxRadioEvents() {
-    // 체크박스 클릭 이벤트
-    document.addEventListener('click', (e) => {
-      const checkbox = e.target.closest('.checkbox');
-      if (checkbox && !checkbox.classList.contains('is-disabled')) {
-        checkbox.classList.toggle('is-selected');
-        calculateTotalCalories();
+    // 샐러드 모드일 때 infoCard와 빵 선택 부분 숨기기
+    function toggleSaladElements(isSalad) {
+      // detailPage 내부에서 요소 찾기
+      const selecArea = detailPage.querySelector('.selecArea');
+      if (!selecArea) {
+        console.log('selecArea not found');
+        return;
       }
       
-      // 라디오 버튼 클릭 이벤트
-      const radio = e.target.closest('.radio');
-      if (radio && !radio.classList.contains('is-disabled')) {
-        const form = radio.closest('.form');
-        if (form) {
-          const sameGroupRadios = form.querySelectorAll('.radio');
-          const wasSelected = radio.classList.contains('is-selected');
-          
-          // 같은 그룹의 다른 라디오 버튼 선택 해제
-          sameGroupRadios.forEach(r => r.classList.remove('is-selected'));
-          
-          // 같은 라디오 버튼을 다시 클릭하면 선택 해제
-          if (wasSelected) {
-            radio.classList.remove('is-selected');
-          } else {
-            radio.classList.add('is-selected');
+      const card = selecArea.querySelector('.card');
+      
+      // 빵 form 찾기: data-field="bread" 속성 먼저 시도
+      let breadForm = selecArea.querySelector('.form[data-field="bread"]');
+      
+      // data-field가 없으면 formTitle 텍스트로 찾기
+      if (!breadForm) {
+        const allForms = selecArea.querySelectorAll('.form');
+        breadForm = Array.from(allForms).find(form => {
+          const formTitle = form.querySelector('.formTitle');
+          if (!formTitle) return false;
+          const titleText = formTitle.textContent.trim();
+          return titleText === '빵';
+        });
+      }
+      
+      // 요소가 있으면 display 속성 설정 (!important 추가)
+      if (card) {
+        if (isSalad) {
+          card.style.setProperty('display', 'none', 'important');
+        } else {
+          card.style.removeProperty('display');
+        }
+      } else {
+        console.log('card not found');
+      }
+      
+      if (breadForm) {
+        if (isSalad) {
+          breadForm.style.setProperty('display', 'none', 'important');
+        } else {
+          breadForm.style.removeProperty('display');
+        }
+      } else {
+        console.log('breadForm not found');
+        // 디버깅: 모든 form 확인
+        const allForms = selecArea.querySelectorAll('.form');
+        console.log('All forms:', Array.from(allForms).map(form => {
+          const formTitle = form.querySelector('.formTitle');
+          return formTitle ? formTitle.textContent.trim() : 'no title';
+        }));
+      }
+    }
+    
+    // 초기 실행: 샌드위치 보여주기
+    showPanel('sandwich');
+    
+    // 탭 클릭 이벤트 연결
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => showPanel(tab.dataset.target));
+    });
+    
+    // 체크박스 아이콘을 인라인 SVG로 변경
+    function convertCheckboxIcons() {
+      const checkboxIcons = document.querySelectorAll('.checkbox__icon img[src="/icons/circleCheck.svg"]');
+      checkboxIcons.forEach(img => {
+        const svgHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10C0 4.47715 4.47715 0 10 0ZM14.6172 6.94336C14.2555 6.60269 13.6856 6.61988 13.3447 6.98145L8.88574 11.71L6.63281 9.47949C6.27959 9.1298 5.71005 9.13214 5.36035 9.48535C5.01065 9.83858 5.01397 10.4081 5.36719 10.7578L8.27637 13.6387C8.44866 13.809 8.68258 13.9026 8.9248 13.8984C9.16702 13.8942 9.39721 13.7924 9.56348 13.6162L14.6553 8.21582C14.9959 7.85415 14.9787 7.28424 14.6172 6.94336Z" fill="currentColor"/></svg>';
+        img.outerHTML = svgHTML;
+      });
+    }
+    
+    // 칼로리 총합 계산 함수
+    function calculateTotalCalories() {
+      const detailPage = document.getElementById('detailPage');
+      if (!detailPage) return;
+      
+      let totalCalories = 0;
+      
+      // 치즈 섹션에서 선택된 항목의 칼로리 찾기
+      function getSelectedCheeseCalories() {
+        const cheeseRadio = detailPage.querySelector('[data-radio-group="cheese"] .radio.is-selected');
+        if (cheeseRadio) {
+          const infoElement = cheeseRadio.querySelector('.radio__info');
+          if (infoElement) {
+            const infoText = infoElement.textContent.trim();
+            const match = infoText.match(/(\d+)/);
+            if (match) {
+              return parseInt(match[1], 10);
+            }
           }
         }
-        calculateTotalCalories();
+        return 0;
       }
-    });
-  }
-  
-  // 칼로리 총합 계산
-  function calculateTotalCalories() {
-    let total = 0;
-    
-    // 선택된 체크박스의 칼로리 합산
-    document.querySelectorAll('.checkbox.is-selected').forEach(checkbox => {
-      const infoElement = checkbox.querySelector('.checkbox__info');
-      if (infoElement) {
-        const infoText = infoElement.textContent.trim();
-        const match = infoText.match(/(\d+)\s*kcal/i);
-        if (match) {
-          let calories = parseInt(match[1], 10);
-          
-          // special:cheese 또는 special:main 처리
-          const specialInfo = checkbox.getAttribute('data-special-info');
+      
+      // 메인 재료 섹션에서 선택된 항목의 칼로리 찾기
+      function getSelectedMainCalories() {
+        const mainForm = detailPage.querySelector('[data-form-id="main"], #main');
+        if (mainForm) {
+          const mainSelect = mainForm.querySelector('select');
+          if (mainSelect && mainSelect.value && mainSelect.value !== '') {
+            const selectedOption = mainSelect.options[mainSelect.selectedIndex];
+            if (selectedOption) {
+              const info = selectedOption.getAttribute('data-info');
+              if (info) {
+                const match = info.match(/(\d+)/);
+                if (match) {
+                  return parseInt(match[1], 10);
+                }
+              }
+            }
+          }
+        }
+        return 0;
+      }
+      
+      // 선택된 checkbox와 radio 찾기
+      const selectedCheckboxes = detailPage.querySelectorAll('.checkbox.is-selected');
+      const selectedRadios = detailPage.querySelectorAll('.radio.is-selected');
+      
+      // select에서 선택된 옵션 찾기
+      const selects = detailPage.querySelectorAll('.select select');
+      selects.forEach(select => {
+        if (select.value && select.value !== '') {
+          const selectedOption = select.options[select.selectedIndex];
+          if (selectedOption) {
+            const info = selectedOption.getAttribute('data-info');
+            if (info) {
+              // 숫자만 추출 (예: "180 kcal" -> 180)
+              const match = info.match(/(\d+)/);
+              if (match) {
+                totalCalories += parseInt(match[1], 10);
+              }
+            }
+          }
+        }
+      });
+      
+      // checkbox의 info에서 칼로리 추출
+      selectedCheckboxes.forEach(checkbox => {
+        // special:인 경우 data 속성에서 확인
+        const specialInfo = checkbox.getAttribute('data-special-info');
+        if (specialInfo) {
           if (specialInfo === 'special:cheese') {
             const cheeseCalories = getSelectedCheeseCalories();
-            if (cheeseCalories > 0) {
-              total += cheeseCalories * 2;
-            }
+            totalCalories += cheeseCalories * 2;
+            return;
           } else if (specialInfo === 'special:main') {
             const mainCalories = getSelectedMainCalories();
-            if (mainCalories > 0) {
-              total += mainCalories * 2;
-            }
-          } else {
-            total += calories;
+            totalCalories += mainCalories * 2;
+            return;
           }
         }
-      }
-    });
-    
-    // 선택된 라디오 버튼의 칼로리 합산
-    document.querySelectorAll('.radio.is-selected').forEach(radio => {
-      const infoElement = radio.querySelector('.radio__info');
-      if (infoElement) {
-        const infoText = infoElement.textContent.trim();
-        const match = infoText.match(/(\d+)\s*kcal/i);
-        if (match) {
-          total += parseInt(match[1], 10);
+        
+        // 일반적인 경우: checkbox__info에서 칼로리 추출
+        const infoElement = checkbox.querySelector('.checkbox__info');
+        if (infoElement) {
+          const infoText = infoElement.textContent.trim();
+          // 숫자만 추출 (예: "180 kcal" -> 180)
+          const match = infoText.match(/(\d+)/);
+          if (match) {
+            totalCalories += parseInt(match[1], 10);
+          }
         }
-      }
-    });
-    
-    // select의 칼로리 합산
-    document.querySelectorAll('.select select').forEach(select => {
-      const selectedOption = select.options[select.selectedIndex];
-      if (selectedOption && selectedOption.textContent) {
-        const match = selectedOption.textContent.match(/(\d+)\s*kcal/i);
-        if (match) {
-          total += parseInt(match[1], 10);
+      });
+      
+      // radio의 info에서 칼로리 추출
+      selectedRadios.forEach(radio => {
+        const infoElement = radio.querySelector('.radio__info');
+        if (infoElement) {
+          const infoText = infoElement.textContent.trim();
+          // 숫자만 추출 (예: "180 kcal" -> 180)
+          const match = infoText.match(/(\d+)/);
+          if (match) {
+            totalCalories += parseInt(match[1], 10);
+          }
         }
-      }
-    });
-    
-    // 결과 업데이트
-    const resultCalories = document.querySelector('.resultCalories');
-    if (resultCalories) {
-      resultCalories.textContent = total.toLocaleString();
-    }
-  }
-  
-  // 선택된 치즈의 칼로리 가져오기
-  function getSelectedCheeseCalories() {
-    const cheeseRadios = document.querySelectorAll('[data-form-id="cheese"] .radio.is-selected');
-    if (cheeseRadios.length > 0) {
-      const infoElement = cheeseRadios[0].querySelector('.radio__info');
-      if (infoElement) {
-        const infoText = infoElement.textContent.trim();
-        const match = infoText.match(/(\d+)\s*kcal/i);
-        if (match) {
-          return parseInt(match[1], 10);
-        }
+      });
+      
+      // resultCalories 요소에 표시
+      const resultCalories = document.querySelector('.resultCalories');
+      if (resultCalories) {
+        resultCalories.textContent = totalCalories || 0;
       }
     }
-    return 0;
-  }
-  
-  // 선택된 메인 재료의 칼로리 가져오기
-  function getSelectedMainCalories() {
-    const mainSelect = document.querySelector('[data-form-id="main"] select');
-    if (mainSelect && mainSelect.selectedIndex > 0) {
-      const selectedOption = mainSelect.options[mainSelect.selectedIndex];
-      if (selectedOption && selectedOption.textContent) {
-        const match = selectedOption.textContent.match(/(\d+)\s*kcal/i);
-        if (match) {
-          return parseInt(match[1], 10);
+    
+    // select change 이벤트 초기화
+    function initSelectEvents() {
+      const detailPage = document.getElementById('detailPage');
+      if (!detailPage) return;
+      
+      // select change 이벤트 위임
+      document.addEventListener('change', function(e) {
+        const select = e.target.closest('.select select');
+        if (select) {
+          calculateTotalCalories();
         }
-      }
+      });
     }
-    return 0;
+    
+    // 체크박스 클릭 이벤트 초기화 (한 번만 등록)
+    if (!checkboxInitialized) {
+      // 동적으로 로드된 요소를 위해 이벤트 위임 사용
+      document.addEventListener('click', function(e) {
+        // 체크박스 처리
+        const checkbox = e.target.closest('.checkbox');
+        if (checkbox) {
+          // disabled 상태면 클릭 무시
+          if (checkbox.classList.contains('is-disabled')) return;
+          
+          // is-selected 클래스 토글
+          checkbox.classList.toggle('is-selected');
+          
+          // 칼로리 총합 계산
+          calculateTotalCalories();
+          return;
+        }
+        
+        // 라디오 버튼 처리 (단일 선택, 2번 클릭 시 해제)
+        const radio = e.target.closest('.radio');
+        if (radio) {
+          // disabled 상태면 클릭 무시
+          if (radio.classList.contains('is-disabled')) return;
+          
+          // 이미 선택된 라디오를 다시 클릭하면 해제
+          if (radio.classList.contains('is-selected')) {
+            radio.classList.remove('is-selected');
+            // 칼로리 총합 계산
+            calculateTotalCalories();
+            return;
+          }
+          
+          // 같은 그룹의 모든 라디오 찾기
+          const radioGroup = radio.closest('[data-radio-group]');
+          if (radioGroup) {
+            const groupName = radioGroup.getAttribute('data-radio-group');
+            const allRadiosInGroup = radioGroup.querySelectorAll('.radio');
+            
+            // 같은 그룹의 모든 라디오 선택 해제
+            allRadiosInGroup.forEach(r => {
+              r.classList.remove('is-selected');
+            });
+          }
+          
+          // 현재 라디오 선택
+          radio.classList.add('is-selected');
+          
+          // 칼로리 총합 계산
+          calculateTotalCalories();
+          return;
+        }
+      });
+      
+      checkboxInitialized = true;
+    }
   }
-  
-  // 체크박스/라디오 이벤트 초기화
-  initCheckboxRadioEvents();
   
   // 상세 정보 토글
   function initDetailToggle() {
@@ -388,4 +440,4 @@
     initDetailToggle();
   }
 })();
-
+  

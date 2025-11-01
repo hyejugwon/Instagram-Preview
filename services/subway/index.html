@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en kr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script src="/js/head.js"></script>
+  <title>hakchips: Subway Calorie Calculator</title>
+  <link rel="stylesheet" href="/services/subway/subway.css">
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="header-topbar">
+        <div class="title h2--B">Subway Calorie Calculator</div>
+        <img src="/icons/menudrop.svg" width="26" height="26" id="menuBtn" style="cursor: pointer;">
+      </div>
+      <div class="tabs tabs--block-full">
+        <button class="kr tab tab--lg is-active" data-target="sandwich">샌드위치</button>
+        <button class="kr tab tab--lg" data-target="salad">샐러드</button>
+      </div>
+    </div>
+
+    
+    <main class="contentsArea">
+      <div class="result">
+        <span class="totalTitle kr h4--B">칼로리 총합</span>
+        <span class="resultCalories kr h4--B">{숫자}</span>
+        <span class="unit h4--B">Kcal</span>
+        <button class="btn btn--text--gray btn--underlined" id="detailBtn">상세보기</button>
+      </div>
+
+      <!-- 영양 정보 섹션 -->
+      <div id="nutritionInfo" class="nutrition-info" style="display: none;">
+        <div class="nutrition-info__content">
+          <div class="nutrition-item">
+            <span class="nutrition-label kr">총 단백질</span>
+            <span class="nutrition-value kr" id="totalProtein">0 g</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-label kr">총 당류</span>
+            <span class="nutrition-value kr" id="totalSugars">0 g</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-label kr">총 나트륨</span>
+            <span class="nutrition-value kr" id="totalSodium">0 g</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-label kr">총 포화지방</span>
+            <span class="nutrition-value kr" id="totalSaturatedFat">0 g</span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="detailPage" id="detailPage">
+        <div class="selecArea">
+          <!-- ingredients-render.js에서 동적으로 렌더링됩니다 -->
+        </div>
+        <!-- 정보 카드는 subway.js에서 동적으로 추가됩니다 -->
+      </div>
+    </main>
+  </div>
+
+  <!-- ✅ JS는 body 맨 아래 -->
+  <script src="/services/subway/ingredients-render.js"></script>
+  <script src="/services/subway/subway.js"></script>
+  <script src="/js/menu.js"></script>
+</body>
+</html>

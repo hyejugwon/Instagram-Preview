@@ -1,0 +1,13 @@
+@layer components {
+    .header{
+      position:sticky; top:0; z-index:50; background:var(--bg);
+      border-bottom:1px solid var(--border);
+    }
+    .header-inner{
+      height:var(--header-h); display:flex; align-items:center;
+      justify-content:space-between; gap:1rem; padding-inline:1rem;
+    }
+    .header .title{ font-weight:800; }
+    .header .actions{ display:flex; gap:.5rem; align-items:center; }
+  }
+  
