@@ -3,8 +3,15 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <script src="/js/head.js"></script>
-        <base href="/Instagram-Preview/">
+        <script src="/js/head.js">
+            (function () {
+        if (location.hostname.endsWith('github.io')) {
+          var b = document.createElement('base');
+          b.href = '/Instagram-Preview/';
+          document.head.prepend(b);
+        }
+      })();
+        </script>
         <title>hakchips: Instagram Feed Preview</title>
         <link rel="stylesheet" href="/services/instagram/instagram.css">
     </head>  
