@@ -1,36 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <base href="/Instagram-Preview/" id="github-base">
     <script>
-      (function () {
-        var basePath = '';
-        var isGitHub = location.hostname.endsWith('github.io');
-        if (isGitHub) {
-          basePath = '/Instagram-Preview';
-          var b = document.createElement('base');
-          b.href = basePath + '/';
-          document.head.insertBefore(b, document.head.firstChild);
-        }
-        
-        // 모든 link와 script 태그의 경로를 즉시 수정
-        var fixPath = function(url) {
-          if (!isGitHub || !url || !url.startsWith('/')) return url;
-          return basePath + url;
-        };
-        
-        // CSS 링크 동적 추가
-        var link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = fixPath('/css/index.css');
-        document.head.appendChild(link);
-        
-        // head.js 스크립트 동적 추가
-        var script = document.createElement('script');
-        script.src = fixPath('/js/head.js');
-        document.head.appendChild(script);
-      })();
+      // 로컬 환경에서는 base 태그 제거
+      if (!location.hostname.endsWith('github.io')) {
+        var base = document.getElementById('github-base');
+        if (base) base.remove();
+      }
     </script>
+    <script src="/js/head.js"></script>
     <title>hakchips</title>
+    <link rel="stylesheet" href="/css/index.css">
   </head>  
   
 
@@ -43,35 +24,17 @@
         </section>
 
         <nav class="stack">
-          <a class="en btn h3--B" href="#" data-href="/services/instagram/">
+          <a class="en btn h3--B" href="/services/instagram/">
             <span>Instagram Feed Preview</span>
           </a>
-          <a class="en btn h3--B" href="#" data-href="/services/subway/">
+          <a class="en btn h3--B" href="/services/subway/">
             <span>Subway Calorie Calculator</span>
           </a>
         </nav>
 
       </main>
     </div>
-    <script>
-      (function() {
-        var basePath = location.hostname.endsWith('github.io') ? '/Instagram-Preview' : '';
-        document.querySelectorAll('a[data-href]').forEach(function(a) {
-          a.href = basePath + a.getAttribute('data-href');
-        });
-      })();
-    </script>
-
-    <script>
-      (function() {
-        var basePath = location.hostname.endsWith('github.io') ? '/Instagram-Preview' : '';
-        var scripts = ['/js/common.js', '/js/menu.js'];
-        scripts.forEach(function(src) {
-          var script = document.createElement('script');
-          script.src = basePath + src;
-          document.body.appendChild(script);
-        });
-      })();
-    </script>
+    <script src="/js/common.js"></script>
+    <script src="/js/menu.js"></script>
   </body>
 </html>

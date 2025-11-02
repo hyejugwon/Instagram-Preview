@@ -1,54 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <base href="/Instagram-Preview/" id="github-base">
         <script>
-          (function () {
-            var basePath = '';
-            var isGitHub = location.hostname.endsWith('github.io');
-            if (isGitHub) {
-              basePath = '/Instagram-Preview';
-              var b = document.createElement('base');
-              b.href = basePath + '/';
-              document.head.insertBefore(b, document.head.firstChild);
-            }
-            
-            var fixPath = function(url) {
-              if (!isGitHub || !url || !url.startsWith('/')) return url;
-              return basePath + url;
+          // 로컬 환경에서는 base 태그 제거
+          if (!location.hostname.endsWith('github.io')) {
+            var base = document.getElementById('github-base');
+            if (base) base.remove();
+          }
+          
+          // 초기 HTML의 아이콘 경로 즉시 수정
+          (function() {
+            var baseTag = document.querySelector('base');
+            var basePath = baseTag ? baseTag.getAttribute('href') : '';
+            var getIconPath = function(path) {
+              if (!basePath) return path;
+              var cleanBase = basePath.replace(/\/$/, '');
+              var cleanPath = path.startsWith('/') ? path : '/' + path;
+              return cleanBase + cleanPath;
             };
             
-            // CSS 링크 동적 추가
-            var link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = fixPath('/services/instagram/instagram.css');
-            document.head.appendChild(link);
+            // DOMContentLoaded 전에 실행되도록 즉시 실행
+            var fixIconPaths = function() {
+              var icons = document.querySelectorAll('#editBtn .icon, #addBtn .icon, #menuBtn');
+              icons.forEach(function(img) {
+                var originalSrc = img.getAttribute('src');
+                if (originalSrc && originalSrc.startsWith('/')) {
+                  img.src = getIconPath(originalSrc);
+                }
+              });
+            };
             
-            // head.js 스크립트 동적 추가
-            var script = document.createElement('script');
-            script.src = fixPath('/js/head.js');
-            document.head.appendChild(script);
+            if (document.readyState === 'loading') {
+              document.addEventListener('DOMContentLoaded', fixIconPaths);
+            } else {
+              fixIconPaths();
+            }
           })();
         </script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <script src="/js/head.js"></script>
         <title>hakchips: Instagram Feed Preview</title>
+        <link rel="stylesheet" href="/services/instagram/instagram.css">
     </head>  
 
     <body>
+        <script>
+          // body 파싱 직후 아이콘 경로 수정
+          (function() {
+            var baseTag = document.querySelector('base');
+            var basePath = baseTag ? baseTag.getAttribute('href') : '';
+            if (!basePath) return;
+            
+            var getIconPath = function(path) {
+              var cleanBase = basePath.replace(/\/$/, '');
+              var cleanPath = path.startsWith('/') ? path : '/' + path;
+              return cleanBase + cleanPath;
+            };
+            
+            var fixIconPaths = function() {
+              var icons = document.querySelectorAll('#editBtn .icon, #addBtn .icon, #menuBtn');
+              icons.forEach(function(img) {
+                var originalSrc = img.getAttribute('src');
+                if (originalSrc && originalSrc.startsWith('/')) {
+                  var newSrc = getIconPath(originalSrc);
+                  img.src = newSrc;
+                  
+                  // 로드 실패 시 재시도
+                  img.onerror = function() {
+                    this.src = newSrc + '?v=' + Date.now();
+                    this.onerror = null; // 무한 루프 방지
+                  };
+                }
+              });
+            };
+            
+            // 즉시 실행 (body가 파싱되는 동안)
+            setTimeout(fixIconPaths, 0);
+            document.addEventListener('DOMContentLoaded', fixIconPaths);
+          })();
+        </script>
         <div class="app">
             <!-- Header -->
             <div class="header">
                 <div class="header-topbar">
                     <div class="title h2--B">Instagram Feed Preview</div>
-                    <img data-src="/icons/menudrop.svg" width="26" height="26" id="menuBtn" style="cursor: pointer;">
+                    <img src="/icons/menudrop.svg" width="26" height="26" id="menuBtn" style="cursor: pointer;">
                 </div>
                 <div class="actions">
                     <button class="btn btn--fill--teriGray btn--sz-me icon--me" id="editBtn" aria-pressed="false">
-                        <img data-src="/icons/switch.svg" alt="" class="icon" width="16" height="16">
+                        <img src="/icons/switch.svg" alt="" class="icon" width="16" height="16">
                         <span>Edit</span>
                     </button>
                     <button class="btn btn--fill--teriGray btn--sz-me icon--me" id="addBtn">
-                        <img data-src="/icons/plus.svg" alt="" class="icon" width="16" height="16">
+                        <img src="/icons/plus.svg" alt="" class="icon" width="16" height="16">
                         <span>Add</span>
                     </button>
                     <input id="fileInput" type="file" accept="image/*" multiple="" style="display:none">
@@ -93,22 +139,8 @@
             <div id="dragGhost" class="ghost" hidden=""></div>
 
             <!-- Script -->
-            <script>
-              (function() {
-                var basePath = location.hostname.endsWith('github.io') ? '/Instagram-Preview' : '';
-                var scripts = ['/services/instagram/instagram.js', '/js/menu.js'];
-                scripts.forEach(function(src) {
-                  var script = document.createElement('script');
-                  script.src = basePath + src;
-                  document.body.appendChild(script);
-                });
-                
-                // 이미지 경로 수정
-                document.querySelectorAll('img[data-src]').forEach(function(img) {
-                  img.src = basePath + img.getAttribute('data-src');
-                });
-              })();
-            </script>
+            <script src="/services/instagram/instagram.js"></script>
+            <script src="/js/menu.js"></script>
         </div>
     </body>
 </html>

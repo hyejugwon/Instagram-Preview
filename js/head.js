@@ -1,9 +1,6 @@
 // head.html 동적 주입 스크립트
 (function () {
-    var basePath = location.hostname.endsWith('github.io') ? '/Instagram-Preview' : '';
-    var headUrl = basePath + '/partials/head.html';
-    
-    fetch(headUrl, { cache: "no-cache" })
+    fetch("/partials/head.html", { cache: "no-cache" })
       .then((res) => res.text())
       .then((html) => {
         const tpl = document.createElement("template");
@@ -24,14 +21,6 @@
             });
           }
         });
-        
-        // 경로 수정: basePath가 있으면 모든 절대 경로에 추가
-        if (basePath) {
-          const links = tpl.content.querySelectorAll('link[href^="/"]');
-          links.forEach(link => {
-            link.href = basePath + link.getAttribute('href');
-          });
-        }
         
         // 나머지 요소들을 <head>로 이동
         document.head.appendChild(tpl.content);

@@ -264,14 +264,43 @@
       document.body.classList.toggle('editing', on);
       if (addBtn) addBtn.disabled = on;
       if (editBtn) {
+        const base = document.querySelector('base');
+        const basePath = base ? base.getAttribute('href') : '';
+        const getIconPath = (path) => {
+          if (!basePath) return path;
+          const cleanBase = basePath.replace(/\/$/, '');
+          const cleanPath = path.startsWith('/') ? path : '/' + path;
+          return cleanBase + cleanPath;
+        };
+        
         if (on) {
           // Done 버튼: priBlack 스타일
           editBtn.className = 'btn btn--fill--priBlack btn--sz-me icon--me';
-          editBtn.innerHTML = '<img src="/icons/check.svg" alt="" class="icon" width="16" height="16"> <span>Done</span>';
+          const checkImg = document.createElement('img');
+          checkImg.src = getIconPath('/icons/check.svg');
+          checkImg.alt = '';
+          checkImg.className = 'icon';
+          checkImg.width = 16;
+          checkImg.height = 16;
+          editBtn.innerHTML = '';
+          editBtn.appendChild(checkImg);
+          const doneSpan = document.createElement('span');
+          doneSpan.textContent = 'Done';
+          editBtn.appendChild(doneSpan);
         } else {
           // Edit 버튼: teriGray 스타일
           editBtn.className = 'btn btn--fill--teriGray btn--sz-me icon--me';
-          editBtn.innerHTML = '<img src="/icons/switch.svg" alt="" class="icon" width="16" height="16"> <span>Edit</span>';
+          const switchImg = document.createElement('img');
+          switchImg.src = getIconPath('/icons/switch.svg');
+          switchImg.alt = '';
+          switchImg.className = 'icon';
+          switchImg.width = 16;
+          switchImg.height = 16;
+          editBtn.innerHTML = '';
+          editBtn.appendChild(switchImg);
+          const editSpan = document.createElement('span');
+          editSpan.textContent = 'Edit';
+          editBtn.appendChild(editSpan);
         }
         editBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
       }
@@ -551,13 +580,33 @@
   
     // ===== Init =====
     (async function init() {
+      // 헤더 아이콘 경로 먼저 수정 (초기 HTML의 이미지)
+      const base = document.querySelector('base');
+      const basePath = base ? base.getAttribute('href') : '';
+      const getIconPath = (path) => {
+        if (!basePath) return path;
+        const cleanBase = basePath.replace(/\/$/, '');
+        const cleanPath = path.startsWith('/') ? path : '/' + path;
+        return cleanBase + cleanPath;
+      };
+      
+      // 초기 HTML의 모든 아이콘 이미지 경로 수정
+      document.querySelectorAll('#editBtn .icon, #addBtn .icon, #menuBtn').forEach(img => {
+        const originalSrc = img.getAttribute('src') || img.src;
+        if (originalSrc && originalSrc.startsWith('/')) {
+          const newSrc = getIconPath(originalSrc);
+          img.src = newSrc;
+        }
+      });
+      
       setEditMode(false);
       await renderAll();
   
-      // 헤더 아이콘 첫 로드 보정
-      document.querySelectorAll('#editBtn .icon').forEach(img => {
+      // 헤더 아이콘 첫 로드 보정 (로드 실패 시 재시도)
+      document.querySelectorAll('#editBtn .icon, #addBtn .icon').forEach(img => {
         if (!img.complete || img.naturalWidth === 0) {
-          img.src = img.src.split('?')[0] + '?v=' + Date.now();
+          const currentSrc = img.src.split('?')[0];
+          img.src = getIconPath(currentSrc.replace(location.origin, '').replace(/^\/[^\/]+/, '')) + '?v=' + Date.now();
         }
       });
   

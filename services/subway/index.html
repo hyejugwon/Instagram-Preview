@@ -1,44 +1,26 @@
 <!DOCTYPE html>
 <html lang="en kr">
 <head>
+  <base href="/Instagram-Preview/" id="github-base">
   <script>
-    (function () {
-      var basePath = '';
-      var isGitHub = location.hostname.endsWith('github.io');
-      if (isGitHub) {
-        basePath = '/Instagram-Preview';
-        var b = document.createElement('base');
-        b.href = basePath + '/';
-        document.head.insertBefore(b, document.head.firstChild);
-      }
-      
-      var fixPath = function(url) {
-        if (!isGitHub || !url || !url.startsWith('/')) return url;
-        return basePath + url;
-      };
-      
-      // CSS 링크 동적 추가
-      var link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = fixPath('/services/subway/subway.css');
-      document.head.appendChild(link);
-      
-      // head.js 스크립트 동적 추가
-      var script = document.createElement('script');
-      script.src = fixPath('/js/head.js');
-      document.head.appendChild(script);
-    })();
+    // 로컬 환경에서는 base 태그 제거
+    if (!location.hostname.endsWith('github.io')) {
+      var base = document.getElementById('github-base');
+      if (base) base.remove();
+    }
   </script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script src="/js/head.js"></script>
   <title>hakchips: Subway Calorie Calculator</title>
+  <link rel="stylesheet" href="/services/subway/subway.css">
 </head>
 <body>
   <div class="app">
     <div class="header">
       <div class="header-topbar">
         <div class="title h2--B">Subway Calorie Calculator</div>
-        <img data-src="/icons/menudrop.svg" width="26" height="26" id="menuBtn" style="cursor: pointer;">
+        <img src="/icons/menudrop.svg" width="26" height="26" id="menuBtn" style="cursor: pointer;">
       </div>
       <div class="tabs tabs--block-full">
         <button class="kr tab tab--lg is-active" data-target="sandwich">샌드위치</button>
@@ -87,21 +69,8 @@
   </div>
 
   <!-- ✅ JS는 body 맨 아래 -->
-  <script>
-    (function() {
-      var basePath = location.hostname.endsWith('github.io') ? '/Instagram-Preview' : '';
-      var scripts = ['/services/subway/ingredients-render.js', '/services/subway/subway.js', '/js/menu.js'];
-      scripts.forEach(function(src) {
-        var script = document.createElement('script');
-        script.src = basePath + src;
-        document.body.appendChild(script);
-      });
-      
-      // 이미지 경로 수정
-      document.querySelectorAll('img[data-src]').forEach(function(img) {
-        img.src = basePath + img.getAttribute('data-src');
-      });
-    })();
-  </script>
+  <script src="/services/subway/ingredients-render.js"></script>
+  <script src="/services/subway/subway.js"></script>
+  <script src="/js/menu.js"></script>
 </body>
 </html>
