@@ -50,12 +50,18 @@
           informationCard.className = 'card card--information card--multiple';
           informationCard.innerHTML = `
             <div class="card__content">
-              <p class="card__content-item kr">서브웨이 공식 홈페이지를 참고하였으나업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.</p>
-              <p class="card__content-item kr">서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.</p>
-              <p class="card__content-item kr">메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.</p>
+              <p class="card__content-item kr" data-i18n-en="Referenced from Subway official website, but information may vary depending on the update date." data-i18n-kr="서브웨이 공식 홈페이지를 참고하였으나업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.">서브웨이 공식 홈페이지를 참고하였으나업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.</p>
+              <p class="card__content-item kr" data-i18n-en="Due to Subway's characteristics, quantities are not always the same, so there may be differences from the calories provided." data-i18n-kr="서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.">서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.</p>
+              <p class="card__content-item kr" data-i18n-en="For main ingredients, Korean Subway was referenced. For other information not disclosed in Korean ingredient labels, Australian ingredient labels were referenced." data-i18n-kr="메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.">메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.</p>
             </div>
           `;
           detailPage.appendChild(informationCard);
+          // i18n 시스템 새로고침
+          if (window.refreshLanguage) {
+            setTimeout(() => {
+              window.refreshLanguage();
+            }, 0);
+          }
         }
         
         // 초기 칼로리 총합 계산
@@ -637,33 +643,25 @@
       
       const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
       
-      // 원래 텍스트로 복원해서 높이 측정
-      const fullText = currentLang === 'kr'
-        ? totalTitle.getAttribute('data-i18n-kr') || '칼로리 총합'
-        : totalTitle.getAttribute('data-i18n-en') || 'Total Calories';
-      totalTitle.textContent = fullText;
+      // 화면 너비 측정
+      const screenWidth = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
+      const shouldUseShort = screenWidth <= 380;
       
-      // i18n 시스템이 업데이트한 후 높이 측정 (약간의 지연)
-      setTimeout(() => {
-        // 다음 프레임에서 높이 측정 (렌더링 완료 후)
-        requestAnimationFrame(() => {
-          const titleHeight = totalTitle.offsetHeight;
-          const titleLineHeight = parseInt(window.getComputedStyle(totalTitle).lineHeight, 10);
-          
-          // 높이가 line-height의 1.5배 이상이면 2줄 이상으로 간주
-          const isMultiLine = titleHeight > titleLineHeight * 1.5;
-          
-          if (isMultiLine) {
-            // 2줄 이상이면 짧은 텍스트 사용
-            const shortText = currentLang === 'kr' 
-              ? totalTitle.getAttribute('data-i18n-kr-short') || '총합'
-              : totalTitle.getAttribute('data-i18n-en-short') || 'Total';
-            totalTitle.textContent = shortText;
-          }
-          
-          isUpdating = false;
-        });
-      }, 50);
+      if (shouldUseShort) {
+        // 380px 이하면 짧은 텍스트 사용
+        const shortText = currentLang === 'kr' 
+          ? totalTitle.getAttribute('data-i18n-kr-short') || '총합'
+          : totalTitle.getAttribute('data-i18n-en-short') || 'Total';
+        totalTitle.textContent = shortText;
+      } else {
+        // 380px 초과면 전체 텍스트 사용
+        const fullText = currentLang === 'kr'
+          ? totalTitle.getAttribute('data-i18n-kr') || '칼로리 총합'
+          : totalTitle.getAttribute('data-i18n-en') || 'Total Calories';
+        totalTitle.textContent = fullText;
+      }
+      
+      isUpdating = false;
     }
     
     // i18n 시스템의 refreshLanguage 후킹

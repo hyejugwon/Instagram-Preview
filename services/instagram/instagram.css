@@ -290,27 +290,36 @@ body.lang-kr .title.h2--B {
 
 .empty-guide{
   display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  padding: 0 24px;
   text-align: center;
   color: #555;
-  padding: 0 24px 24px;
-  margin-top: 60px;
 }
 .empty-guide.show { 
   display: block !important; 
 }
 .empty-guide .guide-inner {
-  max-width: 360px;
-  margin: 0 auto;
+  width: 100%;
 }
 
-.empty-guide .tag{
-  display: inline-block;
-  font-size: 12px;
-  color: #0094FF;
-  padding: 2px 6px;
-  background-color: #E5F5FF;
-  border-radius: 4px;
-  margin-bottom: 8px;
+.empty-guide .guide-content {
+  display: none;
+}
+
+.empty-guide .guide-content.kr {
+  display: block;
+}
+
+body.lang-en .empty-guide .guide-content.kr {
+  display: none;
+}
+
+body.lang-en .empty-guide .guide-content.en {
+  display: block;
 }
 
 .empty-guide .title{
@@ -327,13 +336,6 @@ body.lang-kr .title.h2--B {
   font-weight: 400;
   line-height: 22px;
   margin: 0;
-}
-
-.empty-guide .divider {
-  height: 1px;
-  background: #eee;
-  width: 100%;
-  margin: 28px auto;
 }
 
 .handle{

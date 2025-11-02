@@ -83,7 +83,7 @@
     {
       "id": "sauce",
       "title": "소스",
-      "description": "(중복선택, Ng 기준)",
+      "description": "(중복선택, 14g 기준)",
       "type": "checkbox",
       "layout": "vertical",
       "options": [

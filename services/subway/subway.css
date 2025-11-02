@@ -159,6 +159,7 @@ body.lang-kr .title.h2--B {
   width: 56px;
   min-width: 56px;
   max-width: 56px;
+  display: none; /* 나중에 살릴 수 있도록 숨김 */
 }
 
 .caloriesContainer{

@@ -40,4 +40,24 @@
   flex-direction: column;
 }
 
+/* Menu Modal Footer (광고 영역) */
+#menuOverlay .footer {
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-0);
+  border-top: 1px solid var(--gray-20);
+  padding: 16px;
+  margin-top: auto;
+}
+
+#menuOverlay .footer .adsbygoogle {
+  display: block;
+  margin: 0 auto;
+}
+
 /* Force cache refresh */

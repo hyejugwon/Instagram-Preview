@@ -25,8 +25,41 @@
           tpl.innerHTML = html.trim();
           // fragment의 자식들을 <body>로 이동
           document.body.appendChild(tpl.content);
+          // 광고 초기화
+          initMenuAds();
         })
         .catch((err) => console.error("menu-modal.html load failed:", err));
+    }
+
+    // 메뉴 모달 광고 초기화 함수
+    function initMenuAds() {
+      const ins = document.querySelector('#menuOverlay .footer .adsbygoogle');
+      if (!ins) return;
+      
+      const BP = 430; // 화면 너비 임계값
+      const w = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
+      
+      let width, height;
+      if (w <= BP) {
+        // 모바일: 폭 100%로 두고 높이 100px
+        width = '100%';
+        height = 100;
+      } else {
+        // 데스크톱: 430x90
+        width = 430;
+        height = 90;
+      }
+      
+      // 스타일/속성 적용
+      ins.style.width = (typeof width === 'number' ? width + 'px' : width);
+      ins.style.height = height + 'px';
+      ins.setAttribute('data-full-width-responsive', 'false');
+      
+      try {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      } catch(e) {
+        console.debug('[ads]', e);
+      }
     }
 
     function initMenuEvents() {
