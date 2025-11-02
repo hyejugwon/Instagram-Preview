@@ -94,10 +94,17 @@ body.lang-kr .title.h2--B {
   flex: 1;
 }
 
+.totalTitle{
+  flex-shrink: 1;
+  min-width: 0;
+  white-space: nowrap;
+}
+
 .caloriesWrapper{
   display: flex;
   align-items: center;
   gap: 4px;
+  flex-shrink: 0;
 }
 
 .resultCalories{

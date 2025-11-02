@@ -623,9 +623,17 @@
     const totalTitle = document.querySelector('.totalTitle');
     if (!totalTitle) return;
     
+    let isUpdating = false; // 업데이트 중 플래그로 무한 루프 방지
+    
     function updateTitleText() {
+      if (isUpdating) return;
+      isUpdating = true;
+      
       const caloriesContainer = document.querySelector('.caloriesContainer');
-      if (!caloriesContainer) return;
+      if (!caloriesContainer) {
+        isUpdating = false;
+        return;
+      }
       
       const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
       
@@ -635,33 +643,42 @@
         : totalTitle.getAttribute('data-i18n-en') || 'Total Calories';
       totalTitle.textContent = fullText;
       
-      // i18n 시스템 업데이트 후 높이 측정
-      if (window.refreshLanguage) {
-        window.refreshLanguage();
-      }
-      
-      // 다음 프레임에서 높이 측정 (렌더링 완료 후)
-      requestAnimationFrame(() => {
-        const titleHeight = totalTitle.offsetHeight;
-        const titleLineHeight = parseInt(window.getComputedStyle(totalTitle).lineHeight, 10);
-        
-        // 높이가 line-height의 1.5배 이상이면 2줄 이상으로 간주
-        const isMultiLine = titleHeight > titleLineHeight * 1.5;
-        
-        if (isMultiLine) {
-          // 2줄 이상이면 짧은 텍스트 사용
-          const shortText = currentLang === 'kr' 
-            ? totalTitle.getAttribute('data-i18n-kr-short') || '총합'
-            : totalTitle.getAttribute('data-i18n-en-short') || 'Total';
-          totalTitle.textContent = shortText;
-        }
-      });
+      // i18n 시스템이 업데이트한 후 높이 측정 (약간의 지연)
+      setTimeout(() => {
+        // 다음 프레임에서 높이 측정 (렌더링 완료 후)
+        requestAnimationFrame(() => {
+          const titleHeight = totalTitle.offsetHeight;
+          const titleLineHeight = parseInt(window.getComputedStyle(totalTitle).lineHeight, 10);
+          
+          // 높이가 line-height의 1.5배 이상이면 2줄 이상으로 간주
+          const isMultiLine = titleHeight > titleLineHeight * 1.5;
+          
+          if (isMultiLine) {
+            // 2줄 이상이면 짧은 텍스트 사용
+            const shortText = currentLang === 'kr' 
+              ? totalTitle.getAttribute('data-i18n-kr-short') || '총합'
+              : totalTitle.getAttribute('data-i18n-en-short') || 'Total';
+            totalTitle.textContent = shortText;
+          }
+          
+          isUpdating = false;
+        });
+      }, 50);
+    }
+    
+    // i18n 시스템의 refreshLanguage 후킹
+    const originalRefreshLanguage = window.refreshLanguage;
+    if (originalRefreshLanguage) {
+      window.refreshLanguage = function() {
+        originalRefreshLanguage();
+        setTimeout(updateTitleText, 100);
+      };
     }
     
     // 초기 실행 (약간의 지연 필요)
     setTimeout(() => {
       updateTitleText();
-    }, 100);
+    }, 200);
     
     // 리사이즈 이벤트 리스너
     let resizeTimer;
@@ -675,7 +692,7 @@
     if (originalSetLanguage) {
       window.setLanguage = function(lang) {
         originalSetLanguage(lang);
-        setTimeout(updateTitleText, 100);
+        setTimeout(updateTitleText, 150);
       };
     }
   }
