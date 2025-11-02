@@ -162,11 +162,8 @@
     
     // 체크박스 아이콘을 인라인 SVG로 변경
     function convertCheckboxIcons() {
-      // base 태그를 고려한 경로 매칭
-      const base = document.querySelector('base');
-      const basePath = base ? base.getAttribute('href') : '';
-      const targetPath = basePath ? basePath.replace(/\/$/, '') + '/icons/circleCheck.svg' : '/icons/circleCheck.svg';
-      const checkboxIcons = document.querySelectorAll(`.checkbox__icon img[src="${targetPath}"], .checkbox__icon img[src="/icons/circleCheck.svg"]`);
+      // 체크박스 아이콘을 SVG로 변환
+      const checkboxIcons = document.querySelectorAll('.checkbox__icon img[src="/icons/circleCheck.svg"]');
       checkboxIcons.forEach(img => {
         const svgHTML = '<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10 0C15.5228 0 20 4.47715 20 10C20 15.5228 15.5228 20 10 20C4.47715 20 0 15.5228 0 10C0 4.47715 4.47715 0 10 0ZM14.6172 6.94336C14.2555 6.60269 13.6856 6.61988 13.3447 6.98145L8.88574 11.71L6.63281 9.47949C6.27959 9.1298 5.71005 9.13214 5.36035 9.48535C5.01065 9.83858 5.01397 10.4081 5.36719 10.7578L8.27637 13.6387C8.44866 13.809 8.68258 13.9026 8.9248 13.8984C9.16702 13.8942 9.39721 13.7924 9.56348 13.6162L14.6553 8.21582C14.9959 7.85415 14.9787 7.28424 14.6172 6.94336Z" fill="currentColor"/></svg>';
         img.outerHTML = svgHTML;

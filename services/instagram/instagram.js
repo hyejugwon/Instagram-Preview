@@ -264,20 +264,11 @@
       document.body.classList.toggle('editing', on);
       if (addBtn) addBtn.disabled = on;
       if (editBtn) {
-        const base = document.querySelector('base');
-        const basePath = base ? base.getAttribute('href') : '';
-        const getIconPath = (path) => {
-          if (!basePath) return path;
-          const cleanBase = basePath.replace(/\/$/, '');
-          const cleanPath = path.startsWith('/') ? path : '/' + path;
-          return cleanBase + cleanPath;
-        };
-        
         if (on) {
           // Done 버튼: priBlack 스타일
           editBtn.className = 'btn btn--fill--priBlack btn--sz-me icon--me';
           const checkImg = document.createElement('img');
-          checkImg.src = getIconPath('/icons/check.svg');
+          checkImg.src = '/icons/check.svg';
           checkImg.alt = '';
           checkImg.className = 'icon';
           checkImg.width = 16;
@@ -291,7 +282,7 @@
           // Edit 버튼: teriGray 스타일
           editBtn.className = 'btn btn--fill--teriGray btn--sz-me icon--me';
           const switchImg = document.createElement('img');
-          switchImg.src = getIconPath('/icons/switch.svg');
+          switchImg.src = '/icons/switch.svg';
           switchImg.alt = '';
           switchImg.className = 'icon';
           switchImg.width = 16;
@@ -580,59 +571,16 @@
   
     // ===== Init =====
     (async function init() {
-      // 헤더 아이콘 경로 먼저 수정 (초기 HTML의 이미지)
-      const base = document.querySelector('base');
-      const basePath = base ? base.getAttribute('href') : '';
-      const getIconPath = (path) => {
-        if (!basePath) return path;
-        const cleanBase = basePath.replace(/\/$/, '');
-        const cleanPath = path.startsWith('/') ? path : '/' + path;
-        return cleanBase + cleanPath;
-      };
-      
-      // 초기 HTML의 모든 아이콘 이미지 경로 수정
-      document.querySelectorAll('[data-src], #editBtn .icon, #addBtn .icon, #menuBtn').forEach(img => {
-        const originalSrc = img.getAttribute('data-src') || img.getAttribute('src') || img.src;
-        if (originalSrc && originalSrc.startsWith('/')) {
-          const newSrc = getIconPath(originalSrc);
-          if (img.hasAttribute('data-src')) {
-            img.removeAttribute('data-src');
-          }
-          img.src = newSrc;
-          
-          // 로드 실패 시 재시도
-          img.onerror = function() {
-            this.src = newSrc + '?v=' + Date.now();
-            this.onerror = null;
-          };
-        }
-      });
-      
       setEditMode(false);
       await renderAll();
-  
-      // 헤더 아이콘 첫 로드 보정 (로드 실패 시 재시도)
-      document.querySelectorAll('#editBtn .icon, #addBtn .icon, #menuBtn, #addBtn .icon').forEach(img => {
-        if (!img.complete || img.naturalWidth === 0) {
-          let currentSrc = img.src.split('?')[0];
-          // basePath 제거
-          if (basePath && currentSrc.includes(basePath.replace(/\/$/, ''))) {
-            currentSrc = currentSrc.replace(basePath.replace(/\/$/, ''), '');
-          } else if (currentSrc.startsWith(location.origin)) {
-            currentSrc = currentSrc.replace(location.origin, '');
-          }
-          const newSrc = getIconPath(currentSrc);
-          img.src = newSrc + '?v=' + Date.now();
-        }
-      });
-  
+
       applyEmptyMode();
       syncHeaderPaddingToScrollbar();
 
       // 광고 렌더(초기 1회) + 임계 통과 시 재렌더
       renderAdOnce();
       checkAndRerenderAds();
-  
+
       installPullToRefreshBlocker(document.querySelector('.app'));
     })();
   })();

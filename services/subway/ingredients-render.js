@@ -4,17 +4,7 @@
   
   // 전역에서 접근 가능하도록 window에 등록
   window.renderIngredients = function(container) {
-    // base 태그를 고려한 경로 생성
-    const base = document.querySelector('base');
-    const basePath = base ? base.getAttribute('href') : '';
-    const getPath = (path) => {
-      if (!basePath) return path;
-      const cleanBase = basePath.replace(/\/$/, '');
-      const cleanPath = path.startsWith('/') ? path : '/' + path;
-      return cleanBase + cleanPath;
-    };
-    
-    return fetch(getPath('/services/subway/ingredients-data.json'))
+    return fetch('/services/subway/ingredients-data.json')
       .then(res => res.json())
       .then(data => {
         const selecArea = container || document.querySelector('.selecArea');
@@ -191,7 +181,7 @@
                   `;
                 } else if (option.info && option.info.startsWith('special:')) {
                   // special:인 경우 info는 숨기지만 data 속성으로 저장 (칼로리 계산용)
-                  const iconPath = getPath('/icons/circleCheck.svg');
+                  const iconPath = '/icons/circleCheck.svg';
                   checkbox.innerHTML = `
                     <div class="checkbox__icon">
                       <img src="${iconPath}" alt="">
@@ -200,7 +190,7 @@
                   `;
                   checkbox.setAttribute('data-special-info', option.info);
                 } else {
-                  const iconPath = getPath('/icons/circleCheck.svg');
+                  const iconPath = '/icons/circleCheck.svg';
                   checkbox.innerHTML = `
                     <div class="checkbox__icon">
                       <img src="${iconPath}" alt="">

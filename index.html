@@ -1,39 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <base href="/Instagram-Preview/" id="github-base">
-    <script>
-      // 로컬 환경에서는 base 태그 제거
-      if (!location.hostname.endsWith('github.io')) {
-        var base = document.getElementById('github-base');
-        if (base) base.remove();
-      }
-    </script>
-    <script>
-      // base 태그를 고려하여 CSS/JS 동적 로드
-      (function() {
-        var baseTag = document.querySelector('base');
-        var basePath = baseTag ? baseTag.getAttribute('href') : '';
-        var getPath = function(path) {
-          if (!basePath) return path;
-          var cleanBase = basePath.replace(/\/$/, '');
-          var cleanPath = path.startsWith('/') ? path : '/' + path;
-          return cleanBase + cleanPath;
-        };
-        
-        // head.js 로드
-        var headScript = document.createElement('script');
-        headScript.src = getPath('/js/head.js');
-        document.head.appendChild(headScript);
-        
-        // index.css 로드
-        var cssLink = document.createElement('link');
-        cssLink.rel = 'stylesheet';
-        cssLink.href = getPath('/css/index.css');
-        document.head.appendChild(cssLink);
-      })();
-    </script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <script src="/js/head.js"></script>
     <title>hakchips</title>
+    <link rel="stylesheet" href="/css/index.css">
   </head>  
   
 
@@ -56,25 +28,7 @@
 
       </main>
     </div>
-    <script>
-      // base 태그를 고려하여 JS 동적 로드
-      (function() {
-        var baseTag = document.querySelector('base');
-        var basePath = baseTag ? baseTag.getAttribute('href') : '';
-        var getPath = function(path) {
-          if (!basePath) return path;
-          var cleanBase = basePath.replace(/\/$/, '');
-          var cleanPath = path.startsWith('/') ? path : '/' + path;
-          return cleanBase + cleanPath;
-        };
-        
-        var scripts = ['/js/common.js', '/js/menu.js'];
-        scripts.forEach(function(src) {
-          var script = document.createElement('script');
-          script.src = getPath(src);
-          document.body.appendChild(script);
-        });
-      })();
-    </script>
+    <script src="/js/common.js"></script>
+    <script src="/js/menu.js"></script>
   </body>
 </html>
