@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <base href="/Instagram-Preview/" data-github-pages>
         <script>
           (function () {
-            if (location.hostname.endsWith('github.io')) {
-              var b = document.createElement('base');
-              b.href = '/Instagram-Preview/';
-              document.head.prepend(b);
+            // 로컬 환경에서는 base 태그 제거
+            if (!location.hostname.endsWith('github.io')) {
+              var base = document.querySelector('base[data-github-pages]');
+              if (base) base.remove();
             }
           })();
         </script>
