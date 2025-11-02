@@ -1,10 +1,29 @@
 // head.html 동적 주입 스크립트
 (function () {
-    fetch("/partials/head.html", { cache: "no-cache" })
+    // base 태그 확인
+    const base = document.querySelector('base');
+    const basePath = base ? base.getAttribute('href') : '';
+    const getPath = (path) => {
+      if (!basePath) return path;
+      const cleanBase = basePath.replace(/\/$/, '');
+      const cleanPath = path.startsWith('/') ? path : '/' + path;
+      return cleanBase + cleanPath;
+    };
+    
+    fetch(getPath("/partials/head.html"), { cache: "no-cache" })
       .then((res) => res.text())
       .then((html) => {
         const tpl = document.createElement("template");
-        tpl.innerHTML = html.trim();
+        let processedHtml = html.trim();
+        
+        // base 태그를 고려하여 모든 절대 경로 수정
+        if (basePath) {
+          processedHtml = processedHtml.replace(/(href|src)="(\/[^"]+)"/g, (match, attr, path) => {
+            return `${attr}="${getPath(path)}"`;
+          });
+        }
+        
+        tpl.innerHTML = processedHtml;
         
         // script 태그를 찾아서 따로 처리
         const scripts = tpl.content.querySelectorAll('script');

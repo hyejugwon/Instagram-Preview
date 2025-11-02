@@ -40,9 +40,31 @@
         </script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-        <script src="/js/head.js"></script>
+        <script>
+          // base 태그를 고려하여 CSS/JS 동적 로드
+          (function() {
+            var baseTag = document.querySelector('base');
+            var basePath = baseTag ? baseTag.getAttribute('href') : '';
+            var getPath = function(path) {
+              if (!basePath) return path;
+              var cleanBase = basePath.replace(/\/$/, '');
+              var cleanPath = path.startsWith('/') ? path : '/' + path;
+              return cleanBase + cleanPath;
+            };
+            
+            // head.js 로드
+            var headScript = document.createElement('script');
+            headScript.src = getPath('/js/head.js');
+            document.head.appendChild(headScript);
+            
+            // instagram.css 로드
+            var cssLink = document.createElement('link');
+            cssLink.rel = 'stylesheet';
+            cssLink.href = getPath('/services/instagram/instagram.css');
+            document.head.appendChild(cssLink);
+          })();
+        </script>
         <title>hakchips: Instagram Feed Preview</title>
-        <link rel="stylesheet" href="/services/instagram/instagram.css">
     </head>  
 
     <body>
@@ -140,8 +162,26 @@
             <div id="dragGhost" class="ghost" hidden=""></div>
 
             <!-- Script -->
-            <script src="/services/instagram/instagram.js"></script>
-            <script src="/js/menu.js"></script>
+            <script>
+              // base 태그를 고려하여 JS 동적 로드
+              (function() {
+                var baseTag = document.querySelector('base');
+                var basePath = baseTag ? baseTag.getAttribute('href') : '';
+                var getPath = function(path) {
+                  if (!basePath) return path;
+                  var cleanBase = basePath.replace(/\/$/, '');
+                  var cleanPath = path.startsWith('/') ? path : '/' + path;
+                  return cleanBase + cleanPath;
+                };
+                
+                var scripts = ['/services/instagram/instagram.js', '/js/menu.js'];
+                scripts.forEach(function(src) {
+                  var script = document.createElement('script');
+                  script.src = getPath(src);
+                  document.body.appendChild(script);
+                });
+              })();
+            </script>
         </div>
     </body>
 </html>
