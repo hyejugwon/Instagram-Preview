@@ -50,7 +50,7 @@
           informationCard.className = 'card card--information card--multiple';
           informationCard.innerHTML = `
             <div class="card__content">
-              <p class="card__content-item kr" data-i18n-en="Referenced from Subway official website, but information may vary depending on the update date." data-i18n-kr="서브웨이 공식 홈페이지를 참고하였으나업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.">서브웨이 공식 홈페이지를 참고하였으나업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.</p>
+              <p class="card__content-item kr" data-i18n-en="Referenced from Subway official website, but information may vary depending on the update date." data-i18n-kr="서브웨이 공식 홈페이지를 참고하였으나 업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.">서브웨이 공식 홈페이지를 참고하였으나 업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.</p>
               <p class="card__content-item kr" data-i18n-en="Due to Subway's characteristics, quantities are not always the same, so there may be differences from the calories provided." data-i18n-kr="서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.">서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.</p>
               <p class="card__content-item kr" data-i18n-en="For main ingredients, Korean Subway was referenced. For other information not disclosed in Korean ingredient labels, Australian ingredient labels were referenced." data-i18n-kr="메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.">메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.</p>
             </div>
