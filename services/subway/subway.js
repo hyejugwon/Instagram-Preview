@@ -618,17 +618,73 @@
     window.addEventListener('scroll', updateNutritionInfoPosition);
   }
   
+  // totalTitle 반응형 텍스트 처리
+  function initResponsiveTitle() {
+    const totalTitle = document.querySelector('.totalTitle');
+    if (!totalTitle) return;
+    
+    function updateTitleText() {
+      const caloriesContainer = document.querySelector('.caloriesContainer');
+      if (!caloriesContainer) return;
+      
+      const containerWidth = caloriesContainer.offsetWidth;
+      const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
+      
+      // 작은 화면에서는 짧은 텍스트 사용 (대략 280px 이하)
+      if (containerWidth < 280) {
+        const shortText = currentLang === 'kr' 
+          ? totalTitle.getAttribute('data-i18n-kr-short') || '총합'
+          : totalTitle.getAttribute('data-i18n-en-short') || 'Total';
+        totalTitle.textContent = shortText;
+      } else {
+        // 큰 화면에서는 원래 텍스트 사용
+        const fullText = currentLang === 'kr'
+          ? totalTitle.getAttribute('data-i18n-kr') || '칼로리 총합'
+          : totalTitle.getAttribute('data-i18n-en') || 'Total Calories';
+        totalTitle.textContent = fullText;
+        
+        // i18n 시스템 업데이트
+        if (window.refreshLanguage) {
+          setTimeout(() => {
+            window.refreshLanguage();
+          }, 0);
+        }
+      }
+    }
+    
+    // 초기 실행
+    updateTitleText();
+    
+    // 리사이즈 이벤트 리스너
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(updateTitleText, 100);
+    });
+    
+    // 언어 변경 시에도 업데이트
+    const originalSetLanguage = window.setLanguage;
+    if (originalSetLanguage) {
+      window.setLanguage = function(lang) {
+        originalSetLanguage(lang);
+        setTimeout(updateTitleText, 50);
+      };
+    }
+  }
+  
   // DOM 로드 완료 후 초기화
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       init();
       initDetailToggle();
       initResetButton();
+      initResponsiveTitle();
     });
   } else {
     init();
     initDetailToggle();
     initResetButton();
+    initResponsiveTitle();
   }
 })();
   
