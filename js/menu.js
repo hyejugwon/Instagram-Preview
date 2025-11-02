@@ -100,6 +100,13 @@
             // 메뉴 모달 주입 후 이벤트 초기화 시도
             initMenuEvents();
             
+            // menu-modal이 주입된 후 언어 시스템 새로고침
+            if (window.refreshLanguage) {
+              setTimeout(() => {
+                window.refreshLanguage();
+              }, 100);
+            }
+            
             // menuBtn이 아직 없을 수 있으므로 잠시 후 다시 시도
             setTimeout(() => {
               if (!document.getElementById('menuBtn')) {

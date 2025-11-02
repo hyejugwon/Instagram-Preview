@@ -16,12 +16,52 @@ html, body{
   background: var(--gray-0) !important;
   color: var(--gray-90);
   overflow: hidden;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html::-webkit-scrollbar,
+html *::-webkit-scrollbar,
+body::-webkit-scrollbar,
+body *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+html::-webkit-scrollbar-track,
+html *::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+body *::-webkit-scrollbar-track {
+  display: none !important;
+  background: transparent !important;
+}
+
+html::-webkit-scrollbar-thumb,
+html *::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+body *::-webkit-scrollbar-thumb {
+  display: none !important;
+  background: transparent !important;
 }
 
 /* index.css의 .app 스타일 오버라이드 */
 .app {
   background-color: unset !important;
   padding: unset !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.app::-webkit-scrollbar,
+.app *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
 }
 
 
@@ -40,6 +80,10 @@ html, body{
   justify-content: flex-start !important;
 }
 
+.header .actions{
+  padding: 0px 16px 18px 16px !important;
+}
+
 .header-topbar {
   margin: 0 !important;
   padding: 18px 16px !important;
@@ -48,7 +92,6 @@ html, body{
 
 .actions {
   margin: 0 !important;
-  padding: 0px 16px 18px 16px !important;
   width: 100% !important;
 }
 
@@ -110,9 +153,9 @@ button:disabled {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
-  scrollbar-gutter: stable;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scrollbar-gutter: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
 /* section 요소 기본 margin/padding 제거 */
@@ -121,8 +164,33 @@ button:disabled {
   padding: 0 !important;
 }
 
-.contentsArea::-webkit-scrollbar {
-  display: none;
+/* 모든 브라우저에서 스크롤바 숨김 */
+.contentsArea::-webkit-scrollbar,
+.contentsArea *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+.contentsArea::-webkit-scrollbar-track,
+.contentsArea *::-webkit-scrollbar-track {
+  display: none !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+.contentsArea::-webkit-scrollbar-thumb,
+.contentsArea *::-webkit-scrollbar-thumb {
+  display: none !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+.contentsArea::-webkit-scrollbar-corner {
+  display: none !important;
+  background: transparent !important;
 }
 
 @supports not (height: 100dvh){
@@ -151,11 +219,14 @@ button:disabled {
   text-overflow: ellipsis;
   color: var(--gray-90);
 }
+
+body.lang-kr .title.h2--B {
+  font-weight: 900;
+}
 .actions{
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0px 16px 18px 16px;
 }
 
 /* 이미지 그리드 */
@@ -287,25 +358,7 @@ button:disabled {
 
 .footer-spacer { height: 0 !important; display: none !important; }
 
-/* 모달 공통 */
-.overlay{
-  position:fixed; inset:0; background:rgba(0,0,0,.45);
-  display:none; align-items:center; justify-content:center;
-  z-index:100; padding:24px;
-}
-.overlay.show{ display:flex; }
-.modal-card{
-  width:100%; max-width:360px; background:#fff;
-  border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.25);
-  padding:16px; gap:20px;
-}
-.modal-title{
-  margin:4px 0 16px; text-align:center; font-weight:700;
-  font-size:18px; line-height:26px; color:#383E4A;
-}
-.action{ flex:1; padding:12px 14px; border-radius:10px; border:none; }
-.action.cancel{ background:#eee; color:#333; font-size:15px; font-weight:500; }
-.action.delete{ background:#ef4444; color:#fff; font-size:15px; font-weight:500; }
+/* 모달 스타일은 design-system/components/modal.css 사용 */
 
 /* 선택/드래그 차단 */
 html, body, .contentsArea, .header, .header-inner, .title, .actions, .grid, .cell,

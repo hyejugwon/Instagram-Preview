@@ -1,41 +1,56 @@
 @layer components {
+    /* 공통 모달 스타일 */
     .overlay{
-      position:fixed; inset:0; display:none; place-items:center;
-      background:rgba(0,0,0,.4); padding:1rem;
+      position:fixed; inset:0; background:rgba(0,0,0,.45);
+      display:none; align-items:center; justify-content:center;
+      z-index:100; padding:24px;
+      transition: opacity 0.15s ease;
     }
-    .overlay[open], .overlay.is-open{ display:grid; }
-  
+    .overlay.show{ display:flex; }
+    
     .modal-card{
-      width:min(100%, 24rem); background:var(--bg); color:var(--fg);
-      border-radius:var(--radius-lg); border:1px solid var(--border);
-      box-shadow:var(--shadow-md); padding:var(--sp-6);
+      width:100%; max-width:360px; background:#fff;
+      border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.25);
+      padding:16px; gap:20px;
     }
-    .modal-title{ font-size:var(--fs-lg); font-weight:800; margin-bottom:var(--sp-4); }
-    .modal-card .actions{ display:flex; justify-content:flex-end; gap:.5rem; }
-    .action{
-      height:2.25rem; padding:0 .875rem; border-radius:var(--radius-sm);
-      border:1px solid var(--border); background:var(--muted-bg); cursor:pointer;
+    
+    .modal-title{
+      margin:4px 0 16px; text-align:center; font-weight:700;
+      font-size:18px; line-height:26px; color:#383E4A;
     }
-    .action.delete{ background:var(--danger-500); color:#fff; border-color:transparent; }
+    
+    .modal-card .actions{ 
+      display:flex; 
+      gap:8px;
+    }
+    
+    .action{ 
+      flex:1; 
+      padding:12px 14px; 
+      border-radius:10px; 
+      border:none;
+      font-size:15px; 
+      font-weight:500;
+      cursor:pointer;
+      transition: opacity 0.2s;
+    }
+    
+    .action:hover {
+      opacity: 0.9;
+    }
+    
+    .action.cancel{ 
+      background:#eee; 
+      color:#333; 
+    }
+    
+    .action.delete{ 
+      background:#ef4444; 
+      color:#fff; 
+    }
+    
+    .action.confirm {
+      background:#007bff;
+      color:#fff;
+    }
   }
-  
-
-
-  /* .overlay{
-    position:fixed; inset:0; background:rgba(0,0,0,.45);
-    display:none; align-items:center; justify-content:center;
-    z-index:100; padding:24px;
-  }
-  .overlay.show{ display:flex; }
-  .modal-card{
-    width:100%; max-width:360px; background:#fff;
-    border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.25);
-    padding:16px; gap:20px;
-  }
-  .modal-title{
-    margin:4px 0 16px; text-align:center; font-weight:700;
-    font-size:18px; line-height:26px; color:#383E4A;
-  }
-  .action{ flex:1; padding:12px 14px; border-radius:10px; border:none; }
-  .action.cancel{ background:#eee; color:#333; font-size:15px; font-weight:500; }
-  .action.delete{ background:#ef4444; color:#fff; font-size:15px; font-weight:500; } */

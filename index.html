@@ -13,22 +13,47 @@
     <div class="app">
       <main class="mobile-container stack" style="--stack-gap: var(--sp-6); padding: var(--sp-6);">
         <section class="stack">
-          <div class="en hello">Hey there, <br> this is hakchips 🍪</div>
-          <p class="en h2--M">We're super happy to meet you!</p>
+          <div class="en hello">Hey there, <br> this is <span class="en">hakchips</span> 🍪</div>
+          <p class="en h3--M">Here are some crispy baby codes <br> I cooked up.  <br> 
+            Nothing fancy, but I hope it's tasty!</p>
         </section>
 
         <nav class="stack">
-          <a class="en btn h3--B" href="/services/instagram/">
+          <a class="en btn h3--B" href="/services/instagram/" data-i18n-en="Instagram Feed Preview" data-i18n-kr="인스타그램 피드 미리보기">
             <span>Instagram Feed Preview</span>
           </a>
-          <a class="en btn h3--B" href="/services/subway/">
+          <a class="en btn h3--B" href="/services/subway/" data-i18n-en="Subway Calorie Calculator" data-i18n-kr="서브웨이 칼로리 계산기">
             <span>Subway Calorie Calculator</span>
           </a>
         </nav>
 
+        <!-- Language Selector -->
+        <div class="footer-section">
+          <div class="language-selector">
+            <span class="language-label h3--B" data-i18n-en="Language" data-i18n-kr="언어">Language</span>
+            <div class="language-buttons">
+              <button class="lang-btn active b2--M" data-lang="en" id="langEn">English</button>
+              <button class="lang-btn b2--M" data-lang="kr" id="langKr">한국어</button>
+            </div>
+          </div>
+        </div>
+
       </main>
+      
+      <!-- Google Ad Footer -->
+      <footer class="footer">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-3906940826015683"
+             data-ad-slot="2467327374"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </footer>
     </div>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683"
+            crossorigin="anonymous"></script>
     <script src="/js/common.js"></script>
     <script src="/js/menu.js"></script>
+    <script src="/js/i18n.js"></script>
   </body>
 </html>

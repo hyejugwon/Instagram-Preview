@@ -4,9 +4,7 @@
     const editBtn = document.getElementById('editBtn');
     const fileInput = document.getElementById('fileInput');
     const grid = document.getElementById('grid');
-    const deleteOverlay = document.getElementById('deleteOverlay');
-    const confirmDelete = document.getElementById('confirmDelete');
-    const cancelDelete = document.getElementById('cancelDelete');
+    // 모달은 공통 컴포넌트 사용 (js/modal.js)
     const adOverlay = document.getElementById('adOverlay');
     const closeAd = document.getElementById('closeAd');
     const dragGhost = document.getElementById('dragGhost');
@@ -264,6 +262,9 @@
       document.body.classList.toggle('editing', on);
       if (addBtn) addBtn.disabled = on;
       if (editBtn) {
+        // 현재 언어 가져오기
+        const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
+        
         if (on) {
           // Done 버튼: priBlack 스타일
           editBtn.className = 'btn btn--fill--priBlack btn--sz-me icon--me';
@@ -276,7 +277,9 @@
           editBtn.innerHTML = '';
           editBtn.appendChild(checkImg);
           const doneSpan = document.createElement('span');
-          doneSpan.textContent = 'Done';
+          doneSpan.setAttribute('data-i18n-en', 'Done');
+          doneSpan.setAttribute('data-i18n-kr', '완료');
+          doneSpan.textContent = currentLang === 'kr' ? '완료' : 'Done';
           editBtn.appendChild(doneSpan);
         } else {
           // Edit 버튼: teriGray 스타일
@@ -290,10 +293,19 @@
           editBtn.innerHTML = '';
           editBtn.appendChild(switchImg);
           const editSpan = document.createElement('span');
-          editSpan.textContent = 'Edit';
+          editSpan.setAttribute('data-i18n-en', 'Edit');
+          editSpan.setAttribute('data-i18n-kr', '편집');
+          editSpan.textContent = currentLang === 'kr' ? '편집' : 'Edit';
           editBtn.appendChild(editSpan);
         }
         editBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        
+        // 언어 번역 시스템에 새로 추가된 요소 업데이트
+        if (window.refreshLanguage) {
+          setTimeout(() => {
+            window.refreshLanguage();
+          }, 0);
+        }
       }
     }
   
@@ -337,7 +349,29 @@
   
       longPressTimer = setTimeout(() => {
         targetForDelete = el;
-        deleteOverlay.classList.add('show');
+        // 공통 모달 사용
+        window.showModal({
+          id: 'deleteModal',
+          title: { en: 'Do you want to delete?', kr: '삭제하시겠습니까?' },
+          cancelText: { en: 'Cancel', kr: '취소' },
+          confirmText: { en: 'Delete', kr: '삭제' },
+          confirmClass: 'delete',
+          onCancel: () => {
+            targetForDelete = null;
+          },
+          onConfirm: async () => {
+            if (targetForDelete) {
+              const id = Number(targetForDelete.dataset.id);
+              if (!Number.isNaN(id)) await dbDeletePhotoById(id);
+              if (targetForDelete.parentNode === grid) grid.removeChild(targetForDelete);
+              targetForDelete = null;
+              await saveCurrentOrder();
+              updateGridState();
+              applyEmptyMode();
+              syncHeaderPaddingToScrollbar();
+            }
+          }
+        });
       }, LONG_PRESS_MS);
   
       const move = (e) => {
@@ -432,24 +466,7 @@
     }
   
     // ===== Delete flow =====
-    cancelDelete.addEventListener('click', () => {
-      targetForDelete = null;
-      deleteOverlay.classList.remove('show');
-    });
-  
-    confirmDelete.addEventListener('click', async () => {
-      if (targetForDelete) {
-        const id = Number(targetForDelete.dataset.id);
-        if (!Number.isNaN(id)) await dbDeletePhotoById(id);
-        if (targetForDelete.parentNode === grid) grid.removeChild(targetForDelete);
-        targetForDelete = null;
-        deleteOverlay.classList.remove('show');
-        await saveCurrentOrder();
-        updateGridState();
-        applyEmptyMode();
-        syncHeaderPaddingToScrollbar();
-      }
-    });
+    // 모달은 공통 컴포넌트에서 처리됨 (longPressTimer에서 showModal 호출)
   
     // ===== Interstitial (샘플) =====
     setTimeout(() => adOverlay?.classList.add('show'), 3 * 60 * 1000);

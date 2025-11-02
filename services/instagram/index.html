@@ -13,17 +13,17 @@
             <!-- Header -->
             <div class="header">
                 <div class="header-topbar">
-                    <div class="title h2--B">Instagram Feed Preview</div>
+                    <div class="title h2--B" data-i18n-en="Instagram Feed Preview" data-i18n-kr="인스타그램 피드 미리보기">Instagram Feed Preview</div>
                     <img src="/icons/menudrop.svg" width="26" height="26" id="menuBtn" style="cursor: pointer;">
                 </div>
                 <div class="actions">
                     <button class="btn btn--fill--teriGray btn--sz-me icon--me" id="editBtn" aria-pressed="false">
                         <img src="/icons/switch.svg" alt="" class="icon" width="16" height="16">
-                        <span>Edit</span>
+                        <span data-i18n-en="Edit" data-i18n-kr="편집">Edit</span>
                     </button>
                     <button class="btn btn--fill--teriGray btn--sz-me icon--me" id="addBtn">
                         <img src="/icons/plus.svg" alt="" class="icon" width="16" height="16">
-                        <span>Add</span>
+                        <span data-i18n-en="Add" data-i18n-kr="추가">Add</span>
                     </button>
                     <input id="fileInput" type="file" accept="image/*" multiple="" style="display:none">
                 </div>
@@ -52,23 +52,26 @@
                 <div class="footer-spacer" aria-hidden="true"></div>
             </main>
 
-            <!-- Delete Modal -->
-            <div id="deleteOverlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
-                <div class="modal-card">
-                <div id="deleteTitle" class="modal-title">Do you want to delete?</div>
-                <div class="actions">
-                    <button class="action cancel" id="cancelDelete">Cancel</button>
-                    <button class="action delete" id="confirmDelete">Delete</button>
-                </div>
-                </div>
-            </div>
+            <!-- Delete Modal은 공통 컴포넌트(js/modal.js)로 동적 생성됨 -->
 
             <!-- Drag ghost -->
             <div id="dragGhost" class="ghost" hidden=""></div>
 
-            <!-- Script -->
-            <script src="/services/instagram/instagram.js"></script>
-            <script src="/js/menu.js"></script>
+            <!-- Google Ad Footer -->
+            <footer class="footer">
+              <ins class="adsbygoogle"
+                   style="display:block"
+                   data-ad-client="ca-pub-3906940826015683"
+                   data-ad-slot="2467327374"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
+            </footer>
         </div>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683"
+            crossorigin="anonymous"></script>
+    <script src="/js/i18n.js"></script>
+    <script src="/js/modal.js"></script>
+    <script src="/services/instagram/instagram.js"></script>
+    <script src="/js/menu.js"></script>
     </body>
 </html>

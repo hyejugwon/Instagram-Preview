@@ -2,6 +2,16 @@
 body:not(:has(.contentsArea)) > .app {
   background-color: var(--bg-20);
   padding: 48px 20px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+body:not(:has(.contentsArea)) > .app .mobile-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
 body:not(:has(.contentsArea)) > .app .stack .hello{
@@ -10,6 +20,10 @@ body:not(:has(.contentsArea)) > .app .stack .hello{
   font-weight: 800;
   color: var(--gray-90);
   margin-bottom: 8px;
+}
+
+body:not(:has(.contentsArea)) > .app .stack .h3--M{
+  color: var(--gray-80);
 }
 
 body:not(:has(.contentsArea)) > .app .stack {
@@ -49,6 +63,10 @@ body:not(:has(.contentsArea)) > .app .stack .btn:active {
   margin-bottom: 8px;
 }
 
+.menu-modal .menu-content .stack .h3--M{
+  color: var(--gray-80);
+}
+
 .menu-modal .menu-content .stack {
   margin-bottom: 40px;
 }
@@ -70,5 +88,73 @@ body:not(:has(.contentsArea)) > .app .stack .btn:active {
 .menu-modal .menu-content .stack .btn:active {
   background: var(--gray-90);
   color: var(--lime-50-default);
+}
+
+/* Footer Section (Language Selector & Ad) */
+.footer-section {
+  margin-top: auto;
+  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Language Selector */
+.language-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+.language-label {
+  color: var(--scrim-35);
+}
+
+.language-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.lang-btn {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 100px;
+  background: var(--gray-0);
+  border: 1px solid var(--gray-50);
+  color: var(--gray-50);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.lang-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.lang-btn.active {
+  background: var(--lime-60);
+  color: var(--gray-0);
+  font-weight: 600;
+  border: none;
+}
+
+/* Ad Container */
+.ad-container {
+  width: 100%;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ad-container ins {
+  display: block;
+  width: 100%;
+  max-width: 430px;
 }
 

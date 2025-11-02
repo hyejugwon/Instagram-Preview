@@ -5,6 +5,23 @@
   gap: 44px;
 }
 
+/* Header 타이틀 스타일 (Instagram과 동일하게) */
+.title {
+  flex: 1;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--gray-90);
+}
+
+/* Header 타이틀 한글일 때 font-weight 900 */
+body.lang-kr .title.h2--B {
+  font-weight: 900;
+}
+
 .selecArea {
   padding: 32px 16px 20px 16px;
   display: flex;
@@ -52,19 +69,38 @@
   display: flex;
   align-items: center;
   padding: 16px;
-  gap: 4px;
+  gap: 8px;
   background: var(--lime-50-default);
   position: sticky;
   top: 120px; /* header-topbar (62px) + tabs (58px) + 여유 10px */
   z-index: 10;
+  margin-bottom: 0;
 }
 
 .result .btn{
   margin-left: 8px;
 }
 
-.resultCalories{
+#detailBtn{
+  width: 56px;
+  min-width: 56px;
+  max-width: 56px;
+}
+
+.caloriesContainer{
+  display: flex;
+  align-items: center;
+  gap: 16px;
   flex: 1;
+}
+
+.caloriesWrapper{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.resultCalories{
   text-align: right;
 }
 
@@ -88,7 +124,7 @@
   width: 100%;
   max-width: 500px;
   z-index: 1000;
-  margin-top: 0;
+  top: 0;
   pointer-events: none;
 }
 
@@ -108,6 +144,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 12px 0;
+}
+
+.nutrition-item:first-child {
+  padding-top: 0;
 }
 
 .nutrition-label {
