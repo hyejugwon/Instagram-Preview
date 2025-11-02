@@ -172,6 +172,8 @@ button:disabled {
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
   transition: height 0.3s ease-in-out;
+  touch-action: pan-y;
+  -webkit-touch-callout: none;
 }
 
 /* section 요소 기본 margin/padding 제거 */

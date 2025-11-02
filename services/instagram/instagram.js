@@ -615,7 +615,7 @@
       // 사이드 레일 광고 초기화 (데스크톱 전용)
       initSideRailAds();
 
-      installPullToRefreshBlocker(document.querySelector('.app'));
+      installPullToRefreshBlocker(document.querySelector('.contentsArea'));
     })();
     
     // 사이드 레일 광고 초기화 함수
