@@ -9,16 +9,16 @@
   </head>  
   
 
-  <body>
+  <body class="home-page" style="height: 100dvh; overflow: hidden; display: flex; flex-direction: column;">
     <div class="app">
-      <main class="mobile-container stack" style="--stack-gap: var(--sp-6); padding: var(--sp-6);">
+      <main class="mobile-container stack" style="--stack-gap: var(--sp-6);">
         <section class="stack">
           <div class="en hello">Hey there, <br> this is <span class="en">hakchips</span> 🍪</div>
           <p class="en h3--M">Here are some crispy baby codes <br> I cooked up.  <br> 
             Nothing fancy, but I hope it's tasty!</p>
         </section>
 
-        <nav class="stack">
+        <nav class="stack btnArea">
           <a class="en btn h3--B" href="/services/instagram/" data-i18n-en="Instagram Feed Preview" data-i18n-kr="인스타그램 피드 미리보기">
             <span>Instagram Feed Preview</span>
           </a>
@@ -42,12 +42,54 @@
       
       <!-- Google Ad Footer -->
       <footer class="footer">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="2467327374" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="2467327374" data-ad-format="auto"></ins>
       </footer>
     </div>
     <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683" crossorigin="anonymous"></script>
     <script src="/js/common.js"></script>
     <script src="/js/menu.js"></script>
     <script src="/js/i18n.js"></script>
+    <script>
+      // 광고 크기 제한 (subway 서비스와 동일한 로직)
+      (function() {
+        function initAds() {
+          const ins = document.querySelector('.footer .adsbygoogle');
+          if (!ins) return;
+          
+          const BP = 430; // 화면 너비 임계값
+          const w = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
+          
+          let width, height;
+          if (w <= BP) {
+            // 모바일: 폭 100%로 두고 높이 100px
+            width = '100%';
+            height = 100;
+          } else {
+            // 데스크톱: 100% 너비, 높이 90px
+            width = '100%';
+            height = 90;
+          }
+          
+          // 스타일/속성 적용
+          ins.style.width = (typeof width === 'number' ? width + 'px' : width);
+          ins.style.height = height + 'px';
+          ins.setAttribute('data-full-width-responsive', 'false');
+          
+          try {
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          } catch(e) {
+            console.debug('[ads]', e);
+          }
+        }
+        
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initAds, 100);
+          });
+        } else {
+          setTimeout(initAds, 100);
+        }
+      })();
+    </script>
   </body>
 </html>

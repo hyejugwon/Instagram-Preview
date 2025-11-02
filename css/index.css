@@ -1,9 +1,11 @@
 /* index.html용 스타일 - .contentsArea가 없는 페이지에서만 적용 */
+body.home-page,
 body:not(:has(.contentsArea)) {
   width: 100%;
   min-height: 100dvh;
 }
 
+body.home-page > .app,
 body:not(:has(.contentsArea)) > .app {
   background-color: var(--bg-20);
   padding: 0;
@@ -16,6 +18,7 @@ body:not(:has(.contentsArea)) > .app {
   flex-direction: column;
 }
 
+body.home-page > .app .mobile-container,
 body:not(:has(.contentsArea)) > .app .mobile-container {
   flex: 1;
   display: flex;
@@ -28,6 +31,7 @@ body:not(:has(.contentsArea)) > .app .mobile-container {
   -ms-overflow-style: none !important;
 }
 
+body.home-page > .app .mobile-container::-webkit-scrollbar,
 body:not(:has(.contentsArea)) > .app .mobile-container::-webkit-scrollbar {
   display: none !important;
   width: 0 !important;
@@ -36,21 +40,25 @@ body:not(:has(.contentsArea)) > .app .mobile-container::-webkit-scrollbar {
   -webkit-appearance: none !important;
 }
 
+body.home-page > .app .mobile-container::-webkit-scrollbar-track,
 body:not(:has(.contentsArea)) > .app .mobile-container::-webkit-scrollbar-track {
   display: none !important;
   background: transparent !important;
 }
 
+body.home-page > .app .mobile-container::-webkit-scrollbar-thumb,
 body:not(:has(.contentsArea)) > .app .mobile-container::-webkit-scrollbar-thumb {
   display: none !important;
   background: transparent !important;
 }
 
+body.home-page > .app .mobile-container::-webkit-scrollbar-corner,
 body:not(:has(.contentsArea)) > .app .mobile-container::-webkit-scrollbar-corner {
   display: none !important;
   background: transparent !important;
 }
 
+body.home-page > .app .stack .hello,
 body:not(:has(.contentsArea)) > .app .stack .hello{
   font-size: 28px;
   line-height: 40px;
@@ -59,10 +67,12 @@ body:not(:has(.contentsArea)) > .app .stack .hello{
   margin-bottom: 8px;
 }
 
+body.home-page > .app .stack .h3--M,
 body:not(:has(.contentsArea)) > .app .stack .h3--M{
   color: var(--gray-80);
 }
 
+body.home-page > .app .stack .btn,
 body:not(:has(.contentsArea)) > .app .stack .btn{
   width: 100%;
   padding: 16px;
@@ -74,16 +84,19 @@ body:not(:has(.contentsArea)) > .app .stack .btn{
   border: none;
 }
 
+body.home-page > .app .stack .btn:focus,
 body:not(:has(.contentsArea)) > .app .stack .btn:focus {
   outline: none;
   border: none;
 }
 
+body.home-page > .app .stack .btn:hover,
 body:not(:has(.contentsArea)) > .app .stack .btn:hover {
   background: var(--gray-90);
   color: var(--lime-50-default);
 }
 
+body.home-page > .app .stack .btn:active,
 body:not(:has(.contentsArea)) > .app .stack .btn:active {
   background: var(--gray-90);
   color: var(--lime-50-default);
@@ -153,6 +166,7 @@ body:not(:has(.contentsArea)) > .app .stack .btn:active {
 }
 
 /* Footer Section (Language Selector만) */
+body.home-page > .app .mobile-container .footer-section,
 body:not(:has(.contentsArea)) > .app .mobile-container .footer-section {
   margin-top: auto;
   padding-top: 40px;
@@ -225,6 +239,7 @@ body:not(:has(.contentsArea)) > .app .mobile-container .footer-section {
 }
 
 /* Footer 스타일 (광고 영역 - main과 완전히 분리, 가로 전체) */
+body.home-page .footer,
 body:not(:has(.contentsArea)) .footer {
   width: 100%;
   margin-top: 0;
@@ -237,6 +252,7 @@ body:not(:has(.contentsArea)) .footer {
   flex-shrink: 0;
 }
 
+body.home-page .footer .adsbygoogle,
 body:not(:has(.contentsArea)) .footer .adsbygoogle {
   display: block;
   width: 100%;
