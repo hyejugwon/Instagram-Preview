@@ -528,8 +528,8 @@
   
     // ====== AdSense: 데스크톱/모바일 고정크기 자동 선택 ======
     const PUB_ID = 'ca-pub-3906940826015683';
-    const DESKTOP_SLOT = '2467327374';          // 430x90 (이미 생성된 슬롯)
-    const MOBILE_SLOT  = 'YOUR_MOBILE_SLOT_ID'; // 320x100 또는 320x50로 새로 만든 슬롯 ID로 교체
+    const DESKTOP_SLOT = '5125296215';          // 데스크톱 광고 슬롯
+    const MOBILE_SLOT  = '5125296215';          // 모바일 광고 슬롯
     const BP = 430; // 화면 너비 임계값
   
     function pickAdConfig() {
@@ -611,9 +611,41 @@
       // 광고 렌더(초기 1회) + 임계 통과 시 재렌더
       renderAdOnce();
       checkAndRerenderAds();
+      
+      // 사이드 레일 광고 초기화 (데스크톱 전용)
+      initSideRailAds();
 
       installPullToRefreshBlocker(document.querySelector('.app'));
     })();
+    
+    // 사이드 레일 광고 초기화 함수
+    function initSideRailAds() {
+      if (window.innerWidth < 1000) return; // 모바일에서는 실행 안 함
+      
+      const leftAd = document.querySelector('.side-rail-ad--left .adsbygoogle');
+      const rightAd = document.querySelector('.side-rail-ad--right .adsbygoogle');
+      
+      // 사이드 레일 광고 크기 설정 (160x600)
+      [leftAd, rightAd].forEach(ins => {
+        if (!ins) return;
+        ins.style.width = '160px';
+        ins.style.height = '600px';
+        ins.setAttribute('data-full-width-responsive', 'false');
+        
+        try {
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch(e) {
+          console.debug('[side-rail-ads]', e);
+        }
+      });
+    }
+    
+    // 리사이즈 시 사이드 레일 광고 재초기화
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 1000) {
+        initSideRailAds();
+      }
+    });
   })();
   
   function isIOSSafari() {

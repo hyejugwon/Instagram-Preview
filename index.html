@@ -6,6 +6,7 @@
     <script src="/js/head.js"></script>
     <title>hakchips</title>
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/side-rail-ads.css">
   </head>  
   
 
@@ -42,9 +43,18 @@
       
       <!-- Google Ad Footer -->
       <footer class="footer">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="2467327374" data-ad-format="auto"></ins>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="5125296215" data-ad-format="auto"></ins>
       </footer>
     </div>
+    
+    <!-- 사이드 레일 광고 (데스크톱 전용) -->
+    <div class="side-rail-ad side-rail-ad--left">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="3267195730" data-ad-format="auto"></ins>
+    </div>
+    <div class="side-rail-ad side-rail-ad--right">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="3267195730" data-ad-format="auto"></ins>
+    </div>
+    
     <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683" crossorigin="anonymous"></script>
     <script src="/js/common.js"></script>
     <script src="/js/menu.js"></script>
@@ -82,12 +92,40 @@
           }
         }
         
+        // 사이드 레일 광고 초기화 (데스크톱 전용)
+        function initSideRailAds() {
+          if (window.innerWidth < 1000) return; // 모바일에서는 실행 안 함
+          
+          const leftAd = document.querySelector('.side-rail-ad--left .adsbygoogle');
+          const rightAd = document.querySelector('.side-rail-ad--right .adsbygoogle');
+          
+          // 사이드 레일 광고 크기 설정 (일반적으로 160x600 또는 300x250)
+          [leftAd, rightAd].forEach(ins => {
+            if (!ins) return;
+            ins.style.width = '160px';
+            ins.style.height = '600px';
+            ins.setAttribute('data-full-width-responsive', 'false');
+            
+            try {
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch(e) {
+              console.debug('[side-rail-ads]', e);
+            }
+          });
+        }
+        
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(initAds, 100);
+            setTimeout(() => {
+              initAds();
+              initSideRailAds();
+            }, 100);
           });
         } else {
-          setTimeout(initAds, 100);
+          setTimeout(() => {
+            initAds();
+            initSideRailAds();
+          }, 100);
         }
       })();
     </script>

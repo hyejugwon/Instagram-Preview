@@ -755,6 +755,7 @@
       setTimeout(() => {
         setCSSHeaderH();
         initAds();
+        initSideRailAds();
         // 리사이즈 시 header 높이 재계산
         window.addEventListener('resize', setCSSHeaderH);
       }, 100);
@@ -768,9 +769,39 @@
     setTimeout(() => {
       setCSSHeaderH();
       initAds();
+      initSideRailAds();
       // 리사이즈 시 header 높이 재계산
       window.addEventListener('resize', setCSSHeaderH);
     }, 100);
   }
+  
+  // 사이드 레일 광고 초기화 함수
+  function initSideRailAds() {
+    if (window.innerWidth < 1000) return; // 모바일에서는 실행 안 함
+    
+    const leftAd = document.querySelector('.side-rail-ad--left .adsbygoogle');
+    const rightAd = document.querySelector('.side-rail-ad--right .adsbygoogle');
+    
+    // 사이드 레일 광고 크기 설정 (160x600)
+    [leftAd, rightAd].forEach(ins => {
+      if (!ins) return;
+      ins.style.width = '160px';
+      ins.style.height = '600px';
+      ins.setAttribute('data-full-width-responsive', 'false');
+      
+      try {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      } catch(e) {
+        console.debug('[side-rail-ads]', e);
+      }
+    });
+  }
+  
+  // 리사이즈 시 사이드 레일 광고 재초기화
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 1000) {
+      initSideRailAds();
+    }
+  });
 })();
   

@@ -1,0 +1,48 @@
+/* 사이드 레일 광고 - 데스크톱 전용 */
+.side-rail-ad {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+  display: none; /* 기본적으로 숨김 (모바일) */
+}
+
+.side-rail-ad--left {
+  left: 0;
+}
+
+.side-rail-ad--right {
+  right: 0;
+}
+
+.side-rail-ad .adsbygoogle {
+  display: block;
+}
+
+/* 데스크톱에서만 표시 (화면 너비 1000px 이상) */
+@media (min-width: 1000px) {
+  .side-rail-ad {
+    display: block;
+  }
+  
+  /* 메인 콘텐츠가 중앙에 있으므로, 광고가 콘텐츠를 가리지 않도록 위치 조정 */
+  .side-rail-ad--left {
+    left: calc((100vw - 500px) / 2 - 160px);
+  }
+  
+  .side-rail-ad--right {
+    right: calc((100vw - 500px) / 2 - 160px);
+  }
+}
+
+/* 매우 큰 화면에서는 좌우 끝에 배치 */
+@media (min-width: 1400px) {
+  .side-rail-ad--left {
+    left: 20px;
+  }
+  
+  .side-rail-ad--right {
+    right: 20px;
+  }
+}
+
