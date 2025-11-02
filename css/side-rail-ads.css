@@ -5,6 +5,9 @@
   transform: translateY(-50%);
   z-index: 30;
   display: none; /* 기본적으로 숨김 (모바일) */
+  background: var(--gray-10);
+  padding: 8px;
+  border-radius: 8px;
 }
 
 .side-rail-ad--left {
@@ -25,18 +28,7 @@
     display: block;
   }
   
-  /* 메인 콘텐츠가 중앙에 있으므로, 광고가 콘텐츠를 가리지 않도록 위치 조정 */
-  .side-rail-ad--left {
-    left: calc((100vw - 500px) / 2 - 160px);
-  }
-  
-  .side-rail-ad--right {
-    right: calc((100vw - 500px) / 2 - 160px);
-  }
-}
-
-/* 매우 큰 화면에서는 좌우 끝에 배치 */
-@media (min-width: 1400px) {
+  /* 항상 좌우 끝에 배치 */
   .side-rail-ad--left {
     left: 20px;
   }
