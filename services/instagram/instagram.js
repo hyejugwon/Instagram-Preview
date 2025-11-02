@@ -591,11 +591,20 @@
       };
       
       // 초기 HTML의 모든 아이콘 이미지 경로 수정
-      document.querySelectorAll('#editBtn .icon, #addBtn .icon, #menuBtn').forEach(img => {
-        const originalSrc = img.getAttribute('src') || img.src;
+      document.querySelectorAll('[data-src], #editBtn .icon, #addBtn .icon, #menuBtn').forEach(img => {
+        const originalSrc = img.getAttribute('data-src') || img.getAttribute('src') || img.src;
         if (originalSrc && originalSrc.startsWith('/')) {
           const newSrc = getIconPath(originalSrc);
+          if (img.hasAttribute('data-src')) {
+            img.removeAttribute('data-src');
+          }
           img.src = newSrc;
+          
+          // 로드 실패 시 재시도
+          img.onerror = function() {
+            this.src = newSrc + '?v=' + Date.now();
+            this.onerror = null;
+          };
         }
       });
       
@@ -603,10 +612,17 @@
       await renderAll();
   
       // 헤더 아이콘 첫 로드 보정 (로드 실패 시 재시도)
-      document.querySelectorAll('#editBtn .icon, #addBtn .icon').forEach(img => {
+      document.querySelectorAll('#editBtn .icon, #addBtn .icon, #menuBtn, #addBtn .icon').forEach(img => {
         if (!img.complete || img.naturalWidth === 0) {
-          const currentSrc = img.src.split('?')[0];
-          img.src = getIconPath(currentSrc.replace(location.origin, '').replace(/^\/[^\/]+/, '')) + '?v=' + Date.now();
+          let currentSrc = img.src.split('?')[0];
+          // basePath 제거
+          if (basePath && currentSrc.includes(basePath.replace(/\/$/, ''))) {
+            currentSrc = currentSrc.replace(basePath.replace(/\/$/, ''), '');
+          } else if (currentSrc.startsWith(location.origin)) {
+            currentSrc = currentSrc.replace(location.origin, '');
+          }
+          const newSrc = getIconPath(currentSrc);
+          img.src = newSrc + '?v=' + Date.now();
         }
       });
   

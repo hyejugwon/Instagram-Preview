@@ -8,23 +8,54 @@
         return Promise.resolve();
       }
       
+      // base 태그 확인
+      const base = document.querySelector('base');
+      const basePath = base ? base.getAttribute('href') : '';
+      const getPath = (path) => {
+        if (!basePath) return path;
+        const cleanBase = basePath.replace(/\/$/, '');
+        const cleanPath = path.startsWith('/') ? path : '/' + path;
+        return cleanBase + cleanPath;
+      };
+      
       // index.css가 이미 로드되어 있는지 확인
       const existingLink = document.querySelector('link[href="/css/index.css"]');
       if (!existingLink) {
         // index.css를 head에 동적으로 추가
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/css/index.css';
+        link.href = getPath('/css/index.css');
         document.head.appendChild(link);
       }
       
-      return fetch("/partials/menu-modal.html", { cache: "no-cache" })
+      return fetch(getPath("/partials/menu-modal.html"), { cache: "no-cache" })
         .then((res) => res.text())
         .then((html) => {
           const tpl = document.createElement("template");
-          tpl.innerHTML = html.trim();
+          let processedHtml = html.trim();
+          
+          // base 태그를 고려하여 이미지 경로 수정
+          if (basePath) {
+            processedHtml = processedHtml.replace(/src="(\/[^"]+)"/g, (match, path) => {
+              return `src="${getPath(path)}"`;
+            });
+            processedHtml = processedHtml.replace(/href="(\/[^"]+)"/g, (match, path) => {
+              return `href="${getPath(path)}"`;
+            });
+          }
+          
+          tpl.innerHTML = processedHtml;
           // fragment의 자식들을 <body>로 이동
           document.body.appendChild(tpl.content);
+          
+          // 메뉴 모달 내부의 이미지 경로도 수정
+          const menuImages = tpl.content.querySelectorAll('img[src^="/"]');
+          menuImages.forEach(img => {
+            const originalSrc = img.getAttribute('src');
+            if (originalSrc) {
+              img.src = getPath(originalSrc);
+            }
+          });
         })
         .catch((err) => console.error("menu-modal.html load failed:", err));
     }
