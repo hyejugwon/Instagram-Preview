@@ -204,13 +204,13 @@
         grid.classList.add('empty');
         document.body.classList.add('empty-mode');
         if (app) app.style.overflow = 'auto';
-        if (spacer) spacer.style.display = 'none';
+        if (spacer) spacer.style.display = 'block';
         if (editBtn) editBtn.disabled = true;
       } else {
         grid.classList.remove('empty');
         document.body.classList.remove('empty-mode');
         if (app) app.style.overflow = 'auto';
-        if (spacer) spacer.style.display = '';
+        if (spacer) spacer.style.display = 'block';
         if (editBtn) editBtn.disabled = false;
       }
       // 빈 상태 안내 표시/숨김

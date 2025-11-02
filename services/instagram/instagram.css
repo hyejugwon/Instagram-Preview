@@ -216,15 +216,15 @@ button:disabled {
     min-height: calc(100vh - var(--header-h) - var(--footer-h));
   }
   .empty-mode .contentsArea{
-    height: calc(100vh - var(--header-h)) !important;
+    height: calc(100vh - var(--header-h) - var(--footer-h)) !important;
   }
 }
 
 .empty-mode .contentsArea{
   min-height: 0 !important;
-  height: calc(100dvh - var(--header-h)) !important;
+  height: calc(100dvh - var(--header-h) - var(--footer-h)) !important;
   overflow: auto !important;
-  padding-bottom: 0 !important;
+  padding-bottom: var(--footer-h) !important;
 }
 
 .title{
@@ -377,20 +377,22 @@ body.lang-en .empty-guide .guide-content.en {
 .ghost img{ width:100%; height:100%; object-fit:cover; }
 
 .footer-spacer { 
-  height: var(--footer-h) !important; 
+  height: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px)) !important; 
+  min-height: var(--footer-h) !important;
   display: block !important;
   flex-shrink: 0;
 }
 
 /* Footer 스타일 */
 .footer {
-  height: var(--footer-h);
+  height: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px));
   min-height: var(--footer-h);
-  max-height: var(--footer-h);
+  max-height: none;
   background: var(--gray-10);
   border-left: 1px solid var(--gray-20);
   border-right: 1px solid var(--gray-20);
   padding: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   margin: 0;
   display: flex;
   align-items: center;
