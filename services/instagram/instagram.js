@@ -197,20 +197,17 @@
     }
   
     function updateGridState() {
-      const spacer = document.querySelector('.footer-spacer');
       const isEmpty = grid.children.length === 0;
   
       if (isEmpty) {
         grid.classList.add('empty');
         document.body.classList.add('empty-mode');
         if (app) app.style.overflow = 'auto';
-        if (spacer) spacer.style.display = 'block';
         if (editBtn) editBtn.disabled = true;
       } else {
         grid.classList.remove('empty');
         document.body.classList.remove('empty-mode');
         if (app) app.style.overflow = 'auto';
-        if (spacer) spacer.style.display = 'block';
         if (editBtn) editBtn.disabled = false;
       }
       // 빈 상태 안내 표시/숨김
@@ -549,18 +546,23 @@
   
     function renderAdOnce() {
       const ins = document.querySelector('.footer .adsbygoogle');
-      if (!ins) return;
+      const footer = document.querySelector('.footer');
+      if (!ins || !footer) return;
   
       const { slot, width, height } = pickAdConfig();
   
       // 스타일/속성 적용
       ins.style.width  = (typeof width === 'number' ? width + 'px' : width);
       ins.style.height = height + 'px';
+      ins.style.maxHeight = height + 'px';
       ins.setAttribute('data-ad-client', PUB_ID);
       ins.setAttribute('data-ad-slot', slot);
       ins.setAttribute('data-full-width-responsive', 'false');
   
-      // 푸터 높이 동기화
+      // 푸터 높이 강제 설정
+      footer.style.height = height + 'px';
+      footer.style.minHeight = height + 'px';
+      footer.style.maxHeight = height + 'px';
       setCSSFooterH(height);
   
       // 이미 렌더된 상태면 초기화 후 재렌더
@@ -573,6 +575,15 @@
       } catch(e) {
         console.debug('[ads]', e);
       }
+      
+      // 광고 로드 후에도 높이 유지
+      setTimeout(() => {
+        ins.style.height = height + 'px';
+        ins.style.maxHeight = height + 'px';
+        footer.style.height = height + 'px';
+        footer.style.minHeight = height + 'px';
+        footer.style.maxHeight = height + 'px';
+      }, 100);
     }
   
     let lastIsMobile = null;

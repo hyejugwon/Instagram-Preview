@@ -11,13 +11,16 @@ html { -webkit-text-size-adjust: 100%; }
 
 /* 기본 세팅 */
 html, body{
-  height: 100%;
+  height: 100dvh;
   margin: 0;
+  padding: 0;
   background: var(--gray-0) !important;
   color: var(--gray-90);
   overflow: hidden;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+  display: flex;
+  flex-direction: column;
 }
 
 html::-webkit-scrollbar,
@@ -51,8 +54,19 @@ body *::-webkit-scrollbar-thumb {
 .app {
   background-color: unset !important;
   padding: unset !important;
+  padding-bottom: 0 !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden !important;
+  width: 100%;
+  max-width: var(--maxw);
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
 .app::-webkit-scrollbar,
@@ -89,6 +103,7 @@ body *::-webkit-scrollbar-thumb {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .header .actions{
@@ -155,13 +170,13 @@ button:disabled {
   border-left: 1px solid var(--gray-20);
   border-right: 1px solid var(--gray-20);
   box-sizing: border-box;
+  width: 100%;
   max-width: var(--maxw);
   margin-left: auto;
   margin-right: auto;
-  position: relative;
-  top: 0;
-
-  height: calc(100dvh - var(--header-h) - var(--footer-h));
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
   padding: 0 !important;
   padding-bottom: var(--footer-h);
 
@@ -171,7 +186,6 @@ button:disabled {
   scrollbar-gutter: auto !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
-  transition: height 0.3s ease-in-out;
   touch-action: pan-y;
   -webkit-touch-callout: none;
 }
@@ -212,17 +226,13 @@ button:disabled {
 }
 
 @supports not (height: 100dvh){
-  .contentsArea{
-    min-height: calc(100vh - var(--header-h) - var(--footer-h));
-  }
-  .empty-mode .contentsArea{
-    height: calc(100vh - var(--header-h) - var(--footer-h)) !important;
+  html, body {
+    height: 100vh;
   }
 }
 
 .empty-mode .contentsArea{
   min-height: 0 !important;
-  height: calc(100dvh - var(--header-h) - var(--footer-h)) !important;
   overflow: auto !important;
   padding-bottom: var(--footer-h) !important;
 }
@@ -376,27 +386,35 @@ body.lang-en .empty-guide .guide-content.en {
 .ghost.show{ opacity:1; }
 .ghost img{ width:100%; height:100%; object-fit:cover; }
 
-.footer-spacer { 
-  height: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px)) !important; 
-  min-height: var(--footer-h) !important;
-  display: block !important;
-  flex-shrink: 0;
-}
-
 /* Footer 스타일 */
 .footer {
-  height: calc(var(--footer-h) + env(safe-area-inset-bottom, 0px));
-  min-height: var(--footer-h);
-  max-height: none;
+  width: 100%;
+  max-width: 500px;
+  height: 80px !important;
+  min-height: 80px !important;
+  max-height: 80px !important;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--gray-10);
   border-left: 1px solid var(--gray-20);
   border-right: 1px solid var(--gray-20);
   padding: 0;
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  margin-top: 0;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.footer .adsbygoogle {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 430px;
+  height: 80px !important;
+  max-height: 80px !important;
+  overflow: hidden;
 }
 
 /* 모달 스타일은 design-system/components/modal.css 사용 */
