@@ -627,39 +627,47 @@
       const caloriesContainer = document.querySelector('.caloriesContainer');
       if (!caloriesContainer) return;
       
-      const containerWidth = caloriesContainer.offsetWidth;
       const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
       
-      // 작은 화면에서는 짧은 텍스트 사용 (대략 280px 이하)
-      if (containerWidth < 280) {
-        const shortText = currentLang === 'kr' 
-          ? totalTitle.getAttribute('data-i18n-kr-short') || '총합'
-          : totalTitle.getAttribute('data-i18n-en-short') || 'Total';
-        totalTitle.textContent = shortText;
-      } else {
-        // 큰 화면에서는 원래 텍스트 사용
-        const fullText = currentLang === 'kr'
-          ? totalTitle.getAttribute('data-i18n-kr') || '칼로리 총합'
-          : totalTitle.getAttribute('data-i18n-en') || 'Total Calories';
-        totalTitle.textContent = fullText;
-        
-        // i18n 시스템 업데이트
-        if (window.refreshLanguage) {
-          setTimeout(() => {
-            window.refreshLanguage();
-          }, 0);
-        }
+      // 원래 텍스트로 복원해서 높이 측정
+      const fullText = currentLang === 'kr'
+        ? totalTitle.getAttribute('data-i18n-kr') || '칼로리 총합'
+        : totalTitle.getAttribute('data-i18n-en') || 'Total Calories';
+      totalTitle.textContent = fullText;
+      
+      // i18n 시스템 업데이트 후 높이 측정
+      if (window.refreshLanguage) {
+        window.refreshLanguage();
       }
+      
+      // 다음 프레임에서 높이 측정 (렌더링 완료 후)
+      requestAnimationFrame(() => {
+        const titleHeight = totalTitle.offsetHeight;
+        const titleLineHeight = parseInt(window.getComputedStyle(totalTitle).lineHeight, 10);
+        
+        // 높이가 line-height의 1.5배 이상이면 2줄 이상으로 간주
+        const isMultiLine = titleHeight > titleLineHeight * 1.5;
+        
+        if (isMultiLine) {
+          // 2줄 이상이면 짧은 텍스트 사용
+          const shortText = currentLang === 'kr' 
+            ? totalTitle.getAttribute('data-i18n-kr-short') || '총합'
+            : totalTitle.getAttribute('data-i18n-en-short') || 'Total';
+          totalTitle.textContent = shortText;
+        }
+      });
     }
     
-    // 초기 실행
-    updateTitleText();
+    // 초기 실행 (약간의 지연 필요)
+    setTimeout(() => {
+      updateTitleText();
+    }, 100);
     
     // 리사이즈 이벤트 리스너
     let resizeTimer;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(updateTitleText, 100);
+      resizeTimer = setTimeout(updateTitleText, 150);
     });
     
     // 언어 변경 시에도 업데이트
@@ -667,7 +675,7 @@
     if (originalSetLanguage) {
       window.setLanguage = function(lang) {
         originalSetLanguage(lang);
-        setTimeout(updateTitleText, 50);
+        setTimeout(updateTitleText, 100);
       };
     }
   }
