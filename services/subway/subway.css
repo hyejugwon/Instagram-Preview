@@ -1,3 +1,8 @@
+:root{
+  --header-h: 0px; /* JS에서 동적으로 설정 */
+  --footer-h: 90px; /* 광고 높이 (Instagram과 동일) */
+}
+
 /* index.css의 .app 스타일 오버라이드 */
 .app {
   background-color: unset !important;
@@ -62,19 +67,88 @@ body.lang-kr .title.h2--B {
   border-left: 1px solid var(--gray-20);
   border-right: 1px solid var(--gray-20);
   margin-top: 0;
-  padding-top: 0;
+  box-sizing: border-box;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 0;
+  height: calc(100dvh - var(--header-h) - var(--footer-h));
+  padding: 0 !important;
+  padding-bottom: var(--footer-h);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+/* 모든 브라우저에서 스크롤바 숨김 */
+.contentsArea::-webkit-scrollbar,
+.contentsArea *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+.contentsArea::-webkit-scrollbar-track,
+.contentsArea *::-webkit-scrollbar-track {
+  display: none !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+.contentsArea::-webkit-scrollbar-thumb,
+.contentsArea *::-webkit-scrollbar-thumb {
+  display: none !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+.contentsArea::-webkit-scrollbar-corner {
+  display: none !important;
+  background: transparent !important;
+}
+
+@supports not (height: 100dvh){
+  .contentsArea{
+    min-height: calc(100vh - var(--header-h) - var(--footer-h));
+  }
+}
+
+/* Footer 스타일 (Instagram과 동일) */
+.footer {
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-0);
+  border-left: 1px solid var(--gray-20);
+  border-right: 1px solid var(--gray-20);
+}
+
+.footer .adsbygoogle {
+  display: block;
+  margin: 0 auto;
 }
 
 .result{
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 16px;
   gap: 8px;
   background: var(--lime-50-default);
-  position: sticky;
-  top: 120px; /* header-topbar (62px) + tabs (58px) + 여유 10px */
-  z-index: 10;
   margin-bottom: 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .result .btn{

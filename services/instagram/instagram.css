@@ -358,6 +358,12 @@ body.lang-kr .title.h2--B {
 
 .footer-spacer { height: 0 !important; display: none !important; }
 
+/* Footer 스타일 */
+.footer {
+  border-left: 1px solid var(--gray-20);
+  border-right: 1px solid var(--gray-20);
+}
+
 /* 모달 스타일은 design-system/components/modal.css 사용 */
 
 /* 선택/드래그 차단 */

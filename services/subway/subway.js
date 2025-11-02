@@ -697,6 +697,54 @@
     }
   }
   
+  // header 높이 계산 및 CSS 변수 설정
+  function setCSSHeaderH() {
+    const header = document.querySelector('.header');
+    if (header) {
+      const headerHeight = header.offsetHeight;
+      document.documentElement.style.setProperty('--header-h', headerHeight + 'px');
+    }
+  }
+  
+  // CSS footer 높이 설정 함수
+  function setCSSFooterH(h) {
+    document.documentElement.style.setProperty('--footer-h', h + 'px');
+  }
+  
+  // 광고 초기화 함수 (Instagram과 동일한 크기)
+  function initAds() {
+    const ins = document.querySelector('.footer .adsbygoogle');
+    if (!ins) return;
+    
+    const BP = 430; // 화면 너비 임계값
+    const w = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
+    
+    let width, height;
+    if (w <= BP) {
+      // 모바일: 폭 100%로 두고 높이 100px
+      width = '100%';
+      height = 100;
+    } else {
+      // 데스크톱: 430x90
+      width = 430;
+      height = 90;
+    }
+    
+    // 스타일/속성 적용
+    ins.style.width = (typeof width === 'number' ? width + 'px' : width);
+    ins.style.height = height + 'px';
+    ins.setAttribute('data-full-width-responsive', 'false');
+    
+    // 푸터 높이 동기화
+    setCSSFooterH(height);
+    
+    try {
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    } catch(e) {
+      console.debug('[ads]', e);
+    }
+  }
+  
   // DOM 로드 완료 후 초기화
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
@@ -704,12 +752,26 @@
       initDetailToggle();
       initResetButton();
       initResponsiveTitle();
+      // header 높이 설정 (렌더링 후)
+      setTimeout(() => {
+        setCSSHeaderH();
+        initAds();
+        // 리사이즈 시 header 높이 재계산
+        window.addEventListener('resize', setCSSHeaderH);
+      }, 100);
     });
   } else {
     init();
     initDetailToggle();
     initResetButton();
     initResponsiveTitle();
+    // header 높이 설정 (렌더링 후)
+    setTimeout(() => {
+      setCSSHeaderH();
+      initAds();
+      // 리사이즈 시 header 높이 재계산
+      window.addEventListener('resize', setCSSHeaderH);
+    }, 100);
   }
 })();
   
