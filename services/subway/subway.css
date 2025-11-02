@@ -97,7 +97,6 @@ body.lang-kr .title.h2--B {
 .totalTitle{
   flex-shrink: 1;
   min-width: 0;
-  white-space: nowrap;
 }
 
 .caloriesWrapper{
