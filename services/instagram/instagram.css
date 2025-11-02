@@ -71,6 +71,9 @@ body *::-webkit-scrollbar-thumb {
 
 /* Header 스타일 명시적으로 정의 - 여백 제거 */
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
   margin: 0 !important;
   padding: 0 !important;
   background: var(--gray-0);
@@ -78,16 +81,58 @@ body *::-webkit-scrollbar-thumb {
   flex-direction: column !important;
   align-items: center !important;
   justify-content: flex-start !important;
+  border-left: 1px solid var(--gray-20);
+  border-right: 1px solid var(--gray-20);
+  border-top: none;
+  border-bottom: none;
+  max-width: var(--maxw);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 .header .actions{
   padding: 0px 16px 18px 16px !important;
+  transition: padding-top 0.3s ease-in-out;
+  margin-top: 0;
+  padding-top: 0px !important;
 }
 
 .header-topbar {
+  position: relative;
   margin: 0 !important;
   padding: 18px 16px !important;
   width: 100% !important;
+  max-height: 62px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out, margin 0.3s ease-in-out, position 0s ease-in-out 0.3s;
+  will-change: max-height;
+}
+
+.header-topbar.is-hidden {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-height: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  min-height: 0 !important;
+  height: 0 !important;
+  line-height: 0 !important;
+  border: none !important;
+  overflow: hidden !important;
+}
+
+/* Header-topbar가 숨겨졌을 때 actions가 상단에서 18px 떨어지도록 */
+.header-topbar.is-hidden ~ .actions {
+  padding-top: 18px !important;
+  margin-top: 0 !important;
+  align-self: stretch;
 }
 
 .actions {

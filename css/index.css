@@ -1,8 +1,17 @@
 /* index.html용 스타일 - .contentsArea가 없는 페이지에서만 적용 */
+body:not(:has(.contentsArea)) {
+  width: 100%;
+  min-height: 100dvh;
+}
+
 body:not(:has(.contentsArea)) > .app {
   background-color: var(--bg-20);
-  padding: 48px 20px;
-  min-height: 100dvh;
+  padding: 0;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }
@@ -11,7 +20,10 @@ body:not(:has(.contentsArea)) > .app .mobile-container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 100%;
+  padding: 48px 20px 20px 20px;
+  overflow-y: auto;
+  background-color: var(--bg-20);
+  min-height: 0;
 }
 
 body:not(:has(.contentsArea)) > .app .stack .hello{
@@ -26,10 +38,6 @@ body:not(:has(.contentsArea)) > .app .stack .h3--M{
   color: var(--gray-80);
 }
 
-body:not(:has(.contentsArea)) > .app .stack {
-  margin-bottom: 40px;
-}
-
 body:not(:has(.contentsArea)) > .app .stack .btn{
   width: 100%;
   padding: 16px;
@@ -37,6 +45,13 @@ body:not(:has(.contentsArea)) > .app .stack .btn{
   background: rgba(255, 255, 255, 0.25);
   color: var(--scrim-35);
   margin-bottom: 12px;
+  outline: none;
+  border: none;
+}
+
+body:not(:has(.contentsArea)) > .app .stack .btn:focus {
+  outline: none;
+  border: none;
 }
 
 body:not(:has(.contentsArea)) > .app .stack .btn:hover {
@@ -71,6 +86,14 @@ body:not(:has(.contentsArea)) > .app .stack .btn:active {
   margin-bottom: 40px;
 }
 
+.menu-modal .menu-content > nav.stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+  justify-content: flex-start;
+}
+
 .menu-modal .menu-content .stack .btn{
   width: 100%;
   padding: 16px;
@@ -78,6 +101,20 @@ body:not(:has(.contentsArea)) > .app .stack .btn:active {
   background: rgba(255, 255, 255, 0.25);
   color: var(--scrim-35);
   margin-bottom: 12px;
+  outline: none;
+  border: none;
+  text-decoration: none;
+}
+
+.menu-modal .menu-content .stack .btn:link,
+.menu-modal .menu-content .stack .btn:visited {
+  color: var(--scrim-35);
+  border: none;
+}
+
+.menu-modal .menu-content .stack .btn:focus {
+  outline: none;
+  border: none;
 }
 
 .menu-modal .menu-content .stack .btn:hover {
@@ -90,13 +127,17 @@ body:not(:has(.contentsArea)) > .app .stack .btn:active {
   color: var(--lime-50-default);
 }
 
-/* Footer Section (Language Selector & Ad) */
-.footer-section {
+/* Footer Section (Language Selector만) */
+body:not(:has(.contentsArea)) > .app .mobile-container .footer-section {
   margin-top: auto;
   padding-top: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  flex-shrink: 0;
+}
+
+.menu-modal .menu-content .footer-section {
+  margin-top: auto;
+  padding-top: 40px;
+  flex-shrink: 0;
 }
 
 /* Language Selector */
@@ -158,5 +199,26 @@ body:not(:has(.contentsArea)) > .app .stack .btn:active {
   max-width: 430px;
 }
 
-/* Force cache refresh */
+/* Footer 스타일 (광고 영역 - main과 완전히 분리, 가로 전체) */
+body:not(:has(.contentsArea)) .footer {
+  width: 100%;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: var(--gray-0);
+  border-top: 1px solid var(--gray-20);
+  flex-shrink: 0;
+}
 
+body:not(:has(.contentsArea)) .footer .adsbygoogle {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Force cache refresh */
+.btnArea {
+  margin-top: 40px;
+}

@@ -709,6 +709,44 @@
     document.documentElement.style.setProperty('--footer-h', h + 'px');
   }
   
+  // header-topbar 스크롤 숨김/표시 기능
+  function initHeaderScrollHide() {
+    const headerTopbar = document.querySelector('.header-topbar');
+    const contentsArea = document.querySelector('.contentsArea');
+    
+    if (!headerTopbar || !contentsArea) return;
+    
+    let lastScrollTop = 0;
+    let isScrolling = false;
+    const SCROLL_THRESHOLD = 10; // 스크롤 방향 전환 감지 임계값
+    
+    contentsArea.addEventListener('scroll', () => {
+      if (isScrolling) return;
+      
+      isScrolling = true;
+      requestAnimationFrame(() => {
+        const currentScrollTop = contentsArea.scrollTop;
+        
+        // 스크롤 방향 확인
+        if (currentScrollTop > lastScrollTop && currentScrollTop > SCROLL_THRESHOLD) {
+          // 아래로 스크롤
+          headerTopbar.classList.add('is-hidden');
+        } else if (currentScrollTop < lastScrollTop) {
+          // 위로 스크롤
+          headerTopbar.classList.remove('is-hidden');
+        }
+        
+        // 맨 위로 돌아왔을 때도 표시
+        if (currentScrollTop <= SCROLL_THRESHOLD) {
+          headerTopbar.classList.remove('is-hidden');
+        }
+        
+        lastScrollTop = currentScrollTop;
+        isScrolling = false;
+      });
+    }, { passive: true });
+  }
+  
   // 광고 초기화 함수 (Instagram과 동일한 크기)
   function initAds() {
     const ins = document.querySelector('.footer .adsbygoogle');
@@ -750,6 +788,7 @@
       initDetailToggle();
       initResetButton();
       initResponsiveTitle();
+      initHeaderScrollHide();
       // header 높이 설정 (렌더링 후)
       setTimeout(() => {
         setCSSHeaderH();
@@ -763,6 +802,7 @@
     initDetailToggle();
     initResetButton();
     initResponsiveTitle();
+    initHeaderScrollHide();
     // header 높이 설정 (렌더링 후)
     setTimeout(() => {
       setCSSHeaderH();

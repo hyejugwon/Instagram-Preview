@@ -3,6 +3,40 @@
   --footer-h: 90px; /* 광고 높이 (Instagram과 동일) */
 }
 
+/* Body 스크롤바 숨김 */
+html, body {
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  display: none !important;
+  background: transparent !important;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  display: none !important;
+  background: transparent !important;
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner {
+  display: none !important;
+  background: transparent !important;
+}
+
 /* index.css의 .app 스타일 오버라이드 */
 .app {
   background-color: unset !important;
@@ -25,6 +59,43 @@
 /* Header 타이틀 한글일 때 font-weight 900 */
 body.lang-kr .title.h2--B {
   font-weight: 900;
+}
+
+/* Header 스타일 - sticky로 변경하여 상단 고정 */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--gray-0);
+}
+
+/* Header-topbar 스크롤 숨김/표시 스타일 */
+.header-topbar {
+  position: relative;
+  max-height: 62px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
+  will-change: max-height;
+}
+
+.header-topbar.is-hidden {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Tabs와 Result가 부드럽게 올라가도록 transition 추가 */
+.header .tabs,
+.header .result {
+  transition: transform 0.3s ease-in-out, padding-top 0.3s ease-in-out;
+  margin-top: 0;
+}
+
+/* Header-topbar가 숨겨졌을 때 tabs가 최상단에 붙도록 */
+.header-topbar.is-hidden ~ .tabs {
+  padding-top: 0;
 }
 
 .selecArea {
@@ -78,7 +149,8 @@ body.lang-kr .title.h2--B {
   padding-bottom: var(--footer-h);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  overscroll-behavior-y: contain;
+  overscroll-behavior-y: auto;
+  touch-action: pan-y;
   scrollbar-gutter: auto !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
