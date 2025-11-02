@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <script src="/js/head.js"></script>
+        <title>hakchips: Instagram Feed Preview</title>
+        <link rel="stylesheet" href="/services/instagram/instagram.css">
+    </head>  
+
+    <body>
+        <div class="app">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-topbar">
+                    <div class="title h2--B" data-i18n-en="Instagram Feed Preview" data-i18n-kr="인스타그램 피드 미리보기">Instagram Feed Preview</div>
+                    <img src="/icons/menudrop.svg" width="26" height="26" id="menuBtn" style="cursor: pointer;">
+                </div>
+                <div class="actions">
+                    <button class="btn btn--fill--teriGray btn--sz-me icon--me" id="editBtn" aria-pressed="false">
+                        <img src="/icons/switch.svg" alt="" class="icon" width="16" height="16">
+                        <span data-i18n-en="Edit" data-i18n-kr="편집">Edit</span>
+                    </button>
+                    <button class="btn btn--fill--teriGray btn--sz-me icon--me" id="addBtn">
+                        <img src="/icons/plus.svg" alt="" class="icon" width="16" height="16">
+                        <span data-i18n-en="Add" data-i18n-kr="추가">Add</span>
+                    </button>
+                    <input id="fileInput" type="file" accept="image/*" multiple="" style="display:none">
+                </div>
+            </div>
+
+            <!-- Main (scroll container) -->
+            <main class="contentsArea">
+                <section id="grid" class="grid" aria-live="polite"></section>
+
+                <!-- ✅ 빈 상태 안내 -->
+                <div class="empty-guide" id="emptyGuide" aria-hidden="true">
+                <div class="guide-inner">
+                    <div class="guide-content kr">
+                        <p class="title">[공유 > 홈 화면에 추가] 하여 사용하면<br> 만들어 둔 피드를 계속 볼 수 있습니다</p>
+                        <p class="desc">아이폰의 경우, [웹 앱으로 열기]는 해제해주세요. <br> 업데이트를 받을 수 없습니다.</p>
+                    </div>
+                    <div class="guide-content en">
+                        <p class="title">Use [Share > Add to Home Screen]<br>to keep viewing the feed you’ve created</p>
+                        <p class="desc">Turn off “Open in Web App” to receive updates.</p>
+                    </div>
+                </div>
+                </div>
+
+                <!-- 고정 푸터와 겹침 방지용 스페이서 -->
+                <div class="footer-spacer" aria-hidden="true"></div>
+            </main>
+
+            <!-- Delete Modal은 공통 컴포넌트(js/modal.js)로 동적 생성됨 -->
+
+            <!-- Drag ghost -->
+            <div id="dragGhost" class="ghost" hidden=""></div>
+
+            <!-- Google Ad Footer -->
+            <footer class="footer">
+              <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="2467327374" data-ad-format="auto" data-full-width-responsive="true"></ins>
+            </footer>
+        </div>
+    <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683" crossorigin="anonymous"></script>
+    <script src="/js/i18n.js"></script>
+    <script src="/js/modal.js"></script>
+    <script src="/services/instagram/instagram.js"></script>
+    <script src="/js/menu.js"></script>
+    </body>
+</html>

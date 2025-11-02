@@ -1,0 +1,157 @@
+{
+  "forms": [
+    {
+      "id": "main",
+      "title": "메인 재료",
+      "type": "select",
+      "field": null,
+      "options": [
+        { "text": "BLT", "info": "78 kcal" },
+        { "text": "K-바비큐", "info": "170 kcal" },
+        { "text": "베지", "info": "0 kcal" },
+        { "text": "로스트 비프", "info": "90 kcal" },
+        { "text": "로스트 치킨", "info": "78 kcal" },
+        { "text": "로티세리 바비큐 치킨", "info": "105 kcal" },
+        { "text": "미트볼", "info": "230 kcal" },
+        { "text": "머쉬룸", "info": "23 kcal" },
+        { "text": "스테이크", "info": "110 kcal" },
+        { "text": "스테이크 & 치즈", "info": "98 kcal" },
+        { "text": "스파이시 쉬림프", "info": "23 kcal" },
+        { "text": "스파이시 이탈리안", "info": "220 kcal" },
+        { "text": "쉬림프", "info": "85 kcal" },
+        { "text": "써브웨이 클럽", "info": "77 kcal" },
+        { "text": "안창 비프", "info": "120 kcal" },
+        { "text": "안창 비프&머쉬룸", "info": "70 kcal" },
+        { "text": "에그 슬라이스", "info": "57 kcal" },
+        { "text": "에그마요", "info": "180 kcal" },
+        { "text": "이탈리안 비엠티", "info": "190 kcal" },
+        { "text": "참치", "info": "180 kcal" },
+        { "text": "치킨", "info": "90 kcal" },
+        { "text": "치킨 데리야끼", "info": "92 kcal" },
+        { "text": "터키", "info": "60 kcal" },
+        { "text": "터키 베이컨 아보카도", "info": "133 kcal" },
+        { "text": "터키 베이컨 에그 슬라이스", "info": "143 kcal" },
+        { "text": "풀드 포크 바비큐!", "info": "105 kcal" },
+        { "text": "햄", "info": "70 kcal" }
+      ]
+    },
+    {
+      "id": "bread",
+      "title": "빵",
+      "type": "radio",
+      "field": "bread",
+      "layout": "vertical",
+      "options": [
+        { "text": "하티", "info": "210 kcal" },
+        { "text": "허니오트", "info": "235 kcal" },
+        { "text": "화이트", "info": "202 kcal" },
+        { "text": "파마산 오레가노", "info": "213 kcal" },
+        { "text": "플랫브레드", "info": "232 kcal" },
+        { "text": "위트", "info": "192 kcal" }
+      ]
+    },
+    {
+      "id": "vegetables",
+      "title": "야채",
+      "description": "(중복선택)",
+      "type": "checkbox",
+      "options": [
+        { "text": "양상추", "info": "5 kcal" },
+        { "text": "토마토", "info": "10 kcal" },
+        { "text": "오이", "info": "5 kcal" },
+        { "text": "피망", "info": "5 kcal" },
+        { "text": "양파", "info": "5 kcal" },
+        { "text": "올리브", "info": "15 kcal" },
+        { "text": "할라피뇨", "info": "5 kcal" },
+        { "text": "피클", "info": "5 kcal" },
+        { "text": "아보카도", "info": "60 kcal" }
+      ]
+    },
+    {
+      "id": "cheese",
+      "title": "치즈",
+      "type": "radio",
+      "field": null,
+      "layout": "vertical",
+      "options": [
+        { "text": "선택 안함", "info": "0 kcal" },
+        { "text": "모짜렐라 치즈", "info": "44 kcal" },
+        { "text": "슈레드 치즈", "info": "54 kcal" },
+        { "text": "아메리칸 치즈", "info": "35 kcal" }
+      ]
+    },
+    {
+      "id": "sauce",
+      "title": "소스",
+      "description": "(중복선택, 14g 기준)",
+      "type": "checkbox",
+      "layout": "vertical",
+      "options": [
+        { "text": "선택 안함", "info": "0 kcal" },
+        { "text": "소금 & 후추", "info": "0 kcal" },
+        { "text": "레드 와인 식초", "info": "1 kcal" },
+        { "text": "랜치", "info": "116 kcal" },
+        { "text": "마요네즈", "info": "158 kcal" },
+        { "text": "머스타드", "info": "15 kcal" },
+        { "text": "사우스웨스트 치폴레", "info": "96 kcal" },
+        { "text": "스모크 바비큐", "info": "33 kcal" },
+        { "text": "스모크 치폴레", "info": "97 kcal" },
+        { "text": "스위트 어니언", "info": "40 kcal" },
+        { "text": "스위트 칠리", "info": "40 kcal" },
+        { "text": "올리브 오일", "info": "29 kcal" },
+        { "text": "이탈리안 드레싱", "info": "49 kcal" },
+        { "text": "엑스트라 버진 올리브 오일", "info": "124 kcal" },
+        { "text": "허니 머스타드", "info": "38 kcal" },
+        { "text": "홀스래디쉬", "info": "106 kcal" }
+      ]
+    },
+    {
+      "id": "topping",
+      "title": "토핑",
+      "description": "(중복선택)",
+      "type": "checkbox",
+      "options": [
+        { "text": "베이컨", "info": "35 kcal" },
+        { "text": "아보카도", "info": "60 kcal" },
+        { "text": "에그 슬라이스", "info": "70 kcal" },
+        { "text": "에그마요", "info": "80 kcal" },
+        { "text": "오믈렛", "info": "90 kcal" },
+        { "text": "페퍼로니", "info": "10 kcal" },
+        { "text": "치즈(동일 치즈)", "info": "special:cheese" },
+        { "text": "고기 추가", "info": "special:main" }
+      ]
+    },
+    {
+      "id": "additional",
+      "title": "추가 메뉴",
+      "description": "(중복선택)",
+      "type": "checkbox",
+      "layout": "vertical",
+      "groups": [
+        {
+          "title": "쿠키",
+          "options": [
+            { "text": "라즈베리 치즈 케이크", "info": "204 kcal" },
+            { "text": "더블 초코칩", "info": "212 kcal" },
+            { "text": "오트밀 레이즌", "info": "200 kcal" },
+            { "text": "초코칩", "info": "228 kcal" },
+            { "text": "화이트 마카다미아", "info": "245 kcal" }
+          ]
+        },
+        {
+          "title": "사이드",
+          "options": [
+            { "text": "Bacon Cheesy 웨지 포테이토", "info": "247 kcal" },
+            { "text": "Cheesy 웨지 포테이토", "info": "194 kcal" },
+            { "text": "머쉬룸 수프 하프", "info": "64 kcal" },
+            { "text": "머쉬룸 수프 레귤러", "info": "129 kcal" },
+            { "text": "콘 수프 하프", "info": "81 kcal" },
+            { "text": "콘 수프 레귤러", "info": "163 kcal" },
+            { "text": "웨지 포테이토", "info": "140 kcal" }
+          ]
+        }
+      ]
+    }
+  ]
+}
+

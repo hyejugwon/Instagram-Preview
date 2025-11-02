@@ -2,8 +2,8 @@
   --maxw: 500px;
   --gap: 1px;
   --radius: 12px;
-  --header-h: 124px;           /* JS에서 동적으로 설정 */
-  --footer-h: 80px;            /* 광고 높이 */
+  --header-h: 124px;           /* header-topbar(62px) + actions(62px) = 124px */
+  --footer-h: 2px;            /*← 광고 높이 90이었는데 지금 바꿔놓음*/
   color-scheme: light;         /* CSS 쪽은 'light only' 대신 'light' */
 }
 
@@ -103,6 +103,36 @@ body *::-webkit-scrollbar-thumb {
   margin: 0 !important;
   padding: 18px 16px !important;
   width: 100% !important;
+  max-height: 62px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out, margin 0.3s ease-in-out, position 0s ease-in-out 0.3s;
+  will-change: max-height;
+}
+
+.header-topbar.is-hidden {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-height: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  min-height: 0 !important;
+  height: 0 !important;
+  line-height: 0 !important;
+  border: none !important;
+  overflow: hidden !important;
+}
+
+/* Header-topbar가 숨겨졌을 때 actions가 상단에서 18px 떨어지도록 */
+.header-topbar.is-hidden ~ .actions {
+  padding-top: 18px !important;
+  margin-top: 0 !important;
+  align-self: stretch;
 }
 
 .actions {
@@ -171,7 +201,6 @@ button:disabled {
   scrollbar-gutter: auto !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
-  transition: height 0.3s ease-in-out;
 }
 
 /* section 요소 기본 margin/padding 제거 */
@@ -378,17 +407,8 @@ body.lang-en .empty-guide .guide-content.en {
 
 /* Footer 스타일 */
 .footer {
-  height: var(--footer-h);
-  min-height: var(--footer-h);
-  max-height: var(--footer-h);
-  background: var(--gray-10);
   border-left: 1px solid var(--gray-20);
   border-right: 1px solid var(--gray-20);
-  padding: 0;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 /* 모달 스타일은 design-system/components/modal.css 사용 */

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en kr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script src="/js/head.js"></script>
+  <title>hakchips: Subway Calorie Calculator</title>
+  <link rel="stylesheet" href="/services/subway/subway.css">
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="header-topbar">
+        <div class="title h2--B" data-i18n-en="Subway Calorie Calculator" data-i18n-kr="서브웨이 칼로리 계산기">Subway Calorie Calculator</div>
+        <img src="/icons/menudrop.svg" width="26" height="26" id="menuBtn" style="cursor: pointer;">
+      </div>
+      <div class="tabs tabs--block-full">
+        <button class="kr tab tab--lg is-active" data-target="sandwich" data-i18n-en="Sandwich" data-i18n-kr="샌드위치">샌드위치</button>
+        <button class="kr tab tab--lg" data-target="salad" data-i18n-en="Salad" data-i18n-kr="샐러드">샐러드</button>
+      </div>
+      <div class="result">
+        <div class="caloriesContainer">
+          <span class="totalTitle kr h4--B" data-i18n-en="Total Calories" data-i18n-kr="칼로리 총합" data-i18n-en-short="Total" data-i18n-kr-short="총합">칼로리 총합</span>
+          <div class="caloriesWrapper">
+            <span class="resultCalories kr h4--B">{숫자}</span>
+            <span class="unit h4--B">Kcal</span>
+          </div>
+        </div>
+        <button class="btn btn--text--gray btn--underlined" id="resetBtn" data-i18n-en="Reset" data-i18n-kr="초기화">초기화</button>
+        <button class="btn btn--text--gray btn--underlined" id="detailBtn" data-i18n-en="Details" data-i18n-kr="상세보기" data-i18n-en-collapsed="Hide" data-i18n-kr-collapsed="간략히">상세보기</button>
+      </div>
+    </div>
+
+    
+    <main class="contentsArea">
+
+      <!-- 영양 정보 섹션 -->
+      <div id="nutritionInfo" class="nutrition-info" style="display: none;">
+        <div class="nutrition-info__content">
+          <div class="nutrition-item">
+            <span class="nutrition-label kr" data-i18n-en="Total Protein" data-i18n-kr="총 단백질">총 단백질</span>
+            <span class="nutrition-value kr" id="totalProtein">0 g</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-label kr" data-i18n-en="Total Sugars" data-i18n-kr="총 당류">총 당류</span>
+            <span class="nutrition-value kr" id="totalSugars">0 g</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-label kr" data-i18n-en="Total Sodium" data-i18n-kr="총 나트륨">총 나트륨</span>
+            <span class="nutrition-value kr" id="totalSodium">0 g</span>
+          </div>
+          <div class="nutrition-item">
+            <span class="nutrition-label kr" data-i18n-en="Total Saturated Fat" data-i18n-kr="총 포화지방">총 포화지방</span>
+            <span class="nutrition-value kr" id="totalSaturatedFat">0 g</span>
+          </div>
+        </div>
+      </div>
+  
+      <div class="detailPage" id="detailPage">
+        <div class="selecArea">
+          <!-- ingredients-render.js에서 동적으로 렌더링됩니다 -->
+        </div>
+        <!-- 정보 카드는 subway.js에서 동적으로 추가됩니다 -->
+      </div>
+    </main>
+    
+    <!-- Google Ad Footer -->
+    <footer class="footer">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="2467327374" data-ad-format="auto"></ins>
+    </footer>
+  </div>
+
+  <!-- ✅ JS는 body 맨 아래 -->
+  <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683" crossorigin="anonymous"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/modal.js"></script>
+  <script src="/js/toast.js"></script>
+  <script src="/services/subway/ingredients-render.js"></script>
+  <script src="/services/subway/subway.js"></script>
+  <script src="/js/menu.js"></script>
+</body>
+</html>

@@ -535,11 +535,11 @@
     function pickAdConfig() {
       const w = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
       if (w <= BP) {
-        // 모바일: 폭 100%로 두고 높이 80px
-        return { slot: MOBILE_SLOT, width: '100%', height: 80 };
+        // 모바일: 폭 100%로 두고 높이 100(또는 50) 픽셀
+        return { slot: MOBILE_SLOT, width: '100%', height: 100 };
       } else {
-        // 데스크톱: 430x80
-        return { slot: DESKTOP_SLOT, width: 430, height: 80 };
+        // 데스크톱: 430x90
+        return { slot: DESKTOP_SLOT, width: 430, height: 90 };
       }
     }
   
@@ -586,15 +586,43 @@
     window.addEventListener('resize', checkAndRerenderAds);
     window.addEventListener('orientationchange', checkAndRerenderAds);
   
-    // header 높이 계산 및 CSS 변수 설정
-    function setCSSHeaderH() {
-      const header = document.querySelector('.header');
-      if (header) {
-        const headerHeight = header.offsetHeight;
-        document.documentElement.style.setProperty('--header-h', headerHeight + 'px');
-      }
+    // header-topbar 스크롤 숨김/표시 기능
+    function initHeaderScrollHide() {
+      const headerTopbar = document.querySelector('.header-topbar');
+      const contentsArea = document.querySelector('.contentsArea');
+      
+      if (!headerTopbar || !contentsArea) return;
+      
+      let lastScrollTop = 0;
+      let isScrolling = false;
+      const SCROLL_THRESHOLD = 10; // 스크롤 방향 전환 감지 임계값
+      
+      contentsArea.addEventListener('scroll', () => {
+        if (isScrolling) return;
+        
+        isScrolling = true;
+        requestAnimationFrame(() => {
+          const currentScrollTop = contentsArea.scrollTop;
+          
+          // 스크롤 방향 확인
+          if (currentScrollTop > lastScrollTop && currentScrollTop > SCROLL_THRESHOLD) {
+            // 아래로 스크롤
+            headerTopbar.classList.add('is-hidden');
+          } else if (currentScrollTop < lastScrollTop) {
+            // 위로 스크롤
+            headerTopbar.classList.remove('is-hidden');
+          }
+          
+          // 맨 위로 돌아왔을 때도 표시
+          if (currentScrollTop <= SCROLL_THRESHOLD) {
+            headerTopbar.classList.remove('is-hidden');
+          }
+          
+          lastScrollTop = currentScrollTop;
+          isScrolling = false;
+        });
+      }, { passive: true });
     }
-    
   
     // ===== Init =====
     (async function init() {
@@ -603,10 +631,7 @@
 
       applyEmptyMode();
       syncHeaderPaddingToScrollbar();
-      setCSSHeaderH();
-      
-      // 리사이즈 시 header 높이 재계산
-      window.addEventListener('resize', setCSSHeaderH);
+      initHeaderScrollHide();
 
       // 광고 렌더(초기 1회) + 임계 통과 시 재렌더
       renderAdOnce();
@@ -655,7 +680,10 @@
   }
   
   document.addEventListener('DOMContentLoaded', () => {
-    // 광고 높이는 renderAdOnce()에서 동적으로 설정됨
-    // 이 코드는 제거됨
+    const ins = document.querySelector('.footer .adsbygoogle');
+    if (ins){
+      ins.style.width = '430px';
+      ins.style.height = '90px';
+    }
   });
   

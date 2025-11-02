@@ -1,0 +1,21 @@
+{
+  "name": "hakchips.xyz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "service-worker.js",
+  "scripts": {
+    "serve": "npx http-server -p 3000 -c-1 .",
+    "dev": "browser-sync start --server . --no-open --port 3000 --host 0.0.0.0 --files \"**/*.html, design-system/**/*.css, js/**/*.js, partials/**/*.html\"",
+    "build": "node build.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^3.0.4",
+    "glob": "^11.0.3",
+    "globby": "^15.0.0",
+    "posthtml": "^0.16.7",
+    "posthtml-include": "^2.0.1"
+  }
+}

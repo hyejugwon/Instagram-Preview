@@ -1,0 +1,16 @@
+@layer components {
+    .empty-guide{
+      display:grid; place-items:center; text-align:center;
+      padding: var(--sp-8); color:var(--muted-fg);
+    }
+    .empty-guide .guide-inner{
+      max-width: 38rem; background:var(--muted-bg);
+      border:1px solid var(--border); border-radius:var(--radius-lg);
+      padding: var(--sp-8);
+    }
+    .empty-guide .tag{ font-size:var(--fs-sm); font-weight:700; color:var(--brand); margin:0 0 var(--sp-2); }
+    .empty-guide .title{ font-size:var(--fs-xl); font-weight:800; margin:0 0 var(--sp-3); }
+    .empty-guide .desc{ margin:0 0 var(--sp-4); }
+    .divider{ height:1px; background:var(--border); margin: var(--sp-6) 0; }
+  }
+  
