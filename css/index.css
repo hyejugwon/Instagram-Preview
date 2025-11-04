@@ -250,6 +250,10 @@ body:not(:has(.contentsArea)) .footer {
   background: var(--gray-10);
   border-top: 1px solid var(--gray-20);
   flex-shrink: 0;
+  height: 100px;
+  min-height: 100px;
+  max-height: 100px;
+  overflow: hidden;
 }
 
 body.home-page .footer .adsbygoogle,
@@ -257,6 +261,10 @@ body:not(:has(.contentsArea)) .footer .adsbygoogle {
   display: block;
   width: 100%;
   max-width: 100%;
+  height: 100px;
+  min-height: 100px;
+  max-height: 100px;
+  overflow: hidden;
 }
 
 /* Force cache refresh */

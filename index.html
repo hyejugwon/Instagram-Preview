@@ -42,8 +42,8 @@
       </main>
       
       <!-- Google Ad Footer -->
-      <footer class="footer">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="5125296215" data-ad-format="auto"></ins>
+      <footer class="footer" style="height: 100px; min-height: 100px; max-height: 100px; overflow: hidden;">
+        <ins class="adsbygoogle" style="display:block; height: 100px; max-height: 100px; overflow: hidden;" data-ad-client="ca-pub-3906940826015683" data-ad-slot="5125296215" data-ad-format="auto"></ins>
       </footer>
     </div>
     
@@ -64,7 +64,8 @@
       (function() {
         function initAds() {
           const ins = document.querySelector('.footer .adsbygoogle');
-          if (!ins) return;
+          const footer = document.querySelector('.footer');
+          if (!ins || !footer) return;
           
           const BP = 430; // 화면 너비 임계값
           const w = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
@@ -83,13 +84,28 @@
           // 스타일/속성 적용
           ins.style.width = (typeof width === 'number' ? width + 'px' : width);
           ins.style.height = height + 'px';
+          ins.style.maxHeight = height + 'px';
           ins.setAttribute('data-full-width-responsive', 'false');
+          
+          // 푸터 높이도 동기화
+          footer.style.height = height + 'px';
+          footer.style.minHeight = height + 'px';
+          footer.style.maxHeight = height + 'px';
           
           try {
             (adsbygoogle = window.adsbygoogle || []).push({});
           } catch(e) {
             console.debug('[ads]', e);
           }
+          
+          // 광고 로드 후에도 높이 유지
+          setTimeout(() => {
+            ins.style.height = height + 'px';
+            ins.style.maxHeight = height + 'px';
+            footer.style.height = height + 'px';
+            footer.style.minHeight = height + 'px';
+            footer.style.maxHeight = height + 'px';
+          }, 100);
         }
         
         // 사이드 레일 광고 초기화 (데스크톱 전용)
