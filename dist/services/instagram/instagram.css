@@ -2,8 +2,9 @@
   --maxw: 500px;
   --gap: 1px;
   --radius: 12px;
-  --header-h: 124px;           /* header-topbar(62px) + actions(62px) = 124px */
-  --footer-h: 2px;            /*← 광고 높이 90이었는데 지금 바꿔놓음*/
+  --header-h: 126px;    /* JS가 갱신 */
+  --header-pad: var(--header-h);  /* 헤더가 보일 땐 헤더 높이, 숨길 땐 0으로 */
+  --footer-h: 0px;            /* 광고 높이 - JS가 갱신 */
   color-scheme: light;         /* CSS 쪽은 'light only' 대신 'light' */
 }
 
@@ -11,13 +12,16 @@ html { -webkit-text-size-adjust: 100%; }
 
 /* 기본 세팅 */
 html, body{
-  height: 100%;
+  height: 100dvh;
   margin: 0;
+  padding: 0;
   background: var(--gray-0) !important;
   color: var(--gray-90);
   overflow: hidden;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+  display: flex;
+  flex-direction: column;
 }
 
 html::-webkit-scrollbar,
@@ -51,8 +55,19 @@ body *::-webkit-scrollbar-thumb {
 .app {
   background-color: unset !important;
   padding: unset !important;
+  padding-bottom: 0 !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden !important;
+  width: 100%;
+  max-width: var(--maxw);
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
 .app::-webkit-scrollbar,
@@ -69,11 +84,16 @@ body *::-webkit-scrollbar-thumb {
   width: 100%;
 }
 
-/* Header 스타일 명시적으로 정의 - 여백 제거 */
+/* 헤더를 고정 배치 */
 .header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  width: 100%;
+  max-width: var(--maxw);
   z-index: 50;
+  /* 이 줄 남겨두세요: 배경/보더 등 기존 스타일 그대로 */
   margin: 0 !important;
   padding: 0 !important;
   background: var(--gray-0);
@@ -85,17 +105,44 @@ body *::-webkit-scrollbar-thumb {
   border-right: 1px solid var(--gray-20);
   border-top: none;
   border-bottom: none;
-  max-width: var(--maxw);
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
+  overflow: hidden;
+  transition: transform 0.25s ease-out;
+  box-sizing: border-box;
+  /* 떨림 방지 */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* 숨김 상태: 위로 밀어 올림(레이아웃은 고정이라 겹침 X) */
+.header.is-hidden {
+  transform: translateX(-50%) translateY(calc(-1 * var(--header-h)));
+  pointer-events: none;
+  transition: transform 0.25s ease-out;
+}
+
+/* 헤더가 숨겨졌을 때 패딩 0으로 (공백 제거) */
+body.header-hidden {
+  --header-pad: 0px;
+}
+
+.header.is-hidden .header-topbar,
+.header.is-hidden .actions {
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0;
+  transition: padding 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              margin 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.2s ease-out;
 }
 
 .header .actions{
   padding: 0px 16px 18px 16px !important;
-  transition: padding-top 0.3s ease-in-out;
   margin-top: 0;
   padding-top: 0px !important;
+  transition: padding 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              margin 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.2s ease-in;
 }
 
 .header-topbar {
@@ -103,36 +150,9 @@ body *::-webkit-scrollbar-thumb {
   margin: 0 !important;
   padding: 18px 16px !important;
   width: 100% !important;
-  max-height: 62px;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out, margin 0.3s ease-in-out, position 0s ease-in-out 0.3s;
-  will-change: max-height;
-}
-
-.header-topbar.is-hidden {
-  position: absolute !important;
-  top: 0;
-  left: 0;
-  right: 0;
-  max-height: 0 !important;
-  opacity: 0;
-  pointer-events: none;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  min-height: 0 !important;
-  height: 0 !important;
-  line-height: 0 !important;
-  border: none !important;
-  overflow: hidden !important;
-}
-
-/* Header-topbar가 숨겨졌을 때 actions가 상단에서 18px 떨어지도록 */
-.header-topbar.is-hidden ~ .actions {
-  padding-top: 18px !important;
-  margin-top: 0 !important;
-  align-self: stretch;
+  transition: padding 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              margin 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.2s ease-in;
 }
 
 .actions {
@@ -185,14 +205,15 @@ button:disabled {
   border-left: 1px solid var(--gray-20);
   border-right: 1px solid var(--gray-20);
   box-sizing: border-box;
+  width: 100%;
   max-width: var(--maxw);
   margin-left: auto;
   margin-right: auto;
-  position: relative;
-  top: 0;
-
-  height: calc(100dvh - var(--header-h) - var(--footer-h));
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
   padding: 0 !important;
+  padding-top: var(--header-pad);  /* ⬅️ 추가 */
   padding-bottom: var(--footer-h);
 
   overflow-y: auto;
@@ -201,12 +222,14 @@ button:disabled {
   scrollbar-gutter: auto !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+  touch-action: pan-y;
+  -webkit-touch-callout: none;
 }
 
 /* section 요소 기본 margin/padding 제거 */
 .contentsArea > section {
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 128px 0 0 0 !important;
 }
 
 /* 모든 브라우저에서 스크롤바 숨김 */
@@ -239,19 +262,15 @@ button:disabled {
 }
 
 @supports not (height: 100dvh){
-  .contentsArea{
-    min-height: calc(100vh - var(--header-h) - var(--footer-h));
-  }
-  .empty-mode .contentsArea{
-    height: calc(100vh - var(--header-h)) !important;
+  html, body {
+    height: 100vh;
   }
 }
 
 .empty-mode .contentsArea{
   min-height: 0 !important;
-  height: calc(100dvh - var(--header-h)) !important;
   overflow: auto !important;
-  padding-bottom: 0 !important;
+  padding-bottom: var(--footer-h) !important;
 }
 
 .title{
@@ -403,18 +422,41 @@ body.lang-en .empty-guide .guide-content.en {
 .ghost.show{ opacity:1; }
 .ghost img{ width:100%; height:100%; object-fit:cover; }
 
-.footer-spacer { height: 0 !important; display: none !important; }
-
 /* Footer 스타일 */
 .footer {
+  width: 100%;
+  max-width: 500px;
+  height: 0;
+  min-height: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-10);
   border-left: 1px solid var(--gray-20);
   border-right: 1px solid var(--gray-20);
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.footer .adsbygoogle {
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 430px;
+  height: 80px !important;
+  max-height: 80px !important;
+  overflow: hidden;
 }
 
 /* 모달 스타일은 design-system/components/modal.css 사용 */
 
 /* 선택/드래그 차단 */
-html, body, .contentsArea, .header, .header-inner, .title, .actions, .grid, .cell,
+html, body, .contentsArea, .header, .title, .actions, .grid, .cell,
 button, .btn, img, canvas, svg{
   -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;
   -webkit-touch-callout:none;

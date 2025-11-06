@@ -1,54 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- /partials/head.html -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="color-scheme" content="light only">
-<meta name="theme-color" content="#ffffff">
-
-<!-- PWA -->
-<link rel="manifest" href="/manifest.webmanifest">
-
-<!-- Fonts -->
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
-
-<!-- Design System -->
-<link rel="stylesheet" href="/design-system/tokens/tokens.css">
-<link rel="stylesheet" href="/design-system/foundations/reset.css">
-<link rel="stylesheet" href="/design-system/foundations/base.css">
-<link rel="stylesheet" href="/design-system/utilities/layout.css">
-<link rel="stylesheet" href="/design-system/utilities/display.css">
-<link rel="stylesheet" href="/design-system/components/typography.css">
-<link rel="stylesheet" href="/design-system/components/button.css">
-<link rel="stylesheet" href="/design-system/components/header.css">
-<link rel="stylesheet" href="/design-system/components/grid.css">
-<link rel="stylesheet" href="/design-system/components/tabs.css">
-<link rel="stylesheet" href="/design-system/components/card.css">
-<link rel="stylesheet" href="/design-system/components/forms.css">
-<link rel="stylesheet" href="/design-system/components/modal.css">
-<link rel="stylesheet" href="/design-system/components/toast.css">
-
-<!-- Menu Modal -->
-<link rel="stylesheet" href="/css/menu.css">
-
-<!-- Icons -->
-<link rel="apple-touch-icon" sizes="180x180" href="/icons/logo.png?v=2">
-<link rel="apple-touch-icon" sizes="152x152" href="/icons/logo.png?v=2">
-<link rel="apple-touch-icon" sizes="120x120" href="/icons/logo.png?v=2">
-<link rel="apple-touch-icon" href="/icons/logo.png">
-<link rel="icon" href="/icons/logo_R.png" sizes="32x32" type="image/png">
-<link rel="icon" href="/icons/logo_R.png" sizes="16x16" type="image/png">
-
-<!-- Google AdSense -->
-<script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683" crossorigin="anonymous"></script>
-
-<!-- Menu Modal Script (will be loaded in body) -->
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <script src="/js/head.js"></script>
     <title>hakchips</title>
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/side-rail-ads.css">
   </head>  
   
 
@@ -84,10 +42,19 @@
       </main>
       
       <!-- Google Ad Footer -->
-      <footer class="footer">
-        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="2467327374" data-ad-format="auto"></ins>
+      <footer class="footer" style="height: 100px; min-height: 100px; max-height: 100px; overflow: hidden;">
+        <ins class="adsbygoogle" style="display:block; height: 100px; max-height: 100px; overflow: hidden;" data-ad-client="ca-pub-3906940826015683" data-ad-slot="5125296215" data-ad-format="auto"></ins>
       </footer>
     </div>
+    
+    <!-- 사이드 레일 광고 (데스크톱 전용) -->
+    <div class="side-rail-ad side-rail-ad--left">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="3267195730" data-ad-format="auto"></ins>
+    </div>
+    <div class="side-rail-ad side-rail-ad--right">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="3267195730" data-ad-format="auto"></ins>
+    </div>
+    
     <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683" crossorigin="anonymous"></script>
     <script src="/js/common.js"></script>
     <script src="/js/menu.js"></script>
@@ -97,7 +64,8 @@
       (function() {
         function initAds() {
           const ins = document.querySelector('.footer .adsbygoogle');
-          if (!ins) return;
+          const footer = document.querySelector('.footer');
+          if (!ins || !footer) return;
           
           const BP = 430; // 화면 너비 임계값
           const w = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
@@ -108,29 +76,72 @@
             width = '100%';
             height = 100;
           } else {
-            // 데스크톱: 100% 너비, 높이 90px
+            // 데스크톱: 100% 너비, 높이 100px
             width = '100%';
-            height = 90;
+            height = 100;
           }
           
           // 스타일/속성 적용
           ins.style.width = (typeof width === 'number' ? width + 'px' : width);
           ins.style.height = height + 'px';
+          ins.style.maxHeight = height + 'px';
           ins.setAttribute('data-full-width-responsive', 'false');
+          
+          // 푸터 높이도 동기화
+          footer.style.height = height + 'px';
+          footer.style.minHeight = height + 'px';
+          footer.style.maxHeight = height + 'px';
           
           try {
             (adsbygoogle = window.adsbygoogle || []).push({});
           } catch(e) {
             console.debug('[ads]', e);
           }
+          
+          // 광고 로드 후에도 높이 유지
+          setTimeout(() => {
+            ins.style.height = height + 'px';
+            ins.style.maxHeight = height + 'px';
+            footer.style.height = height + 'px';
+            footer.style.minHeight = height + 'px';
+            footer.style.maxHeight = height + 'px';
+          }, 100);
+        }
+        
+        // 사이드 레일 광고 초기화 (데스크톱 전용)
+        function initSideRailAds() {
+          if (window.innerWidth < 1000) return; // 모바일에서는 실행 안 함
+          
+          const leftAd = document.querySelector('.side-rail-ad--left .adsbygoogle');
+          const rightAd = document.querySelector('.side-rail-ad--right .adsbygoogle');
+          
+          // 사이드 레일 광고 크기 설정 (일반적으로 160x600 또는 300x250)
+          [leftAd, rightAd].forEach(ins => {
+            if (!ins) return;
+            ins.style.width = '160px';
+            ins.style.height = '600px';
+            ins.setAttribute('data-full-width-responsive', 'false');
+            
+            try {
+              (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch(e) {
+              console.debug('[side-rail-ads]', e);
+            }
+          });
         }
         
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(initAds, 100);
+            setTimeout(() => {
+              initAds();
+              initSideRailAds();
+            }, 100);
           });
         } else {
-          setTimeout(initAds, 100);
+          setTimeout(() => {
+            initAds();
+            initSideRailAds();
+          }, 100);
         }
       })();
     </script>

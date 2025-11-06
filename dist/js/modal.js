@@ -9,6 +9,7 @@
    * 모달 표시
    * @param {Object} options - 모달 옵션
    * @param {string} options.title - 모달 타이틀 (또는 data-i18n-en, data-i18n-kr 포함 객체)
+   * @param {boolean} options.hideTitle - 타이틀 숨기기 (기본: false)
    * @param {string} options.cancelText - 취소 버튼 텍스트 (또는 data-i18n-en, data-i18n-kr 포함 객체)
    * @param {string} options.confirmText - 확인 버튼 텍스트 (또는 data-i18n-en, data-i18n-kr 포함 객체)
    * @param {Function} options.onCancel - 취소 버튼 클릭 시 콜백
@@ -20,6 +21,7 @@
   function showModal(options) {
     const {
       title,
+      hideTitle = false,
       cancelText = { en: 'Cancel', kr: '취소' },
       confirmText = { en: 'Confirm', kr: '확인' },
       onCancel,
@@ -43,29 +45,32 @@
     const modalCard = document.createElement('div');
     modalCard.className = 'modal-card';
 
-    const titleEl = document.createElement('div');
-    titleEl.className = 'modal-title';
-    titleEl.id = `${id}-title`;
-    
-    // 타이틀 설정 (문자열 또는 객체)
-    if (typeof title === 'string') {
-      titleEl.innerHTML = title;
-    } else if (title && title.en && title.kr) {
-      titleEl.setAttribute('data-i18n-en', title.en);
-      titleEl.setAttribute('data-i18n-kr', title.kr);
-      const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
-      const titleText = currentLang === 'kr' ? title.kr : title.en;
-      // HTML 태그 지원 (예: <br>)
-      if (titleText.includes('<')) {
-        titleEl.innerHTML = titleText;
+    let titleEl = null;
+    if (!hideTitle) {
+      titleEl = document.createElement('div');
+      titleEl.className = 'modal-title';
+      titleEl.id = `${id}-title`;
+      
+      // 타이틀 설정 (문자열 또는 객체)
+      if (typeof title === 'string') {
+        titleEl.innerHTML = title;
+      } else if (title && title.en && title.kr) {
+        titleEl.setAttribute('data-i18n-en', title.en);
+        titleEl.setAttribute('data-i18n-kr', title.kr);
+        const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
+        const titleText = currentLang === 'kr' ? title.kr : title.en;
+        // HTML 태그 지원 (예: <br>)
+        if (titleText.includes('<')) {
+          titleEl.innerHTML = titleText;
+        } else {
+          titleEl.textContent = titleText;
+        }
       } else {
-        titleEl.textContent = titleText;
+        titleEl.innerHTML = title || '';
       }
-    } else {
-      titleEl.innerHTML = title || '';
+      
+      overlay.setAttribute('aria-labelledby', titleEl.id);
     }
-    
-    overlay.setAttribute('aria-labelledby', titleEl.id);
 
     const actions = document.createElement('div');
     actions.className = 'actions';
@@ -143,7 +148,9 @@
     // 구조 조립
     actions.appendChild(cancelBtn);
     actions.appendChild(confirmBtn);
-    modalCard.appendChild(titleEl);
+    if (titleEl) {
+      modalCard.appendChild(titleEl);
+    }
     modalCard.appendChild(actions);
     overlay.appendChild(modalCard);
 

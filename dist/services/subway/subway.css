@@ -1,6 +1,6 @@
 :root{
   --header-h: 0px; /* JS에서 동적으로 설정 */
-  --footer-h: 90px; /* 광고 높이 (Instagram과 동일) */
+  --footer-h: 80px; /* 광고 높이 */
 }
 
 /* Body 스크롤바 숨김 */
@@ -69,33 +69,8 @@ body.lang-kr .title.h2--B {
   background: var(--gray-0);
 }
 
-/* Header-topbar 스크롤 숨김/표시 스타일 */
 .header-topbar {
   position: relative;
-  max-height: 62px;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
-  will-change: max-height;
-}
-
-.header-topbar.is-hidden {
-  max-height: 0;
-  opacity: 0;
-  pointer-events: none;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
-/* Tabs와 Result가 부드럽게 올라가도록 transition 추가 */
-.header .tabs,
-.header .result {
-  transition: transform 0.3s ease-in-out, padding-top 0.3s ease-in-out;
-  margin-top: 0;
-}
-
-/* Header-topbar가 숨겨졌을 때 tabs가 최상단에 붙도록 */
-.header-topbar.is-hidden ~ .tabs {
-  padding-top: 0;
 }
 
 .selecArea {
@@ -154,6 +129,7 @@ body.lang-kr .title.h2--B {
   scrollbar-gutter: auto !important;
   scrollbar-width: none !important;
   -ms-overflow-style: none !important;
+  transition: height 0.3s ease-in-out;
 }
 
 /* 모든 브라우저에서 스크롤바 숨김 */
@@ -195,14 +171,20 @@ body.lang-kr .title.h2--B {
 .footer {
   width: 100%;
   max-width: 500px;
+  height: var(--footer-h);
+  min-height: var(--footer-h);
+  max-height: var(--footer-h);
   margin-left: auto;
   margin-right: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--gray-0);
+  background: var(--gray-10);
   border-left: 1px solid var(--gray-20);
   border-right: 1px solid var(--gray-20);
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .footer .adsbygoogle {

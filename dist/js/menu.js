@@ -45,9 +45,9 @@
         width = '100%';
         height = 100;
       } else {
-        // 데스크톱: 430x90
+        // 데스크톱: 430x100
         width = 430;
-        height = 90;
+        height = 100;
       }
       
       // 스타일/속성 적용
@@ -73,6 +73,18 @@
         return;
       }
 
+      // 사이드 광고 z-index 조정 함수
+      function updateSideRailAdsZIndex(show) {
+        const sideRailAds = document.querySelectorAll('.side-rail-ad');
+        sideRailAds.forEach(ad => {
+          if (show) {
+            ad.style.zIndex = '201'; // 메뉴 모달의 z-index(200)보다 높게
+          } else {
+            ad.style.zIndex = ''; // 원래대로 복원
+          }
+        });
+      }
+
       // 이벤트 위임: document에 클릭 이벤트 등록
       document.addEventListener('click', function menuClickHandler(e) {
         // 메뉴 버튼 클릭 체크 (img 태그이거나 부모 요소 확인)
@@ -84,6 +96,7 @@
           if (overlay) {
             overlay.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            updateSideRailAdsZIndex(true); // 사이드 광고 z-index 조정
           }
           // nutrition-info 닫기 (subway 페이지인 경우)
           const nutritionInfo = document.getElementById('nutritionInfo');
@@ -104,6 +117,7 @@
           if (overlay) {
             overlay.style.display = 'none';
             document.body.style.overflow = '';
+            updateSideRailAdsZIndex(false); // 사이드 광고 z-index 복원
           }
           return;
         }
@@ -114,6 +128,7 @@
           if (overlay) {
             overlay.style.display = 'none';
             document.body.style.overflow = '';
+            updateSideRailAdsZIndex(false); // 사이드 광고 z-index 복원
           }
         }
       });

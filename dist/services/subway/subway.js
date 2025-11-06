@@ -50,7 +50,7 @@
           informationCard.className = 'card card--information card--multiple';
           informationCard.innerHTML = `
             <div class="card__content">
-              <p class="card__content-item kr" data-i18n-en="Referenced from Subway official website, but information may vary depending on the update date." data-i18n-kr="서브웨이 공식 홈페이지를 참고하였으나업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.">서브웨이 공식 홈페이지를 참고하였으나업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.</p>
+              <p class="card__content-item kr" data-i18n-en="Referenced from Subway official website, but information may vary depending on the update date." data-i18n-kr="서브웨이 공식 홈페이지를 참고하였으나 업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.">서브웨이 공식 홈페이지를 참고하였으나 업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.</p>
               <p class="card__content-item kr" data-i18n-en="Due to Subway's characteristics, quantities are not always the same, so there may be differences from the calories provided." data-i18n-kr="서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.">서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.</p>
               <p class="card__content-item kr" data-i18n-en="For main ingredients, Korean Subway was referenced. For other information not disclosed in Korean ingredient labels, Australian ingredient labels were referenced." data-i18n-kr="메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.">메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.</p>
             </div>
@@ -709,43 +709,6 @@
     document.documentElement.style.setProperty('--footer-h', h + 'px');
   }
   
-  // header-topbar 스크롤 숨김/표시 기능
-  function initHeaderScrollHide() {
-    const headerTopbar = document.querySelector('.header-topbar');
-    const contentsArea = document.querySelector('.contentsArea');
-    
-    if (!headerTopbar || !contentsArea) return;
-    
-    let lastScrollTop = 0;
-    let isScrolling = false;
-    const SCROLL_THRESHOLD = 10; // 스크롤 방향 전환 감지 임계값
-    
-    contentsArea.addEventListener('scroll', () => {
-      if (isScrolling) return;
-      
-      isScrolling = true;
-      requestAnimationFrame(() => {
-        const currentScrollTop = contentsArea.scrollTop;
-        
-        // 스크롤 방향 확인
-        if (currentScrollTop > lastScrollTop && currentScrollTop > SCROLL_THRESHOLD) {
-          // 아래로 스크롤
-          headerTopbar.classList.add('is-hidden');
-        } else if (currentScrollTop < lastScrollTop) {
-          // 위로 스크롤
-          headerTopbar.classList.remove('is-hidden');
-        }
-        
-        // 맨 위로 돌아왔을 때도 표시
-        if (currentScrollTop <= SCROLL_THRESHOLD) {
-          headerTopbar.classList.remove('is-hidden');
-        }
-        
-        lastScrollTop = currentScrollTop;
-        isScrolling = false;
-      });
-    }, { passive: true });
-  }
   
   // 광고 초기화 함수 (Instagram과 동일한 크기)
   function initAds() {
@@ -757,13 +720,13 @@
     
     let width, height;
     if (w <= BP) {
-      // 모바일: 폭 100%로 두고 높이 100px
+      // 모바일: 폭 100%로 두고 높이 80px
       width = '100%';
-      height = 100;
+      height = 80;
     } else {
-      // 데스크톱: 430x90
+      // 데스크톱: 430x80
       width = 430;
-      height = 90;
+      height = 80;
     }
     
     // 스타일/속성 적용
@@ -788,11 +751,11 @@
       initDetailToggle();
       initResetButton();
       initResponsiveTitle();
-      initHeaderScrollHide();
       // header 높이 설정 (렌더링 후)
       setTimeout(() => {
         setCSSHeaderH();
         initAds();
+        initSideRailAds();
         // 리사이즈 시 header 높이 재계산
         window.addEventListener('resize', setCSSHeaderH);
       }, 100);
@@ -802,14 +765,43 @@
     initDetailToggle();
     initResetButton();
     initResponsiveTitle();
-    initHeaderScrollHide();
     // header 높이 설정 (렌더링 후)
     setTimeout(() => {
       setCSSHeaderH();
       initAds();
+      initSideRailAds();
       // 리사이즈 시 header 높이 재계산
       window.addEventListener('resize', setCSSHeaderH);
     }, 100);
   }
+  
+  // 사이드 레일 광고 초기화 함수
+  function initSideRailAds() {
+    if (window.innerWidth < 1000) return; // 모바일에서는 실행 안 함
+    
+    const leftAd = document.querySelector('.side-rail-ad--left .adsbygoogle');
+    const rightAd = document.querySelector('.side-rail-ad--right .adsbygoogle');
+    
+    // 사이드 레일 광고 크기 설정 (160x600)
+    [leftAd, rightAd].forEach(ins => {
+      if (!ins) return;
+      ins.style.width = '160px';
+      ins.style.height = '600px';
+      ins.setAttribute('data-full-width-responsive', 'false');
+      
+      try {
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      } catch(e) {
+        console.debug('[side-rail-ads]', e);
+      }
+    });
+  }
+  
+  // 리사이즈 시 사이드 레일 광고 재초기화
+  window.addEventListener('resize', () => {
+    if (window.innerWidth >= 1000) {
+      initSideRailAds();
+    }
+  });
 })();
   
