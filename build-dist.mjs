@@ -11,8 +11,18 @@ const DIST = "dist";
 await rm(DIST, { recursive: true, force: true });
 await mkdir(DIST, { recursive: true });
 
-// 2) 전체 프로젝트를 dist로 복사 (node_modules, dist 등 제외)
-const entries = await globby(["**/*", "!node_modules/**", "!dist/**", "!.git/**"]);
+// 2) 전체 프로젝트를 dist로 복사 (node_modules, dist, 빌드 스크립트, 개발 파일 등 제외)
+const entries = await globby([
+  "**/*", 
+  "!node_modules/**", 
+  "!dist/**", 
+  "!.git/**",
+  "!build-dist.mjs",
+  "!build.mjs",
+  "!package.json",
+  "!package-lock.json",
+  "!check-dns.sh"
+]);
 for (const entry of entries) {
   await cp(entry, `${DIST}/${entry}`, { recursive: true });
 }
