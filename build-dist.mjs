@@ -12,6 +12,7 @@ await rm(DIST, { recursive: true, force: true });
 await mkdir(DIST, { recursive: true });
 
 // 2) 전체 프로젝트를 dist로 복사 (node_modules, dist, 빌드 스크립트, 개발 파일 등 제외)
+// 단, index.html은 최상위에서만 관리하고 dist에는 복사하지 않음 (dist/index.html은 빌드 후 생성)
 const entries = await globby([
   "**/*", 
   "!node_modules/**", 
@@ -21,11 +22,15 @@ const entries = await globby([
   "!build.mjs",
   "!package.json",
   "!package-lock.json",
-  "!check-dns.sh"
+  "!check-dns.sh",
+  "!index.html"  // 최상위 index.html은 복사하지 않음
 ]);
 for (const entry of entries) {
   await cp(entry, `${DIST}/${entry}`, { recursive: true });
 }
+
+// index.html은 최상위에서 dist로 직접 복사 (include 처리 전)
+await cp("index.html", `${DIST}/index.html`);
 
 // 3) dist 내부의 HTML에서 <include> 치환 (partials는 제외)
 const htmlFiles = await globby([`${DIST}/**/*.html`, `!${DIST}/partials/**`]);
