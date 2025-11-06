@@ -33,8 +33,9 @@
 
     // 메뉴 모달 광고 초기화 함수
     function initMenuAds() {
-      const ins = document.querySelector('#menuOverlay .footer .adsbygoogle');
-      if (!ins) return;
+      const ins = document.querySelector('#menuOverlay .menu-modal .footer .adsbygoogle');
+      const footer = document.querySelector('#menuOverlay .menu-modal .footer');
+      if (!ins || !footer) return;
       
       const BP = 430; // 화면 너비 임계값
       const w = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
@@ -53,13 +54,28 @@
       // 스타일/속성 적용
       ins.style.width = (typeof width === 'number' ? width + 'px' : width);
       ins.style.height = height + 'px';
+      ins.style.maxHeight = height + 'px';
       ins.setAttribute('data-full-width-responsive', 'false');
+      
+      // 푸터 높이도 동기화
+      footer.style.height = height + 'px';
+      footer.style.minHeight = height + 'px';
+      footer.style.maxHeight = height + 'px';
       
       try {
         (adsbygoogle = window.adsbygoogle || []).push({});
       } catch(e) {
         console.debug('[ads]', e);
       }
+      
+      // 광고 로드 후에도 높이 유지
+      setTimeout(() => {
+        ins.style.height = height + 'px';
+        ins.style.maxHeight = height + 'px';
+        footer.style.height = height + 'px';
+        footer.style.minHeight = height + 'px';
+        footer.style.maxHeight = height + 'px';
+      }, 100);
     }
 
     function initMenuEvents() {
