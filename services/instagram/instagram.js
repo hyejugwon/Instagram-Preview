@@ -450,34 +450,22 @@
         fileInput.click();
       });
       
-      deleteBtn.addEventListener('click', (e) => {
+      deleteBtn.addEventListener('click', async (e) => {
         e.preventDefault();
         e.stopPropagation();
         hideActionMenuModal(id);
-        // 삭제 확인 모달 표시
-        targetForDelete = el;
-        window.showModal({
-          id: 'deleteModal',
-          title: { en: 'Do you want to delete?', kr: '삭제할까요?' },
-          cancelText: { en: 'Cancel', kr: '취소' },
-          confirmText: { en: 'Delete', kr: '삭제' },
-          confirmClass: 'delete',
-          onCancel: () => {
-            targetForDelete = null;
-          },
-          onConfirm: async () => {
-            if (targetForDelete) {
-              const id = Number(targetForDelete.dataset.id);
-              if (!Number.isNaN(id)) await dbDeletePhotoById(id);
-              if (targetForDelete.parentNode === grid) grid.removeChild(targetForDelete);
-              targetForDelete = null;
-              await saveCurrentOrder();
-              updateGridState();
-              applyEmptyMode();
-              syncHeaderPaddingToScrollbar();
-            }
-          }
-        });
+        // 바로 삭제
+        const photoId = Number(el.dataset.id);
+        if (!Number.isNaN(photoId)) {
+          await dbDeletePhotoById(photoId);
+        }
+        if (el.parentNode === grid) {
+          grid.removeChild(el);
+        }
+        await saveCurrentOrder();
+        updateGridState();
+        applyEmptyMode();
+        syncHeaderPaddingToScrollbar();
       });
       
       closeBtn.addEventListener('click', (e) => {
@@ -776,6 +764,85 @@
       }
     }
     
+    // header 전체 스크롤 숨김/표시 기능
+    function initHeaderScrollHide() {
+      const header = document.querySelector('.header');
+      const contentsArea = document.querySelector('.contentsArea');
+      
+      if (!header || !contentsArea) {
+        console.warn('[initHeaderScrollHide] header or contentsArea not found');
+        return;
+      }
+      
+      // header의 실제 높이 저장
+      const headerHeight = header.offsetHeight;
+      header.style.maxHeight = headerHeight + 'px';
+      
+      let lastScrollTop = contentsArea.scrollTop;
+      let isHidden = false;
+      let scrollDirection = 0; // 1: down, -1: up, 0: none
+      let scrollHistory = []; // 스크롤 방향 히스토리
+      const SCROLL_THRESHOLD = 80;
+      const SCROLL_DELTA = 15; // 최소 스크롤 변화량
+      const HISTORY_SIZE = 3; // 히스토리 크기
+      
+      const updateHeader = () => {
+        const currentScrollTop = contentsArea.scrollTop;
+        const scrollDelta = currentScrollTop - lastScrollTop;
+        
+        // 스크롤 방향 히스토리 업데이트
+        if (Math.abs(scrollDelta) >= SCROLL_DELTA) {
+          const direction = scrollDelta > 0 ? 1 : -1;
+          scrollHistory.push(direction);
+          if (scrollHistory.length > HISTORY_SIZE) {
+            scrollHistory.shift();
+          }
+          
+          // 히스토리에서 가장 많이 나타나는 방향 결정
+          const downCount = scrollHistory.filter(d => d === 1).length;
+          const upCount = scrollHistory.filter(d => d === -1).length;
+          
+          if (downCount > upCount) {
+            scrollDirection = 1;
+          } else if (upCount > downCount) {
+            scrollDirection = -1;
+          }
+        }
+        
+        // 아래로 스크롤 - 숨기기
+        if (scrollDirection === 1 && currentScrollTop > SCROLL_THRESHOLD) {
+          if (!isHidden) {
+            header.classList.add('is-hidden');
+            header.style.maxHeight = '0px';
+            isHidden = true;
+          }
+        } 
+        // 위로 스크롤 - 표시하기
+        else if (scrollDirection === -1 || currentScrollTop <= SCROLL_THRESHOLD) {
+          if (isHidden) {
+            header.classList.remove('is-hidden');
+            header.style.maxHeight = headerHeight + 'px';
+            isHidden = false;
+          }
+        }
+        
+        lastScrollTop = currentScrollTop;
+      };
+      
+      let rafId = null;
+      const handleScroll = () => {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+        }
+        
+        rafId = requestAnimationFrame(() => {
+          updateHeader();
+          rafId = null;
+        });
+      };
+      
+      contentsArea.addEventListener('scroll', handleScroll, { passive: true });
+    }
   
     // ===== Init =====
     (async function init() {
@@ -797,6 +864,14 @@
       initSideRailAds();
 
       installPullToRefreshBlocker(document.querySelector('.contentsArea'));
+      
+      // header 스크롤 숨김 기능 초기화
+      // DOM이 완전히 렌더링된 후 실행
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          initHeaderScrollHide();
+        });
+      });
     })();
     
     // 사이드 레일 광고 초기화 함수

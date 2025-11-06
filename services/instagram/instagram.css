@@ -103,14 +103,37 @@ body *::-webkit-scrollbar-thumb {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+  flex-shrink: 1;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, margin-top 0.3s ease-in-out;
+}
+
+.header.is-hidden {
+  max-height: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+  pointer-events: none;
   flex-shrink: 0;
+}
+
+.header.is-hidden .header-topbar,
+.header.is-hidden .actions {
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0;
+  transition: padding 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              margin 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.2s ease-out;
 }
 
 .header .actions{
   padding: 0px 16px 18px 16px !important;
-  transition: padding-top 0.3s ease-in-out;
   margin-top: 0;
   padding-top: 0px !important;
+  transition: padding 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              margin 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.2s ease-in;
 }
 
 .header-topbar {
@@ -118,6 +141,9 @@ body *::-webkit-scrollbar-thumb {
   margin: 0 !important;
   padding: 18px 16px !important;
   width: 100% !important;
+  transition: padding 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              margin 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.2s ease-in;
 }
 
 .actions {
