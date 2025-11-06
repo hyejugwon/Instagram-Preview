@@ -9,6 +9,7 @@
     const closeAd = document.getElementById('closeAd');
     const dragGhost = document.getElementById('dragGhost');
     const app = document.querySelector('.app');
+    const contentsArea = document.querySelector('.contentsArea');
     const emptyGuide = document.getElementById('emptyGuide');
   
     // === Global guards: drag / copy / select / contextmenu OFF ===
@@ -53,8 +54,37 @@
       const db = await openDB();
       return new Promise((res, rej) => {
         const tx = db.transaction([OS_PHOTOS], 'readwrite');
-        tx.objectStore(OS_PHOTOS).add({ blob, createdAt: Date.now() });
-        tx.oncomplete = () => res();
+        const req = tx.objectStore(OS_PHOTOS).add({ blob, createdAt: Date.now() });
+        req.onsuccess = () => res(req.result); // 새로 생성된 ID 반환
+        req.onerror = () => rej(tx.error);
+      });
+    }
+    
+    async function dbUpdatePhotoById(id, blob) {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction([OS_PHOTOS], 'readwrite');
+        const store = tx.objectStore(OS_PHOTOS);
+        const getReq = store.get(id);
+        
+        getReq.onsuccess = () => {
+          const data = getReq.result;
+          if (data) {
+            // 기존 데이터를 복사하고 blob만 업데이트
+            const updatedData = {
+              id: data.id,
+              blob: blob,
+              createdAt: data.createdAt // createdAt 유지
+            };
+            const putReq = store.put(updatedData);
+            putReq.onsuccess = () => res();
+            putReq.onerror = () => rej(putReq.error);
+          } else {
+            rej(new Error('Photo not found'));
+          }
+        };
+        
+        getReq.onerror = () => rej(getReq.error);
         tx.onerror = () => rej(tx.error);
       });
     }
@@ -255,6 +285,27 @@
     }
   
     // ===== Header actions =====
+    // 아이콘 템플릿 (한 번만 생성하고 clone 사용)
+    const iconTemplateCheck = (() => {
+      const img = document.createElement('img');
+      img.src = '/icons/check.svg';
+      img.alt = '';
+      img.className = 'icon';
+      img.width = 16;
+      img.height = 16;
+      return img;
+    })();
+    
+    const iconTemplateSwitch = (() => {
+      const img = document.createElement('img');
+      img.src = '/icons/switch.svg';
+      img.alt = '';
+      img.className = 'icon';
+      img.width = 16;
+      img.height = 16;
+      return img;
+    })();
+    
     function setEditMode(on) {
       editMode = on;
       document.body.classList.toggle('editing', on);
@@ -263,46 +314,35 @@
         // 현재 언어 가져오기
         const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
         
+        // 아이콘과 텍스트 요소 생성 (clone 사용)
+        const img = on ? iconTemplateCheck.cloneNode(true) : iconTemplateSwitch.cloneNode(true);
+        const span = document.createElement('span');
+        
         if (on) {
           // Done 버튼: priBlack 스타일
           editBtn.className = 'btn btn--fill--priBlack btn--sz-me icon--me';
-          const checkImg = document.createElement('img');
-          checkImg.src = '/icons/check.svg';
-          checkImg.alt = '';
-          checkImg.className = 'icon';
-          checkImg.width = 16;
-          checkImg.height = 16;
-          editBtn.innerHTML = '';
-          editBtn.appendChild(checkImg);
-          const doneSpan = document.createElement('span');
-          doneSpan.setAttribute('data-i18n-en', 'Done');
-          doneSpan.setAttribute('data-i18n-kr', '완료');
-          doneSpan.textContent = currentLang === 'kr' ? '완료' : 'Done';
-          editBtn.appendChild(doneSpan);
+          span.setAttribute('data-i18n-en', 'Done');
+          span.setAttribute('data-i18n-kr', '완료');
+          span.textContent = currentLang === 'kr' ? '완료' : 'Done';
         } else {
           // Edit 버튼: teriGray 스타일
           editBtn.className = 'btn btn--fill--teriGray btn--sz-me icon--me';
-          const switchImg = document.createElement('img');
-          switchImg.src = '/icons/switch.svg';
-          switchImg.alt = '';
-          switchImg.className = 'icon';
-          switchImg.width = 16;
-          switchImg.height = 16;
-          editBtn.innerHTML = '';
-          editBtn.appendChild(switchImg);
-          const editSpan = document.createElement('span');
-          editSpan.setAttribute('data-i18n-en', 'Edit');
-          editSpan.setAttribute('data-i18n-kr', '편집');
-          editSpan.textContent = currentLang === 'kr' ? '편집' : 'Edit';
-          editBtn.appendChild(editSpan);
+          span.setAttribute('data-i18n-en', 'Edit');
+          span.setAttribute('data-i18n-kr', '편집');
+          span.textContent = currentLang === 'kr' ? '편집' : 'Edit';
         }
+        
+        // replaceChildren로 안전하게 교체 (img+span 2개만 남도록)
+        editBtn.replaceChildren(img, span);
         editBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
         
-        // 언어 번역 시스템에 새로 추가된 요소 업데이트
-        if (window.refreshLanguage) {
-          setTimeout(() => {
-            window.refreshLanguage();
-          }, 0);
+        // 언어 번역 시스템에 새로 추가된 요소 업데이트 (마이크로태스크 지연)
+        if (typeof window.refreshLanguage === 'function') {
+          Promise.resolve().then(() => {
+            if (typeof window.refreshLanguage === 'function') {
+              window.refreshLanguage();
+            }
+          });
         }
       }
     }
@@ -316,7 +356,12 @@
       }
     });
   
-    addBtn?.addEventListener('click', () => fileInput.click());
+    addBtn?.addEventListener('click', () => {
+      // 일반 추가 모드일 때는 multiple 속성 유지 (여러 개 선택 가능)
+      fileInput.setAttribute('multiple', '');
+      fileInput.multiple = true; // 명시적으로 true 설정
+      fileInput.click();
+    });
     fileInput.removeAttribute('capture');
     fileInput.setAttribute('accept', 'image/*');
   
@@ -326,50 +371,64 @@
       // 사진 교체 모드인 경우
       if (targetForReplace && files.length > 0) {
         const file = files[0]; // 첫 번째 파일만 사용
-        const blob = await resizeToBlob(file);
-        const id = Number(targetForReplace.dataset.id);
-        
-        if (!Number.isNaN(id)) {
-          // 기존 셀의 위치(인덱스) 저장
-          const currentOrder = getCurrentOrderIds();
-          const replaceIndex = currentOrder.indexOf(id);
+        try {
+          const blob = await resizeToBlob(file);
+          const id = Number(targetForReplace.dataset.id);
           
-          // 기존 사진 삭제
-          await dbDeletePhotoById(id);
-          
-          // 새 사진 추가
-          await dbAddPhoto(blob);
-          
-          // 전체 다시 렌더링
-          await renderAll();
-          
-          // 새로 추가된 사진의 ID 찾기 (가장 최근에 추가된 것)
-          const allPhotos = await dbGetAllPhotos();
-          const newPhoto = allPhotos[allPhotos.length - 1]; // 가장 최근 추가된 사진
-          
-          // 순서 복원: 기존 위치에 새 사진 배치
-          if (newPhoto && replaceIndex >= 0) {
-            const newOrder = getCurrentOrderIds();
-            const newId = newPhoto.id;
-            // 새 ID를 기존 위치에 삽입
-            const restoredOrder = [...currentOrder];
-            restoredOrder.splice(replaceIndex, 1, newId); // 기존 ID를 새 ID로 교체
-            // 새로 추가된 ID가 다른 위치에 있으면 제거
-            const newIdIndex = restoredOrder.indexOf(newId);
-            if (newIdIndex !== replaceIndex && newIdIndex >= 0) {
-              restoredOrder.splice(newIdIndex, 1);
+          if (!Number.isNaN(id)) {
+            // 스크롤 위치 저장
+            const savedScrollTop = contentsArea ? contentsArea.scrollTop : 0;
+            
+            // 기존 셀의 위치(인덱스) 저장
+            const currentOrder = getCurrentOrderIds();
+            const replaceIndex = currentOrder.indexOf(id);
+            
+            // 기존 사진 삭제
+            await dbDeletePhotoById(id);
+            
+            // 새 사진 추가 (ID 반환)
+            const newId = await dbAddPhoto(blob);
+            
+            if (!newId) {
+              console.error('사진 추가 실패: ID를 받지 못했습니다');
+              throw new Error('사진 추가 실패');
             }
-            // 순서 저장
-            await dbSetOrder(restoredOrder);
+            
+            // 전체 다시 렌더링
             await renderAll();
+            
+            // 순서 복원: 기존 위치에 새 사진 배치
+            if (newId && replaceIndex >= 0) {
+              const restoredOrder = [...currentOrder];
+              restoredOrder.splice(replaceIndex, 1, newId); // 기존 ID를 새 ID로 교체
+              // 순서 저장
+              await dbSetOrder(restoredOrder);
+              await renderAll();
+            }
+            
+            await saveCurrentOrder();
+            updateGridState();
+            applyEmptyMode();
+            syncHeaderPaddingToScrollbar();
+            
+            // 스크롤 위치 복원
+            if (contentsArea) {
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  contentsArea.scrollTop = savedScrollTop;
+                });
+              });
+            }
           }
-          
-          await saveCurrentOrder();
-          updateGridState();
-          applyEmptyMode();
-          syncHeaderPaddingToScrollbar();
+        } catch (error) {
+          console.error('사진 교체 중 오류:', error);
+          alert('사진 교체 중 오류가 발생했습니다: ' + error.message);
+        } finally {
+          targetForReplace = null;
+          // 사진 교체 완료 후 multiple 속성 복원
+          fileInput.setAttribute('multiple', '');
+          fileInput.multiple = true; // 명시적으로 true 설정
         }
-        targetForReplace = null;
       } else {
         // 일반 추가 모드
         for (const f of files) {
@@ -447,6 +506,9 @@
         hideActionMenuModal(id);
         // 사진 교체 모드로 설정하고 fileInput 클릭
         targetForReplace = el;
+        // 사진 교체 모드일 때는 multiple 속성 제거 (1개만 선택 가능)
+        fileInput.removeAttribute('multiple');
+        fileInput.multiple = false; // 명시적으로 false 설정
         fileInput.click();
       });
       
@@ -670,10 +732,10 @@
     }
   
     function syncHeaderPaddingToScrollbar() {
-      const headerInner = document.querySelector('.header-inner');
-      if (!app || !headerInner) return;
-      const sbw = app.offsetWidth - app.clientWidth; // 세로 스크롤바 폭
-      headerInner.style.paddingRight = `calc(12px + ${sbw}px)`;
+      if (!app) return;
+      const sbw = Math.max(0, app.offsetWidth - app.clientWidth);
+      // CSS에서 .header-topbar { padding-right: calc(var(--sbw) + 12px) } 로 사용
+      document.documentElement.style.setProperty('--sbw', `${sbw}px`);
     }
   
     window.addEventListener('resize', syncHeaderPaddingToScrollbar);
@@ -758,90 +820,130 @@
     // header 높이 계산 및 CSS 변수 설정
     function setCSSHeaderH() {
       const header = document.querySelector('.header');
-      if (header) {
-        const headerHeight = header.offsetHeight;
-        document.documentElement.style.setProperty('--header-h', headerHeight + 'px');
-      }
+      if (!header) return;
+      // rAF를 사용하여 레이아웃이 확정된 후 높이 측정
+      requestAnimationFrame(() => {
+        const h = header.offsetHeight || 124;
+        document.documentElement.style.setProperty('--header-h', `${h}px`);
+        // 보이는 상태에선 패딩을 헤더 높이로
+        if (!document.body.classList.contains('header-hidden')) {
+          document.documentElement.style.setProperty('--header-pad', `${h}px`);
+        }
+      });
     }
+
+    // 헤더 높이 변화를 실시간으로 추적
+    function observeHeaderSize() {
+      const header = document.querySelector('.header');
+      if (!header || !('ResizeObserver' in window)) return;
+      const ro = new ResizeObserver(() => setCSSHeaderH());
+      ro.observe(header);
+  }
+
     
-    // header 전체 스크롤 숨김/표시 기능
+    // header 전체 스크롤 숨김/표시 기능 (안정 버전)
     function initHeaderScrollHide() {
       const header = document.querySelector('.header');
-      const contentsArea = document.querySelector('.contentsArea');
+      if (!header || !contentsArea) return;
       
-      if (!header || !contentsArea) {
-        console.warn('[initHeaderScrollHide] header or contentsArea not found');
-        return;
-      }
+      const updateHeaderHeight = () => {
+        requestAnimationFrame(() => {
+          const h = header.offsetHeight || 124;
+          document.documentElement.style.setProperty('--header-h', `${h}px`);
+          if (!document.body.classList.contains('header-hidden')) {
+            document.documentElement.style.setProperty('--header-pad', `${h}px`);
+          }
+        });
+      };
       
-      // header의 실제 높이 저장
-      const headerHeight = header.offsetHeight;
-      header.style.maxHeight = headerHeight + 'px';
+      // 초기 상태: 헤더는 항상 보이는 상태로 시작
+      header.classList.remove('is-hidden');
+      document.body.classList.remove('header-hidden');
+      
+      // 초기 패딩 설정 (rAF로 레이아웃 확정 후)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const initialH = header.offsetHeight || 124;
+          document.documentElement.style.setProperty('--header-h', `${initialH}px`);
+          document.documentElement.style.setProperty('--header-pad', `${initialH}px`);
+        });
+      });
       
       let lastScrollTop = contentsArea.scrollTop;
       let isHidden = false;
-      let scrollDirection = 0; // 1: down, -1: up, 0: none
-      let scrollHistory = []; // 스크롤 방향 히스토리
-      const SCROLL_THRESHOLD = 80;
-      const SCROLL_DELTA = 15; // 최소 스크롤 변화량
-      const HISTORY_SIZE = 3; // 히스토리 크기
+      let hideTimeout = null;
+      const SCROLL_THRESHOLD = 50; // 헤더를 숨기기 시작하는 최소 스크롤 위치
+      const SCROLL_DELTA = 25;
       
-      const updateHeader = () => {
+      const hideHeaderSafely = () => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            header.classList.add('is-hidden');
+            isHidden = true;
+            document.body.classList.add('header-hidden');          // ⬅️ 패딩 0
+            document.documentElement.style.setProperty('--header-pad', '0px');
+          });
+        });
+      };
+      
+      const showHeaderSafely = () => {
+        header.classList.remove('is-hidden');
+        isHidden = false;
+        document.body.classList.remove('header-hidden');           // ⬅️ 패딩 복구
+        const h = header.offsetHeight || 124;
+        document.documentElement.style.setProperty('--header-pad', `${h}px`);
+        setCSSHeaderH(); // 보이는 순간 재확인 (웹폰트/번역 직후에도 OK)
+      };
+      
+      const handleScroll = () => {
+        if (!contentsArea || !header) return;
         const currentScrollTop = contentsArea.scrollTop;
         const scrollDelta = currentScrollTop - lastScrollTop;
         
-        // 스크롤 방향 히스토리 업데이트
-        if (Math.abs(scrollDelta) >= SCROLL_DELTA) {
-          const direction = scrollDelta > 0 ? 1 : -1;
-          scrollHistory.push(direction);
-          if (scrollHistory.length > HISTORY_SIZE) {
-            scrollHistory.shift();
-          }
-          
-          // 히스토리에서 가장 많이 나타나는 방향 결정
-          const downCount = scrollHistory.filter(d => d === 1).length;
-          const upCount = scrollHistory.filter(d => d === -1).length;
-          
-          if (downCount > upCount) {
-            scrollDirection = 1;
-          } else if (upCount > downCount) {
-            scrollDirection = -1;
-          }
+        // 모달 열림 시 항상 표시
+        if (document.querySelector('.overlay.show')) {
+          if (isHidden) showHeaderSafely();
+          lastScrollTop = currentScrollTop;
+          return;
         }
         
-        // 아래로 스크롤 - 숨기기
-        if (scrollDirection === 1 && currentScrollTop > SCROLL_THRESHOLD) {
-          if (!isHidden) {
-            header.classList.add('is-hidden');
-            header.style.maxHeight = '0px';
-            isHidden = true;
-          }
+        // 스크롤 위치가 0이거나 매우 작을 때는 항상 헤더 표시
+        if (currentScrollTop <= 0) {
+          if (isHidden) showHeaderSafely();
+          lastScrollTop = currentScrollTop;
+          return;
+        }
+        
+        // 위로 스크롤하거나 임계값 이하일 때 헤더 표시
+        if (scrollDelta < -SCROLL_DELTA || currentScrollTop <= SCROLL_THRESHOLD) {
+          if (isHidden) showHeaderSafely();
         } 
-        // 위로 스크롤 - 표시하기
-        else if (scrollDirection === -1 || currentScrollTop <= SCROLL_THRESHOLD) {
-          if (isHidden) {
-            header.classList.remove('is-hidden');
-            header.style.maxHeight = headerHeight + 'px';
-            isHidden = false;
+        // 아래로 스크롤하고 임계값을 넘었을 때만 헤더 숨김
+        else if (scrollDelta > SCROLL_DELTA && currentScrollTop > SCROLL_THRESHOLD) {
+          if (!isHidden) {
+            clearTimeout(hideTimeout);
+            hideTimeout = setTimeout(() => {
+              if (!contentsArea) return;
+              const finalScrollTop = contentsArea.scrollTop;
+              // 스크롤 위치가 0보다 크고 임계값을 넘었을 때만 숨김
+              if (finalScrollTop > 0 && finalScrollTop > SCROLL_THRESHOLD) {
+                hideHeaderSafely();
+              }
+            }, 300);
           }
         }
         
         lastScrollTop = currentScrollTop;
       };
       
-      let rafId = null;
-      const handleScroll = () => {
-        if (rafId) {
-          cancelAnimationFrame(rafId);
-        }
-        
-        rafId = requestAnimationFrame(() => {
-          updateHeader();
-          rafId = null;
-        });
-      };
-      
-      contentsArea.addEventListener('scroll', handleScroll, { passive: true });
+      let ticking = false;
+      if (contentsArea) {
+        contentsArea.addEventListener('scroll', () => {
+          if (ticking) return;
+          requestAnimationFrame(() => { handleScroll(); ticking = false; });
+          ticking = true;
+        }, { passive: true });
+      }
     }
   
     // ===== Init =====
@@ -852,6 +954,7 @@
       applyEmptyMode();
       syncHeaderPaddingToScrollbar();
       setCSSHeaderH();
+      observeHeaderSize();
       
       // 리사이즈 시 header 높이 재계산
       window.addEventListener('resize', setCSSHeaderH);
@@ -863,15 +966,13 @@
       // 사이드 레일 광고 초기화 (데스크톱 전용)
       initSideRailAds();
 
-      installPullToRefreshBlocker(document.querySelector('.contentsArea'));
+      if (contentsArea) {
+        installPullToRefreshBlocker(contentsArea);
+      }
       
-      // header 스크롤 숨김 기능 초기화
-      // DOM이 완전히 렌더링된 후 실행
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          initHeaderScrollHide();
-        });
-      });
+      // header 스크롤 숨김 기능 초기화 (안정화된 버전)
+      // renderAll() 완료 후 DOM이 렌더링되었으므로 바로 실행
+      initHeaderScrollHide();
     })();
     
     // 사이드 레일 광고 초기화 함수

@@ -2,8 +2,9 @@
   --maxw: 500px;
   --gap: 1px;
   --radius: 12px;
-  --header-h: 124px;           /* JS에서 동적으로 설정 */
-  --footer-h: 80px;            /* 광고 높이 */
+  --header-h: 126px;    /* JS가 갱신 */
+  --header-pad: var(--header-h);  /* 헤더가 보일 땐 헤더 높이, 숨길 땐 0으로 */
+  --footer-h: 0px;            /* 광고 높이 - JS가 갱신 */
   color-scheme: light;         /* CSS 쪽은 'light only' 대신 'light' */
 }
 
@@ -83,11 +84,16 @@ body *::-webkit-scrollbar-thumb {
   width: 100%;
 }
 
-/* Header 스타일 명시적으로 정의 - 여백 제거 */
+/* 헤더를 고정 배치 */
 .header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(0);
+  width: 100%;
+  max-width: var(--maxw);
   z-index: 50;
+  /* 이 줄 남겨두세요: 배경/보더 등 기존 스타일 그대로 */
   margin: 0 !important;
   padding: 0 !important;
   background: var(--gray-0);
@@ -99,22 +105,25 @@ body *::-webkit-scrollbar-thumb {
   border-right: 1px solid var(--gray-20);
   border-top: none;
   border-bottom: none;
-  max-width: var(--maxw);
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-  flex-shrink: 1;
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out, margin-top 0.3s ease-in-out;
+  transition: transform 0.25s ease-out;
+  box-sizing: border-box;
+  /* 떨림 방지 */
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
+/* 숨김 상태: 위로 밀어 올림(레이아웃은 고정이라 겹침 X) */
 .header.is-hidden {
-  max-height: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  padding: 0 !important;
+  transform: translateX(-50%) translateY(calc(-1 * var(--header-h)));
   pointer-events: none;
-  flex-shrink: 0;
+  transition: transform 0.25s ease-out;
+}
+
+/* 헤더가 숨겨졌을 때 패딩 0으로 (공백 제거) */
+body.header-hidden {
+  --header-pad: 0px;
 }
 
 .header.is-hidden .header-topbar,
@@ -204,6 +213,7 @@ button:disabled {
   min-height: 0;
   min-width: 0;
   padding: 0 !important;
+  padding-top: var(--header-pad);  /* ⬅️ 추가 */
   padding-bottom: var(--footer-h);
 
   overflow-y: auto;
@@ -219,7 +229,7 @@ button:disabled {
 /* section 요소 기본 margin/padding 제거 */
 .contentsArea > section {
   margin: 0 !important;
-  padding: 0 !important;
+  padding: 128px 0 0 0 !important;
 }
 
 /* 모든 브라우저에서 스크롤바 숨김 */
@@ -416,9 +426,8 @@ body.lang-en .empty-guide .guide-content.en {
 .footer {
   width: 100%;
   max-width: 500px;
-  height: 80px !important;
-  min-height: 80px !important;
-  max-height: 80px !important;
+  height: 0;
+  min-height: 0;
   margin-left: auto;
   margin-right: auto;
   display: flex;
@@ -431,6 +440,7 @@ body.lang-en .empty-guide .guide-content.en {
   margin-top: 0;
   margin-bottom: 0;
   flex-shrink: 0;
+  overflow: hidden;
 }
 
 .footer .adsbygoogle {
@@ -446,7 +456,7 @@ body.lang-en .empty-guide .guide-content.en {
 /* 모달 스타일은 design-system/components/modal.css 사용 */
 
 /* 선택/드래그 차단 */
-html, body, .contentsArea, .header, .header-inner, .title, .actions, .grid, .cell,
+html, body, .contentsArea, .header, .title, .actions, .grid, .cell,
 button, .btn, img, canvas, svg{
   -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none;
   -webkit-touch-callout:none;
