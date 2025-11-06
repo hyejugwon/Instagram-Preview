@@ -21,6 +21,7 @@
     // ===== State =====
     let editMode = false;
     let targetForDelete = null;
+    let targetForReplace = null; // 사진 교체 대상
     let pointerId = null;
     let dragInfo = null;
     let longPressTimer = null;
@@ -321,35 +322,143 @@
   
     fileInput.addEventListener('change', async (e) => {
       const files = Array.from(e.target.files || []);
-      for (const f of files) {
-        const blob = await resizeToBlob(f);
-        await dbAddPhoto(blob);
+      
+      // 사진 교체 모드인 경우
+      if (targetForReplace && files.length > 0) {
+        const file = files[0]; // 첫 번째 파일만 사용
+        const blob = await resizeToBlob(file);
+        const id = Number(targetForReplace.dataset.id);
+        
+        if (!Number.isNaN(id)) {
+          // 기존 셀의 위치(인덱스) 저장
+          const currentOrder = getCurrentOrderIds();
+          const replaceIndex = currentOrder.indexOf(id);
+          
+          // 기존 사진 삭제
+          await dbDeletePhotoById(id);
+          
+          // 새 사진 추가
+          await dbAddPhoto(blob);
+          
+          // 전체 다시 렌더링
+          await renderAll();
+          
+          // 새로 추가된 사진의 ID 찾기 (가장 최근에 추가된 것)
+          const allPhotos = await dbGetAllPhotos();
+          const newPhoto = allPhotos[allPhotos.length - 1]; // 가장 최근 추가된 사진
+          
+          // 순서 복원: 기존 위치에 새 사진 배치
+          if (newPhoto && replaceIndex >= 0) {
+            const newOrder = getCurrentOrderIds();
+            const newId = newPhoto.id;
+            // 새 ID를 기존 위치에 삽입
+            const restoredOrder = [...currentOrder];
+            restoredOrder.splice(replaceIndex, 1, newId); // 기존 ID를 새 ID로 교체
+            // 새로 추가된 ID가 다른 위치에 있으면 제거
+            const newIdIndex = restoredOrder.indexOf(newId);
+            if (newIdIndex !== replaceIndex && newIdIndex >= 0) {
+              restoredOrder.splice(newIdIndex, 1);
+            }
+            // 순서 저장
+            await dbSetOrder(restoredOrder);
+            await renderAll();
+          }
+          
+          await saveCurrentOrder();
+          updateGridState();
+          applyEmptyMode();
+          syncHeaderPaddingToScrollbar();
+        }
+        targetForReplace = null;
+      } else {
+        // 일반 추가 모드
+        for (const f of files) {
+          const blob = await resizeToBlob(f);
+          await dbAddPhoto(blob);
+        }
+        await renderAll();
+        await saveCurrentOrder();
+        applyEmptyMode();
+        syncHeaderPaddingToScrollbar();
+        scrollAppToTop(); // 새 사진 추가 후 스크롤 최상단 이동
       }
+      
       fileInput.value = '';
-      await renderAll();
-      await saveCurrentOrder();
-      applyEmptyMode();
-      syncHeaderPaddingToScrollbar();
-      scrollAppToTop(); // 새 사진 추가 후 스크롤 최상단 이동
     });
   
-    // ===== Long press (delete) =====
+    // ===== Long press (action menu) =====
     const LONG_PRESS_MS = 300;
     const DRAG_THRESHOLD = 16;
   
-    function onPointerDownForLongPress(ev, el) {
-      if (editMode) return;
-      if (pointerId !== null) return;
-      pointerId = ev.pointerId;
-      // el.setPointerCapture(ev.pointerId);
-      const startX = ev.clientX, startY = ev.clientY;
-  
-      longPressTimer = setTimeout(() => {
+    // 2가지 옵션 선택 모달 표시 (타이틀 없는 버전)
+    function showActionMenuModal(el) {
+      const id = 'actionMenuModal';
+      const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
+      
+      // 기존 모달이 있으면 제거
+      if (window.modalInstances && window.modalInstances.has(id)) {
+        window.hideModal(id);
+      }
+      
+      // 모달 HTML 생성
+      const overlay = document.createElement('div');
+      overlay.id = id;
+      overlay.className = 'overlay';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      
+      const modalCard = document.createElement('div');
+      modalCard.className = 'modal-card';
+      
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+      actions.style.display = 'flex';
+      actions.style.flexDirection = 'column';
+      actions.style.gap = '8px';
+      
+      // 사진 교체 버튼
+      const replaceBtn = document.createElement('button');
+      replaceBtn.className = 'btn btn--fill--priBlack btn--sz-lg';
+      replaceBtn.setAttribute('data-i18n-en', 'Replace with another photo');
+      replaceBtn.setAttribute('data-i18n-kr', '다른 사진으로 교체');
+      replaceBtn.textContent = currentLang === 'kr' ? '다른 사진으로 교체' : 'Replace with another photo';
+      replaceBtn.style.width = '100%';
+      
+      // 삭제 버튼
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn btn--fill--priBlack btn--sz-lg';
+      deleteBtn.setAttribute('data-i18n-en', 'Delete Photo');
+      deleteBtn.setAttribute('data-i18n-kr', '사진 삭제');
+      deleteBtn.textContent = currentLang === 'kr' ? '사진 삭제' : 'Delete Photo';
+      deleteBtn.style.width = '100%';
+      
+      // 닫기 버튼
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'action cancel btn--sz-lg';
+      closeBtn.setAttribute('data-i18n-en', 'Close');
+      closeBtn.setAttribute('data-i18n-kr', '닫기');
+      closeBtn.textContent = currentLang === 'kr' ? '닫기' : 'Close';
+      closeBtn.style.width = '100%';
+      
+      // 이벤트 리스너
+      replaceBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        hideActionMenuModal(id);
+        // 사진 교체 모드로 설정하고 fileInput 클릭
+        targetForReplace = el;
+        fileInput.click();
+      });
+      
+      deleteBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        hideActionMenuModal(id);
+        // 삭제 확인 모달 표시
         targetForDelete = el;
-        // 공통 모달 사용
         window.showModal({
           id: 'deleteModal',
-          title: { en: 'Do you want to delete?', kr: '삭제하시겠습니까?' },
+          title: { en: 'Do you want to delete?', kr: '삭제할까요?' },
           cancelText: { en: 'Cancel', kr: '취소' },
           confirmText: { en: 'Delete', kr: '삭제' },
           confirmClass: 'delete',
@@ -369,6 +478,67 @@
             }
           }
         });
+      });
+      
+      closeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        hideActionMenuModal(id);
+      });
+      
+      // 배경 클릭 시 닫기
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          hideActionMenuModal(id);
+        }
+      });
+      
+      // 구조 조립
+      actions.appendChild(replaceBtn);
+      actions.appendChild(deleteBtn);
+      actions.appendChild(closeBtn);
+      modalCard.appendChild(actions);
+      overlay.appendChild(modalCard);
+      
+      // DOM에 추가
+      document.body.appendChild(overlay);
+      
+      // 모달 표시
+      setTimeout(() => {
+        overlay.classList.add('show');
+      }, 10);
+      
+      // 언어 시스템에 새로 추가된 요소 업데이트
+      if (window.refreshLanguage) {
+        setTimeout(() => {
+          window.refreshLanguage();
+        }, 0);
+      }
+    }
+    
+    function hideActionMenuModal(id) {
+      const overlay = document.getElementById(id);
+      if (overlay) {
+        overlay.classList.remove('show');
+        setTimeout(() => {
+          if (overlay.parentNode) {
+            overlay.parentNode.removeChild(overlay);
+          }
+        }, 150);
+      }
+    }
+  
+    function onPointerDownForLongPress(ev, el) {
+      if (editMode) return;
+      if (pointerId !== null) return;
+      pointerId = ev.pointerId;
+      // el.setPointerCapture(ev.pointerId);
+      const startX = ev.clientX, startY = ev.clientY;
+  
+      longPressTimer = setTimeout(() => {
+        // 2가지 옵션 선택 모달 표시
+        showActionMenuModal(el);
+        cleanup();
       }, LONG_PRESS_MS);
   
       const move = (e) => {
