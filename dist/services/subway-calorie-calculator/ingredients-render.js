@@ -114,7 +114,7 @@
   
   // 전역에서 접근 가능하도록 window에 등록
   window.renderIngredients = function(container) {
-    return fetch('/services/subway/ingredients-data.json')
+    return fetch('/services/subway-calorie-calculator/ingredients-data.json')
       .then(res => res.json())
       .then(data => {
         const selecArea = container || document.querySelector('.selecArea');
@@ -198,8 +198,8 @@
             const selectIcon = document.createElement('div');
             selectIcon.className = 'select__icon';
             selectIcon.innerHTML = `
-              <img src="/icons/down.svg" alt="" class="select__icon--down">
-              <img src="/icons/up.svg" alt="" class="select__icon--up">
+              <img src="/icons/down.svg" alt="Dropdown" class="select__icon--down">
+              <img src="/icons/up.svg" alt="Dropdown" class="select__icon--up">
             `;
             selectDiv.appendChild(selectIcon);
             
@@ -225,8 +225,8 @@
               
               radio.innerHTML = `
                 <div class="radio__icon">
-                  <img src="/icons/radioEmpty.svg" alt="" class="radio__icon--empty">
-                  <img src="/icons/radioFill.svg" alt="" class="radio__icon--fill">
+                  <img src="/icons/radioEmpty.svg" alt="Radio button" class="radio__icon--empty">
+                  <img src="/icons/radioFill.svg" alt="Radio button selected" class="radio__icon--fill">
                 </div>
                 <div class="${contentClass}">
                   ${option.info ? `<span class="radio__info">${option.info}</span>` : ''}
@@ -279,7 +279,7 @@
                   if (option.info) {
                     checkbox.innerHTML = `
                       <div class="checkbox__icon">
-                        <img src="/icons/circleCheck.svg" alt="">
+                        <img src="/icons/circleCheck.svg" alt="Checkbox">
                       </div>
                       <div class="${contentClass}">
                         <span class="checkbox__info">${option.info}</span>
@@ -292,7 +292,7 @@
                   } else {
                     checkbox.innerHTML = `
                       <div class="checkbox__icon">
-                        <img src="/icons/circleCheck.svg" alt="">
+                        <img src="/icons/circleCheck.svg" alt="Checkbox">
                       </div>
                     `;
                     checkbox.appendChild(checkboxText);
@@ -326,7 +326,7 @@
                 if (shouldShowInfo) {
                   checkbox.innerHTML = `
                     <div class="checkbox__icon">
-                      <img src="/icons/circleCheck.svg" alt="">
+                      <img src="/icons/circleCheck.svg" alt="Checkbox">
                     </div>
                     <div class="${contentClass}">
                       <span class="checkbox__info">${option.info}</span>
@@ -341,7 +341,7 @@
                   const iconPath = '/icons/circleCheck.svg';
                   checkbox.innerHTML = `
                     <div class="checkbox__icon">
-                      <img src="${iconPath}" alt="">
+                      <img src="${iconPath}" alt="Checkbox">
                     </div>
                   `;
                   checkbox.appendChild(checkboxText);
@@ -350,7 +350,7 @@
                   const iconPath = '/icons/circleCheck.svg';
                   checkbox.innerHTML = `
                     <div class="checkbox__icon">
-                      <img src="${iconPath}" alt="">
+                      <img src="${iconPath}" alt="Checkbox">
                     </div>
                   `;
                   checkbox.appendChild(checkboxText);
