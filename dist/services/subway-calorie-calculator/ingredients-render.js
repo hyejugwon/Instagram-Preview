@@ -60,7 +60,7 @@
     '에그마요': { en: 'Egg Mayo', kr: '에그마요' },
     '오믈렛': { en: 'Omelet', kr: '오믈렛' },
     '페퍼로니': { en: 'Pepperoni', kr: '페퍼로니' },
-    '치즈(동일 치즈)': { en: 'Cheese (Same Cheese)', kr: '치즈(동일 치즈)' },
+    '치즈 추가(동일 치즈)': { en: 'Extra Cheese (Same Cheese)', kr: '치즈 추가(동일 치즈)' },
     '고기 추가': { en: 'Extra Meat', kr: '고기 추가' },
     // 추가 메뉴 - 쿠키
     '라즈베리 치즈 케이크': { en: 'Raspberry Cheesecake', kr: '라즈베리 치즈 케이크' },

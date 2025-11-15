@@ -117,7 +117,7 @@
         { "text": "에그마요", "info": "80 kcal" },
         { "text": "오믈렛", "info": "90 kcal" },
         { "text": "페퍼로니", "info": "10 kcal" },
-        { "text": "치즈(동일 치즈)", "info": "special:cheese" },
+        { "text": "치즈 추가(동일 치즈)", "info": "special:cheese" },
         { "text": "고기 추가", "info": "special:main" }
       ]
     },

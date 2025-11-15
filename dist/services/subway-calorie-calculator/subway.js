@@ -274,6 +274,58 @@
           // disabled 상태면 클릭 무시
           if (checkbox.classList.contains('is-disabled')) return;
           
+          // special 옵션 체크 (고기 추가, 치즈 추가)
+          const specialInfo = checkbox.getAttribute('data-special-info');
+          if (specialInfo) {
+            const detailPage = document.getElementById('detailPage');
+            if (!detailPage) return;
+            
+            if (specialInfo === 'special:main') {
+              // 메인 재료가 선택되었는지 확인
+              const mainForm = detailPage.querySelector('[data-form-id="main"], #main');
+              const mainSelect = mainForm ? mainForm.querySelector('select') : null;
+              const mainSelected = mainSelect && mainSelect.value && mainSelect.value !== '';
+              
+              if (!mainSelected) {
+                // 토스트 표시
+                if (window.showToast) {
+                  window.showToast({
+                    en: 'Please select a main ingredient first',
+                    kr: '메인 재료를 먼저 선택해주세요'
+                  });
+                }
+                
+                // 메인 재료 섹션으로 스크롤
+                if (mainForm) {
+                  mainForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                
+                return; // 선택 막기
+              }
+            } else if (specialInfo === 'special:cheese') {
+              // 치즈가 선택되었는지 확인
+              const cheeseRadio = detailPage.querySelector('[data-radio-group="cheese"] .radio.is-selected');
+              
+              if (!cheeseRadio) {
+                // 토스트 표시
+                if (window.showToast) {
+                  window.showToast({
+                    en: 'Please select a cheese option first',
+                    kr: '치즈 옵션을 먼저 선택해주세요'
+                  });
+                }
+                
+                // 치즈 섹션으로 스크롤
+                const cheeseForm = detailPage.querySelector('[data-radio-group="cheese"]');
+                if (cheeseForm) {
+                  cheeseForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                
+                return; // 선택 막기
+              }
+            }
+          }
+          
           // is-selected 클래스 토글
           checkbox.classList.toggle('is-selected');
           
