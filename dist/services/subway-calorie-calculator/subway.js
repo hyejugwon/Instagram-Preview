@@ -303,7 +303,7 @@
                 return; // 선택 막기
               }
             } else if (specialInfo === 'special:cheese') {
-              // 치즈가 선택되었는지 확인
+              // 치즈가 선택되었는지 확인 (선택 안함 제외)
               const cheeseRadio = detailPage.querySelector('[data-radio-group="cheese"] .radio.is-selected');
               
               if (!cheeseRadio) {
@@ -322,6 +322,30 @@
                 }
                 
                 return; // 선택 막기
+              }
+              
+              // 선택 안함인지 확인
+              const cheeseText = cheeseRadio.querySelector('.radio__text');
+              if (cheeseText) {
+                const cheeseTextContent = cheeseText.textContent.trim();
+                // "선택 안함" 또는 "None"인 경우
+                if (cheeseTextContent === '선택 안함' || cheeseTextContent === 'None') {
+                  // 토스트 표시
+                  if (window.showToast) {
+                    window.showToast({
+                      en: 'Please select a cheese option first',
+                      kr: '치즈 옵션을 먼저 선택해주세요'
+                    });
+                  }
+                  
+                  // 치즈 섹션으로 스크롤
+                  const cheeseForm = detailPage.querySelector('[data-radio-group="cheese"]');
+                  if (cheeseForm) {
+                    cheeseForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+                  
+                  return; // 선택 막기
+                }
               }
             }
           }
