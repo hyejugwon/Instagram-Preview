@@ -22,8 +22,8 @@
   display: block;
 }
 
-/* 데스크톱에서만 표시 (화면 너비 1000px 이상) */
-@media (min-width: 1000px) {
+/* 데스크톱에서만 표시 (화면 너비 900px 이상) */
+@media (min-width: 900px) {
   .side-rail-ad {
     display: block;
   }
