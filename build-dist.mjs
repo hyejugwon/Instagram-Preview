@@ -29,8 +29,9 @@ for (const entry of entries) {
   await cp(entry, `${DIST}/${entry}`, { recursive: true });
 }
 
-// index.html은 최상위에서 dist로 직접 복사 (include 처리 전)
+// index.html과 sitemap.xml은 최상위에서 dist로 직접 복사 (include 처리 전)
 await cp("index.html", `${DIST}/index.html`);
+await cp("sitemap.xml", `${DIST}/sitemap.xml`);
 
 // 3) dist 내부의 HTML에서 <include> 치환 (partials는 제외)
 const htmlFiles = await globby([`${DIST}/**/*.html`, `!${DIST}/partials/**`]);
