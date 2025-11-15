@@ -394,11 +394,11 @@
       if (specialInfo) {
         if (specialInfo === 'special:cheese') {
           const cheeseCalories = getSelectedCheeseCalories();
-          totalCalories += cheeseCalories * 2;
+          totalCalories += cheeseCalories;
           return;
         } else if (specialInfo === 'special:main') {
           const mainCalories = getSelectedMainCalories();
-          totalCalories += mainCalories * 2;
+          totalCalories += mainCalories;
           return;
         }
       }
