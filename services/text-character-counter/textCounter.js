@@ -73,14 +73,17 @@
     
     // 반복 단어 분석 함수 (6번 이상 반복되는 단어 찾기)
     function updateRepeatedWords(text) {
+      // 형태소 분석기 영역은 항상 표시
+      morphemeSection.style.display = 'flex';
+      
       if (!text || text.trim() === '') {
-        // 텍스트가 없으면 형태소 분석기 영역 숨김
-        morphemeSection.style.display = 'none';
+        // 텍스트가 없으면 안내 메시지 표시
+        repeatedWordsContainer.innerHTML = '<div class="empty-message" data-i18n-en="Only morphemes used 6 or more times are displayed" data-i18n-kr="6회 이상 사용된 형태소들만 노출됩니다">6회 이상 사용된 형태소들만 노출됩니다</div>';
+        if (window.refreshLanguage) {
+          setTimeout(() => window.refreshLanguage(), 0);
+        }
         return;
       }
-      
-      // 텍스트가 있으면 형태소 분석기 영역 표시
-      morphemeSection.style.display = 'flex';
       
       // 띄어쓰기를 기준으로 단어 분리
       const words = text.trim().split(/\s+/).filter(word => word.length > 0);
@@ -133,7 +136,7 @@
         });
       
       if (repeatedWords.length === 0) {
-        repeatedWordsContainer.innerHTML = '<div class="empty-message" data-i18n-en="No words are repeated more than six times" data-i18n-kr="6회 이상 반복되는 단어가 없습니다">6회 이상 반복되는 단어가 없습니다</div>';
+        repeatedWordsContainer.innerHTML = '<div class="empty-message" data-i18n-en="Only morphemes used 6 or more times are displayed" data-i18n-kr="6회 이상 사용된 형태소들만 노출됩니다">6회 이상 사용된 형태소들만 노출됩니다</div>';
         if (window.refreshLanguage) {
           setTimeout(() => window.refreshLanguage(), 0);
         }

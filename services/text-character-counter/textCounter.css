@@ -244,7 +244,7 @@ body.lang-kr .stat-value {
 
 /* Morpheme Section */
 .morpheme-section {
-  display: none; /* 기본적으로 숨김, 텍스트 입력 시 표시 */
+  display: flex; /* 항상 표시 */
   flex-direction: column;
   gap: 8px;
   margin-top: 12px;
@@ -306,6 +306,6 @@ body.lang-kr .section-title {
 }
 
 .repeated-word-count--highlight {
-  color: var(--orange-60-default);
+  color: var(--lime-70);
 }
 
