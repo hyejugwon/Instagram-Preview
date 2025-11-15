@@ -1,0 +1,311 @@
+:root{
+  --header-h: 0px; /* JS에서 동적으로 설정 */
+  --footer-h: 100px; /* 광고 높이 */
+}
+
+/* Body 스크롤바 숨김 */
+html, body {
+  overflow: hidden !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  display: none !important;
+  background: transparent !important;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+  display: none !important;
+  background: transparent !important;
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner {
+  display: none !important;
+  background: transparent !important;
+}
+
+/* index.css의 .app 스타일 오버라이드 */
+.app {
+  background-color: unset !important;
+  padding: unset !important;
+  gap: 0;
+}
+
+/* Header 타이틀 스타일 */
+.title {
+  flex: 1;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--gray-90);
+}
+
+/* Header 타이틀 한글일 때 font-weight 900 */
+body.lang-kr .title.h2--B {
+  font-weight: 900;
+}
+
+/* Header 스타일 - sticky로 변경하여 상단 고정 */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--gray-0);
+  border-bottom: 1px solid var(--gray-20);
+}
+
+.header-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  gap: 16px;
+}
+
+.contentsArea{
+  border-left: 1px solid var(--gray-20);
+  border-right: 1px solid var(--gray-20);
+  margin-top: 0;
+  box-sizing: border-box;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 0;
+  height: calc(100dvh - var(--header-h) - var(--footer-h));
+  padding: 0 !important;
+  padding-bottom: var(--footer-h);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: auto;
+  touch-action: pan-y;
+  scrollbar-gutter: auto !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+  transition: height 0.3s ease-in-out;
+}
+
+/* 모든 브라우저에서 스크롤바 숨김 */
+.contentsArea::-webkit-scrollbar,
+.contentsArea *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+.contentsArea::-webkit-scrollbar-track,
+.contentsArea *::-webkit-scrollbar-track {
+  display: none !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+.contentsArea::-webkit-scrollbar-thumb,
+.contentsArea *::-webkit-scrollbar-thumb {
+  display: none !important;
+  background: transparent !important;
+  -webkit-appearance: none !important;
+}
+
+.contentsArea::-webkit-scrollbar-corner {
+  display: none !important;
+  background: transparent !important;
+}
+
+@supports not (height: 100dvh){
+  .contentsArea{
+    min-height: calc(100vh - var(--header-h) - var(--footer-h));
+  }
+}
+
+/* Footer 스타일 */
+.footer {
+  width: 100%;
+  max-width: 500px;
+  height: var(--footer-h);
+  min-height: var(--footer-h);
+  max-height: var(--footer-h);
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-10);
+  border-left: 1px solid var(--gray-20);
+  border-right: 1px solid var(--gray-20);
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.footer .adsbygoogle {
+  display: block;
+  margin: 0 auto;
+}
+
+/* Text Counter Container */
+.textCounter-container {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* Input Section */
+.input-section {
+  width: 100%;
+}
+
+.text-input {
+  width: 100%;
+  height: 240px;
+  padding: 16px;
+  border: 1px solid var(--lime-60);
+  border-radius: 8px;
+  background: var(--lime-10);
+  color: var(--gray-80);
+  font-size: 15px;
+  line-height: 22px;
+  font-family: inherit;
+  resize: none;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: var(--lime-70);
+}
+
+.text-input::placeholder {
+  color: var(--gray-50);
+}
+
+/* Stats Section */
+.stats-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.stat-card {
+  background: var(--gray-10);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-label {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--gray-60);
+  font-weight: 400;
+}
+
+.stat-value {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600 !important;
+  color: var(--gray-80);
+  text-align: right;
+  margin-left: auto;
+}
+
+body.lang-kr .stat-value {
+  font-weight: 900;
+}
+
+/* Morpheme Section */
+.morpheme-section {
+  display: none; /* 기본적으로 숨김, 텍스트 입력 시 표시 */
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.section-title {
+  color: var(--gray-80);
+  font-weight: 700;
+}
+
+body.lang-kr .section-title {
+  font-weight: 900;
+}
+
+.repeated-words-container {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 12px;
+  background: var(--gray-10);
+  border-radius: 8px;
+}
+
+.empty-message {
+  color: var(--gray-60);
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  padding: 20px;
+}
+
+.repeated-word-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--gray-20);
+}
+
+.repeated-word-item:last-child {
+  border-bottom: none;
+}
+
+.repeated-word-text {
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--gray-70);
+  font-weight: 500;
+  word-break: break-all;
+  flex: 1;
+  margin-right: 12px;
+}
+
+.repeated-word-count {
+  font-size: 16px;
+  line-height: 20px;
+  color: var(--gray-70);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.repeated-word-count--highlight {
+  color: var(--orange-60-default);
+}
+

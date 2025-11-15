@@ -50,7 +50,7 @@
             ad.style.display = 'none';
           } else {
             // 메뉴 모달이 닫힐 때 사이드 광고 복원 (데스크톱에서만)
-            if (window.innerWidth >= 1000) {
+            if (window.innerWidth >= 900) {
               ad.style.display = 'block';
             }
           }

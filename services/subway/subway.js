@@ -783,7 +783,7 @@
   
   // 사이드 레일 광고 초기화 함수
   function initSideRailAds() {
-    if (window.innerWidth < 1000) return; // 모바일에서는 실행 안 함
+    if (window.innerWidth < 900) return; // 모바일에서는 실행 안 함
     
     const leftAd = document.querySelector('.side-rail-ad--left .adsbygoogle');
     const rightAd = document.querySelector('.side-rail-ad--right .adsbygoogle');
@@ -805,7 +805,7 @@
   
   // 리사이즈 시 사이드 레일 광고 재초기화
   window.addEventListener('resize', () => {
-    if (window.innerWidth >= 1000) {
+    if (window.innerWidth >= 900) {
       initSideRailAds();
     }
   });

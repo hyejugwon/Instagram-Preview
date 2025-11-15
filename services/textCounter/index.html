@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en kr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <script src="/js/head.js"></script>
+  <title>hakchips: Text Character Counter</title>
+  <link rel="stylesheet" href="/services/textCounter/textCounter.css">
+  <link rel="stylesheet" href="/css/side-rail-ads.css">
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="header-topbar">
+        <div class="title h2--B" data-i18n-en="Text Character Counter" data-i18n-kr="글자 수 세기">Text Character Counter</div>
+        <img src="/icons/menudrop.svg" width="26" height="26" id="menuBtn" style="cursor: pointer;">
+      </div>
+    </div>
+
+    <main class="contentsArea">
+      <div class="textCounter-container">
+        <div class="input-section">
+          <textarea 
+            id="textInput" 
+            class="text-input" 
+            placeholder="텍스트를 입력하세요"
+            data-i18n-placeholder-en="Enter text here"
+            data-i18n-placeholder-kr="텍스트를 입력하세요"
+            rows="10"
+          ></textarea>
+        </div>
+
+        <div class="stats-section">
+          <div class="section-title h3--B" data-i18n-en="number of characters" data-i18n-kr="글자 수">글자 수</div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-label" data-i18n-en="Characters" data-i18n-kr="공백 포함">공백 포함</div>
+              <div class="stat-value" id="charCount">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label" data-i18n-en="Characters (no spaces)" data-i18n-kr="공백 제외">공백 제외</div>
+              <div class="stat-value" id="charCountNoSpaces">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label" data-i18n-en="Words" data-i18n-kr="단어">단어</div>
+              <div class="stat-value" id="wordCount">0</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label" data-i18n-en="Lines" data-i18n-kr="줄">줄</div>
+              <div class="stat-value" id="lineCount">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="morpheme-section">
+          <div class="section-title h3--B" data-i18n-en="Morpheme Analyzer" data-i18n-kr="형태소 분석기">형태소 분석기</div>
+          <div class="repeated-words-container" id="repeatedWordsContainer">
+            <div class="empty-message" data-i18n-en="No words are repeated more than six times" data-i18n-kr="6회 이상 반복되는 단어가 없습니다">6회 이상 반복되는 단어가 없습니다</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Google Ad Footer -->
+    <footer class="footer">
+      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="5125296215" data-ad-format="auto"></ins>
+    </footer>
+  </div>
+  
+  <!-- 사이드 레일 광고 (데스크톱 전용) -->
+  <div class="side-rail-ad side-rail-ad--left">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="3267195730" data-ad-format="auto"></ins>
+  </div>
+  <div class="side-rail-ad side-rail-ad--right">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="3267195730" data-ad-format="auto"></ins>
+  </div>
+
+  <!-- ✅ JS는 body 맨 아래 -->
+  <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683" crossorigin="anonymous"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/toast.js"></script>
+  <script src="/services/textCounter/textCounter.js"></script>
+  <script src="/js/menu.js"></script>
+</body>
+</html>
+
