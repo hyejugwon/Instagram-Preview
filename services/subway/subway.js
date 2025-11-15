@@ -89,6 +89,12 @@
       
       // 탭이 변경되었으면 초기화
       if (tabChanged) {
+        // 스크롤을 최상단으로 이동 (.contentsArea가 스크롤 컨테이너)
+        const contentsArea = document.querySelector('.contentsArea');
+        if (contentsArea) {
+          contentsArea.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
         // nutrition-info 닫기
         const nutritionInfo = document.getElementById('nutritionInfo');
         const detailBtn = document.getElementById('detailBtn');
@@ -722,11 +728,11 @@
     if (w <= BP) {
       // 모바일: 폭 100%로 두고 높이 80px
       width = '100%';
-      height = 80;
+      height = 100;
     } else {
       // 데스크톱: 430x80
       width = 430;
-      height = 80;
+      height = 100;
     }
     
     // 스타일/속성 적용

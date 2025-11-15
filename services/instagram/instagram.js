@@ -753,10 +753,10 @@
       const w = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
       if (w <= BP) {
         // 모바일: 폭 100%로 두고 높이 80px
-        return { slot: MOBILE_SLOT, width: '100%', height: 80 };
+        return { slot: MOBILE_SLOT, width: '100%', height: 100 };
       } else {
         // 데스크톱: 430x80
-        return { slot: DESKTOP_SLOT, width: 430, height: 80 };
+        return { slot: DESKTOP_SLOT, width: 430, height: 100 };
       }
     }
   

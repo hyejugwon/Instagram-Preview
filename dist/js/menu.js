@@ -25,58 +25,10 @@
           tpl.innerHTML = html.trim();
           // fragment의 자식들을 <body>로 이동
           document.body.appendChild(tpl.content);
-          // 광고 초기화
-          initMenuAds();
         })
         .catch((err) => console.error("menu-modal.html load failed:", err));
     }
 
-    // 메뉴 모달 광고 초기화 함수
-    function initMenuAds() {
-      const ins = document.querySelector('#menuOverlay .menu-modal .footer .adsbygoogle');
-      const footer = document.querySelector('#menuOverlay .menu-modal .footer');
-      if (!ins || !footer) return;
-      
-      const BP = 430; // 화면 너비 임계값
-      const w = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth);
-      
-      let width, height;
-      if (w <= BP) {
-        // 모바일: 폭 100%로 두고 높이 100px
-        width = '100%';
-        height = 100;
-      } else {
-        // 데스크톱: 430x100
-        width = 430;
-        height = 100;
-      }
-      
-      // 스타일/속성 적용
-      ins.style.width = (typeof width === 'number' ? width + 'px' : width);
-      ins.style.height = height + 'px';
-      ins.style.maxHeight = height + 'px';
-      ins.setAttribute('data-full-width-responsive', 'false');
-      
-      // 푸터 높이도 동기화
-      footer.style.height = height + 'px';
-      footer.style.minHeight = height + 'px';
-      footer.style.maxHeight = height + 'px';
-      
-      try {
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      } catch(e) {
-        console.debug('[ads]', e);
-      }
-      
-      // 광고 로드 후에도 높이 유지
-      setTimeout(() => {
-        ins.style.height = height + 'px';
-        ins.style.maxHeight = height + 'px';
-        footer.style.height = height + 'px';
-        footer.style.minHeight = height + 'px';
-        footer.style.maxHeight = height + 'px';
-      }, 100);
-    }
 
     function initMenuEvents() {
       if (menuInitialized) return;
@@ -89,14 +41,18 @@
         return;
       }
 
-      // 사이드 광고 z-index 조정 함수
-      function updateSideRailAdsZIndex(show) {
+      // 사이드 광고 표시/숨김 함수 (메뉴 모달이 열릴 때 숨김)
+      function updateSideRailAdsVisibility(show) {
         const sideRailAds = document.querySelectorAll('.side-rail-ad');
         sideRailAds.forEach(ad => {
           if (show) {
-            ad.style.zIndex = '201'; // 메뉴 모달의 z-index(200)보다 높게
+            // 메뉴 모달이 열릴 때 사이드 광고 숨김 (AdSense 정책 준수)
+            ad.style.display = 'none';
           } else {
-            ad.style.zIndex = ''; // 원래대로 복원
+            // 메뉴 모달이 닫힐 때 사이드 광고 복원 (데스크톱에서만)
+            if (window.innerWidth >= 1000) {
+              ad.style.display = 'block';
+            }
           }
         });
       }
@@ -112,7 +68,7 @@
           if (overlay) {
             overlay.style.display = 'flex';
             document.body.style.overflow = 'hidden';
-            updateSideRailAdsZIndex(true); // 사이드 광고 z-index 조정
+            updateSideRailAdsVisibility(true); // 사이드 광고 숨김
           }
           // nutrition-info 닫기 (subway 페이지인 경우)
           const nutritionInfo = document.getElementById('nutritionInfo');
@@ -133,7 +89,7 @@
           if (overlay) {
             overlay.style.display = 'none';
             document.body.style.overflow = '';
-            updateSideRailAdsZIndex(false); // 사이드 광고 z-index 복원
+            updateSideRailAdsVisibility(false); // 사이드 광고 복원
           }
           return;
         }
@@ -144,7 +100,7 @@
           if (overlay) {
             overlay.style.display = 'none';
             document.body.style.overflow = '';
-            updateSideRailAdsZIndex(false); // 사이드 광고 z-index 복원
+            updateSideRailAdsVisibility(false); // 사이드 광고 복원
           }
         }
       });
