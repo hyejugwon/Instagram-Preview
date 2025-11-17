@@ -37,16 +37,38 @@
 
                 <!-- ✅ 빈 상태 안내 -->
                 <div class="empty-guide" id="emptyGuide" aria-hidden="true">
-                <div class="guide-inner">
-                    <div class="guide-content kr">
-                        <p class="title">[공유 > 홈 화면에 추가] 하여 사용하면<br> 만들어 둔 피드를 계속 볼 수 있습니다</p>
-                        <p class="desc">아이폰의 경우, [웹 앱으로 열기]는 해제해주세요. <br> 업데이트를 받을 수 없습니다.</p>
+                    <div class="guide-inner">
+                        <div class="guide-content kr">
+                            <div class="guide-text">
+                                <span class="guide-number">1</span>
+                                <p class="title">상단 [추가] 버튼을 눌러<br> 피드에서 보여질 사진을 업로드해보세요</p>
+                                <p class="desc">추가한 사진들이 해당 영역이 표시되며<br>업로드 후 내 피드 모습을 미리 볼 수 있습니다.</p>
+                            </div>
+                        </div>
+                        <div class="guide-divider"></div>
+                        <div class="guide-content kr">
+                            <div class="guide-text">
+                                <span class="guide-number">2</span>
+                                <p class="title">[공유 > 홈 화면에 추가] 하여 사용하면<br> 만들어 둔 피드를 계속 볼 수 있습니다</p>
+                                <p class="desc">아이폰의 경우, [웹 앱으로 열기]는 해제해주세요. <br> 업데이트를 받을 수 없습니다.</p>
+                            </div>
+                        </div>
+                        <div class="guide-content en">
+                            <div class="guide-text">
+                                <span class="guide-number">1</span>
+                                <p class="title">Click the [Add] button at the top<br>to upload photos for your feed</p>
+                                <p class="desc">Uploaded photos will appear in this area<br>and you can preview your feed after uploading.</p>
+                            </div>
+                        </div>
+                        <div class="guide-divider"></div>
+                        <div class="guide-content en">
+                            <div class="guide-text">
+                                <span class="guide-number">2</span>
+                                <p class="title">Use [Share > Add to Home Screen]<br>to keep viewing the feed you've created</p>
+                                <p class="desc">Turn off "Open in Web App" to receive updates.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="guide-content en">
-                        <p class="title">Use [Share > Add to Home Screen]<br>to keep viewing the feed you’ve created</p>
-                        <p class="desc">Turn off “Open in Web App” to receive updates.</p>
-                    </div>
-                </div>
                 </div>
             </main>
 
@@ -56,16 +78,16 @@
             <div id="dragGhost" class="ghost" hidden=""></div>
 
             <!-- Google Ad Footer -->
-            <footer class="footer">
+            <footer class="footer" id="adFooter" style="display: none;">
               <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="5125296215" data-ad-format="auto"></ins>
             </footer>
         </div>
         
         <!-- 사이드 레일 광고 (데스크톱 전용) -->
-        <div class="side-rail-ad side-rail-ad--left">
+        <div class="side-rail-ad side-rail-ad--left" id="sideRailAdLeft" style="display: none;">
           <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="3267195730" data-ad-format="auto"></ins>
         </div>
-        <div class="side-rail-ad side-rail-ad--right">
+        <div class="side-rail-ad side-rail-ad--right" id="sideRailAdRight" style="display: none;">
           <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="3267195730" data-ad-format="auto"></ins>
         </div>
         

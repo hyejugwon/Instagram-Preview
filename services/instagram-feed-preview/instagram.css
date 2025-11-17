@@ -368,10 +368,16 @@ body.lang-kr .title.h2--B {
 }
 .empty-guide .guide-inner {
   width: 100%;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .empty-guide .guide-content {
   display: none;
+  width: 100%;
 }
 
 .empty-guide .guide-content.kr {
@@ -384,6 +390,55 @@ body.lang-en .empty-guide .guide-content.kr {
 
 body.lang-en .empty-guide .guide-content.en {
   display: block;
+}
+
+.empty-guide .guide-divider {
+  display: none;
+  width: 300px;
+  height: 1px;
+  background-color: var(--gray-20);
+  margin: 14px 0;
+}
+
+/* 한국어: 첫 번째 guide-content 다음의 divider 표시 */
+.empty-guide .guide-content.kr:first-of-type + .guide-divider {
+  display: block;
+}
+
+/* 영어: 첫 번째 guide-content 다음의 divider 표시 */
+body.lang-en .empty-guide .guide-content.en:first-of-type + .guide-divider {
+  display: block;
+}
+
+/* 한국어일 때 영어 divider 숨김 */
+.empty-guide .guide-content.en:first-of-type + .guide-divider {
+  display: none;
+}
+
+/* 영어일 때 한국어 divider 숨김 */
+body.lang-en .empty-guide .guide-content.kr:first-of-type + .guide-divider {
+  display: none;
+}
+
+.empty-guide .guide-text {
+  width: 100%;
+  text-align: center;
+}
+
+.empty-guide .guide-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border-radius: 50%;
+  background-color: var(--gray-50);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 8px;
 }
 
 .empty-guide .title{

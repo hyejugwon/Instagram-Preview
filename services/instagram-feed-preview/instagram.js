@@ -26,6 +26,7 @@
     let pointerId = null;
     let dragInfo = null;
     let longPressTimer = null;
+    let adsInitialized = false; // 광고 초기화 여부
   
     // ===== Persist (IndexedDB) =====
     const DB_NAME = 'insta-preview';
@@ -249,6 +250,40 @@
         } else {
           emptyGuide.classList.remove('show');
           emptyGuide.setAttribute('aria-hidden', 'true');
+        }
+      }
+      // 광고 영역 표시/숨김 (빈 상태일 때는 숨김, 사진이 하나라도 있으면 표시)
+      const adFooter = document.getElementById('adFooter');
+      const sideRailAdLeft = document.getElementById('sideRailAdLeft');
+      const sideRailAdRight = document.getElementById('sideRailAdRight');
+      
+      if (isEmpty) {
+        // 빈 상태: 광고 숨김
+        if (adFooter) adFooter.style.display = 'none';
+        if (sideRailAdLeft) sideRailAdLeft.style.display = 'none';
+        if (sideRailAdRight) sideRailAdRight.style.display = 'none';
+        adsInitialized = false; // 빈 상태가 되면 초기화 플래그 리셋
+      } else {
+        // 사진이 하나라도 있으면: 광고 표시
+        if (adFooter) adFooter.style.display = 'flex';
+        // 사이드 레일 광고는 데스크톱에서만 표시
+        if (window.innerWidth >= 900) {
+          if (sideRailAdLeft) sideRailAdLeft.style.display = 'block';
+          if (sideRailAdRight) sideRailAdRight.style.display = 'block';
+        } else {
+          if (sideRailAdLeft) sideRailAdLeft.style.display = 'none';
+          if (sideRailAdRight) sideRailAdRight.style.display = 'none';
+        }
+        // 사진이 추가되었을 때 광고 초기화 (한 번만)
+        if (!adsInitialized && typeof renderAdOnce === 'function' && typeof initSideRailAds === 'function') {
+          setTimeout(() => {
+            renderAdOnce();
+            checkAndRerenderAds();
+            if (window.innerWidth >= 900) {
+              initSideRailAds();
+            }
+            adsInitialized = true;
+          }, 100);
         }
       }
     }
@@ -814,8 +849,8 @@
         renderAdOnce();
       }
     }
-    window.addEventListener('resize', checkAndRerenderAds);
-    window.addEventListener('orientationchange', checkAndRerenderAds);
+    // window.addEventListener('resize', checkAndRerenderAds);
+    // window.addEventListener('orientationchange', checkAndRerenderAds);
   
     // header 높이 계산 및 CSS 변수 설정
     function setCSSHeaderH() {
@@ -959,12 +994,13 @@
       // 리사이즈 시 header 높이 재계산
       window.addEventListener('resize', setCSSHeaderH);
 
-      // 광고 렌더(초기 1회) + 임계 통과 시 재렌더
-      renderAdOnce();
-      checkAndRerenderAds();
-      
-      // 사이드 레일 광고 초기화 (데스크톱 전용)
-      initSideRailAds();
+      // 광고 렌더링 (사진이 있을 때만)
+      const hasPhotos = grid.children.length > 0;
+      if (hasPhotos) {
+        renderAdOnce();
+        checkAndRerenderAds();
+        initSideRailAds();
+      }
 
       if (contentsArea) {
         installPullToRefreshBlocker(contentsArea);
@@ -999,8 +1035,17 @@
     
     // 리사이즈 시 사이드 레일 광고 재초기화
     window.addEventListener('resize', () => {
-      if (window.innerWidth >= 900) {
+      const isEmpty = grid.children.length === 0;
+      if (!isEmpty && window.innerWidth >= 900) {
         initSideRailAds();
+        // updateGridState도 호출하여 사이드 광고 표시 상태 업데이트
+        updateGridState();
+      } else if (isEmpty) {
+        // 빈 상태일 때는 사이드 광고 숨김
+        const sideRailAdLeft = document.getElementById('sideRailAdLeft');
+        const sideRailAdRight = document.getElementById('sideRailAdRight');
+        if (sideRailAdLeft) sideRailAdLeft.style.display = 'none';
+        if (sideRailAdRight) sideRailAdRight.style.display = 'none';
       }
     });
   })();
