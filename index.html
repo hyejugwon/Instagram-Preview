@@ -46,24 +46,26 @@
       </main>
       
       <!-- Google Ad Footer -->
-      <footer class="footer" style="height: 100px; min-height: 100px; max-height: 100px; overflow: hidden;">
+      <footer class="footer" style="display: none; height: 100px; min-height: 100px; max-height: 100px; overflow: hidden;">
         <ins class="adsbygoogle" style="display:block; height: 100px; max-height: 100px; overflow: hidden;" data-ad-client="ca-pub-3906940826015683" data-ad-slot="5125296215" data-ad-format="auto"></ins>
       </footer>
     </div>
     
     <!-- 사이드 레일 광고 (데스크톱 전용) -->
-    <div class="side-rail-ad side-rail-ad--left">
+    <div class="side-rail-ad side-rail-ad--left" style="display: none;">
       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="3267195730" data-ad-format="auto"></ins>
     </div>
-    <div class="side-rail-ad side-rail-ad--right">
+    <div class="side-rail-ad side-rail-ad--right" style="display: none;">
       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-3906940826015683" data-ad-slot="3267195730" data-ad-format="auto"></ins>
     </div>
     
-    <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683" crossorigin="anonymous"></script>
+    <!-- Google AdSense 스크립트 숨김 처리 -->
+    <!-- <script async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3906940826015683" crossorigin="anonymous"></script> -->
     <script src="/js/common.js"></script>
     <script src="/js/menu.js"></script>
     <script src="/js/i18n.js"></script>
-    <script>
+    <!-- 광고 초기화 스크립트 숨김 처리 -->
+    <!-- <script>
       // 광고 크기 제한 (subway 서비스와 동일한 로직)
       (function() {
         function initAds() {
@@ -148,6 +150,6 @@
           }, 100);
         }
       })();
-    </script>
+    </script> -->
   </body>
 </html>
