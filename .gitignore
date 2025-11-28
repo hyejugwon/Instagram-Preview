@@ -1,7 +1,5 @@
 .DS_Store
-.DS_Store
 node_modules/
 
-# dist 폴더의 HTML 파일들은 빌드 결과물이므로 제외
-dist/**/*.html
-dist/*.html
+# dist 폴더는 빌드 결과물이므로 제외
+dist/

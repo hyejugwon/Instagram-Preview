@@ -78,7 +78,11 @@
       
       if (!text || text.trim() === '') {
         // 텍스트가 없으면 안내 메시지 표시
-        repeatedWordsContainer.innerHTML = '<div class="empty-message" data-i18n-en="Only morphemes used 6 or more times are displayed" data-i18n-kr="6회 이상 사용된 형태소들만 노출됩니다">6회 이상 사용된 형태소들만 노출됩니다</div>';
+        const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
+        const emptyMessage = currentLang === 'kr' 
+          ? '6회 이상 사용된 형태소들만 노출됩니다'
+          : 'Only morphemes used 6 or more times are displayed';
+        repeatedWordsContainer.innerHTML = `<div class="empty-message" data-i18n-en="Only morphemes used 6 or more times are displayed" data-i18n-kr="6회 이상 사용된 형태소들만 노출됩니다">${emptyMessage}</div>`;
         if (window.refreshLanguage) {
           setTimeout(() => window.refreshLanguage(), 0);
         }
@@ -136,7 +140,11 @@
         });
       
       if (repeatedWords.length === 0) {
-        repeatedWordsContainer.innerHTML = '<div class="empty-message" data-i18n-en="Only morphemes used 6 or more times are displayed" data-i18n-kr="6회 이상 사용된 형태소들만 노출됩니다">6회 이상 사용된 형태소들만 노출됩니다</div>';
+        const currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'en';
+        const emptyMessage = currentLang === 'kr' 
+          ? '6회 이상 사용된 형태소들만 노출됩니다'
+          : 'Only morphemes used 6 or more times are displayed';
+        repeatedWordsContainer.innerHTML = `<div class="empty-message" data-i18n-en="Only morphemes used 6 or more times are displayed" data-i18n-kr="6회 이상 사용된 형태소들만 노출됩니다">${emptyMessage}</div>`;
         if (window.refreshLanguage) {
           setTimeout(() => window.refreshLanguage(), 0);
         }
