@@ -317,28 +317,4 @@ body.lang-kr .section-title {
 
 
 /* Bottom Notice Container */
-.bottom-notice-container {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  border-radius: 8px;
-  border: 1px solid var(--gray-20);
-  margin-top: 40px;
-  padding: 16px;
-}
-
-.bottom-notice-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.notice-title {
-  color: var(--gray-70);
-}
-
-.notice-text {
-  color: var(--gray-60);
-  font-size: 14px;
-  line-height: 20px;
-}
+/* info-section 공통 스타일은 design-system/components/info-section.css에서 관리 */

@@ -113,23 +113,7 @@ body.lang-kr .title.h2--B {
   flex-shrink: 0;
 }
 
-.card--information .infoContentsContainer:first-of-type .info_narrative .card__content-item::before {
-  display: none;
-}
-
-.card--information .infoContentsContainer:first-of-type .info_narrative .card__content-item {
-  padding-left: 0;
-}
-
-.card--information .infoContentsContainer{
-  margin-bottom: 12px;
-}
-
-.card--information .info_title{
-  color: var(--gray-60);
-  margin-bottom: 8px;
-  
-}
+/* info-section 공통 스타일은 design-system/components/info-section.css에서 관리 */
 
 .contentsArea{
   border-left: 1px solid var(--gray-20);

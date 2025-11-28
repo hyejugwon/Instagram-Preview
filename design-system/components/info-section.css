@@ -1,0 +1,84 @@
+/* 공통 정보 섹션 스타일 */
+.info-section-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.info-section-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.info-section-title {
+  color: var(--gray-70);
+  /* margin-bottom: 2px; */
+}
+
+.info-section-text {
+  color: var(--gray-60);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* 땡땡이(bullet) 스타일 */
+.info-section-text.has-bullet {
+  position: relative;
+  padding-left: 20px;
+  list-style: none;
+}
+
+.info-section-text.has-bullet::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 8.5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--gray-50);
+  display: block;
+  flex-shrink: 0;
+}
+
+/* 땡땡이 없는 경우 */
+.info-section-text:not(.has-bullet) {
+  padding-left: 0;
+}
+
+/* 여러 개의 info-section-text가 있을 때 간격 */
+.info-section-item > div:not(.info-section-title) {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.info-section-item > div:not(.info-section-title) > .info-section-text {
+  margin-bottom: 0;
+}
+
+.info-section-item > div:not(.info-section-title) > .info-section-text:not(:last-child) {
+  margin-bottom: 0;
+}
+
+/* card--information 내부 스타일 (서브웨이) */
+.card--information .info-section-container {
+  gap: 12px;
+}
+
+.card--information .info-section-item {
+  margin-bottom: 12px;
+}
+
+.card--information .info-section-item:last-child {
+  margin-bottom: 0;
+}
+
+/* bottom-notice-container 스타일 (글자수 세기) */
+.bottom-notice-container {
+  margin-top: 28px;
+  padding: 24px 16px;
+  background: var(--gray-10);
+}
+
