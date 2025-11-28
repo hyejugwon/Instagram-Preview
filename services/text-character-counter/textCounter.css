@@ -101,11 +101,7 @@ body.lang-kr .title.h2--B {
   transition: height 0.3s ease-in-out;
 }
 
-.top-notice {
-  padding: 16px;
-  background-color: var(--gray-10);
-  color: var(--gray-60);
-}
+/* info-section-notice 공통 스타일은 design-system/components/info-section.css에서 관리 */
 
 /* 모든 브라우저에서 스크롤바 숨김 */
 .contentsArea::-webkit-scrollbar,

@@ -52,10 +52,6 @@
             <div class="card__content">
               <div class="info-section-container">
                 <div class="info-section-item">
-                  <div class="info-section-title h4--M" data-i18n-en="What is a Subway Calorie Calculator?" data-i18n-kr="서브웨이 칼로리 계산기란?">What is a Subway Calorie Calculator?</div>
-                  <div class="info-section-text b1--R" data-i18n-en="Create your own Subway sandwich or salad with your desired combination. We will calculate the total calories consumed based on your selected options." data-i18n-kr="원하는 조합으로 서브웨이 샌드위치 또는 샐러드를 만들어보세요. 선택한 옵션에 따라 총 섭취 칼로리를 계산해드릴게요.">Create your own Subway sandwich or salad with your desired combination. We will calculate the total calories consumed based on your selected options.</div>
-                </div>
-                <div class="info-section-item">
                   <div class="info-section-title h4--M" data-i18n-en="Notes" data-i18n-kr="안내사항">Notes</div>
                   <div>
                     <p class="info-section-text has-bullet kr" data-i18n-en="Referenced from Subway official website, but information may vary depending on the update date." data-i18n-kr="서브웨이 공식 홈페이지를 참고하였으나 업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.">서브웨이 공식 홈페이지를 참고하였으나 업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.</p>

@@ -75,6 +75,13 @@
   margin-bottom: 0;
 }
 
+/* info-section-notice 스타일 (상단 안내 문구) */
+.info-section-notice {
+  padding: 16px;
+  background-color: var(--gray-10);
+  color: var(--gray-60);
+}
+
 /* bottom-notice-container 스타일 (글자수 세기) */
 .bottom-notice-container {
   margin-top: 28px;
