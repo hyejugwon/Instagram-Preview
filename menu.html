@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="hakchips - Menu">
+    <script src="/js/head.js"></script>
+    <title>hakchips - Menu</title>
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/menu.css">
+  </head>  
+
+  <body class="menu-page" style="height: 100dvh; overflow: hidden; display: flex; flex-direction: column;">
+    <div class="app">
+      <div class="menu-modal">
+        <div class="menu-header">
+          <button class="menu-close" onclick="window.history.back()" aria-label="Close menu">
+            <img src="/icons/close.svg" width="26" height="26" alt="Close menu">
+          </button>
+        </div>
+        <div class="menu-content">
+          <section class="stack">
+            <div class="en hello">Hey there, <br> this is <span class="en">hakchips</span> 🍪</div>
+            <p class="en h3--M">Here are some crispy baby codes <br> I cooked up.  <br> 
+              Nothing fancy, but I hope it's tasty!</p>
+          </section>
+    
+          <nav class="stack">
+            <a class="en btn h3--B" href="/services/instagram-feed-preview/" data-i18n-en="Instagram Feed Preview" data-i18n-kr="인스타그램 피드 미리보기">
+              <span>Instagram Feed Preview</span>
+            </a>
+            <a class="en btn h3--B" href="/services/subway-calorie-calculator/" data-i18n-en="Subway Calorie Calculator" data-i18n-kr="서브웨이 칼로리 계산기">
+              <span>Subway Calorie Calculator</span>
+            </a>
+            <a class="en btn h3--B" href="/services/text-character-counter/" data-i18n-en="Text character counter" data-i18n-kr="글자 수 세기">
+              <span>Text character counter</span>
+            </a>
+          </nav>
+
+          <!-- Language Selector -->
+          <div class="footer-section">
+            <div class="language-selector">
+              <span class="language-label h3--B" data-i18n-en="Language" data-i18n-kr="언어">Language</span>
+              <div class="language-buttons">
+                <button class="lang-btn active b2--M" data-lang="en" id="langEn">English</button>
+                <button class="lang-btn b2--M" data-lang="kr" id="langKr">한국어</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script src="/js/common.js"></script>
+    <script src="/js/i18n.js"></script>
+  </body>
+</html>
+
