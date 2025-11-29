@@ -54,9 +54,66 @@
                 <div class="info-section-item">
                   <div class="info-section-title h4--M" data-i18n-en="Notes" data-i18n-kr="안내사항">Notes</div>
                   <div>
-                    <p class="info-section-text has-bullet kr" data-i18n-en="Referenced from Subway official website, but information may vary depending on the update date." data-i18n-kr="서브웨이 공식 홈페이지를 참고하였으나 업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.">서브웨이 공식 홈페이지를 참고하였으나 업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.</p>
-                    <p class="info-section-text has-bullet kr" data-i18n-en="Due to Subway's characteristics, quantities are not always the same, so there may be differences from the calories provided." data-i18n-kr="서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.">서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.</p>
-                    <p class="info-section-text has-bullet kr" data-i18n-en="For main ingredients, Korean Subway was referenced. For other information not disclosed in Korean ingredient labels, Australian ingredient labels were referenced." data-i18n-kr="메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.">메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.</p>
+                    <p 
+                      class="info-section-text has-bullet kr" 
+                      data-i18n-en="Referenced from Subway official website, but information may vary depending on the update date." 
+                      data-i18n-kr="서브웨이 공식 홈페이지를 참고하였으나 업데이트 날짜에 따라 정보가 차이가 있을 수 있습니다.">
+                    </p>
+                    <p 
+                      class="info-section-text has-bullet kr" 
+                      data-i18n-en="Due to Subway's characteristics, quantities are not always the same, so there may be differences from the calories provided." 
+                      data-i18n-kr="서브웨이 특성상 정량이 항상 동일하지 않기 때문에, 안내된 칼로리와 차이가 있을 수 있습니다.">
+                    </p>
+                    <p 
+                      class="info-section-text has-bullet kr" 
+                      data-i18n-en="For main ingredients, Korean Subway was referenced. For other information not disclosed in Korean ingredient labels, Australian ingredient labels were referenced." 
+                      data-i18n-kr="메인 재료의 경우 한국 서브웨이, 그 외 한국 성분표에 공개되지 않은 정보의 경우 호주 성분표를 참고하였습니다.">
+                    </p>
+                  </div>
+                </div>
+                <div class="info-section-item">
+                  <div class="info-section-title h4--M" data-i18n-en="Daily Recommended Intake" data-i18n-kr="일일 권장량">Notes</div>
+                  <div>
+                    <p 
+                      class="info-section-text has-bullet kr" 
+                      data-i18n-en="Daily calorie intake: Adult men 2,500kcal / Adult women 2,000kcal" 
+                      data-i18n-kr="총 하루 섭취 칼로리: 성인 남성 2,500kcal / 성인 여성 2,000kcal">
+                    </p>
+                    <p 
+                      class="info-section-text has-bullet kr" 
+                      data-i18n-en="Sodium: Daily limit for men 2,300mg or less / Women 1,600mg or less (varies by height and weight)" 
+                      data-i18n-kr="나트륨: 1일 기준 남성 2,300mg 이하 / 여성 1,600mg 이하(키, 몸무게에 따라 상이)">
+                    </p>
+                    <p 
+                      class="info-section-text has-bullet kr" 
+                      data-i18n-en="Protein: Recommended 0.8g per 1kg of body weight / Up to 2g per kg recommended for muscle growth" 
+                      data-i18n-kr="단백질: 체중 1kg당 0.8g 권장 / 근육 성장을 위해서는 최대 2kg까지 권장">
+                    </p>
+                  </div>
+                </div>
+                <div class="info-section-item">
+                  <div class="info-section-title h4--M" data-i18n-en="Tips for Healthy Diet" data-i18n-kr="건강한 다이어트를 위한 조언">Notes</div>
+                  <div>
+                    <p 
+                      class="info-section-text has-bullet kr" 
+                      data-i18n-en="Additional menu items like cookies and soup are high in sugar and fat, so be cautious about consumption for a healthy diet." 
+                      data-i18n-kr="쿠키, 수프 등 추가 메뉴는 당과 지방 성분이 높으니 건강한 다이어트를 위해 섭취에 주의하세요.">
+                    </p>
+                    <p 
+                      class="info-section-text has-bullet kr" 
+                      data-i18n-en="Cheese is high in fat, so be cautious about consumption for a healthy diet." 
+                      data-i18n-kr="치즈는 지방 성분이 높으니 건강한 다이어트를 위해 섭취에 주의하세요.">
+                    </p>
+                    <p 
+                      class="info-section-text has-bullet kr" 
+                      data-i18n-en="It is recommended to choose whole grain breads like wheat and oat honey." 
+                      data-i18n-kr="빵은 위트, 오트 허니 등 통곡물을 선택하는 것을 추천합니다.">
+                    </p>
+                    <p 
+                      class="info-section-text has-bullet kr" 
+                      data-i18n-en="It is recommended to add plenty of vegetable toppings and choose sauces with low fat content such as olive oil and red wine vinegar." 
+                      data-i18n-kr="야채 토핑을 풍부하게 추가하고, 소스는 올리브 오일, 레드 와인 식초 등 지방 성분이 낮은 소스를 선택하는 것을 추천합니다.">
+                    </p>
                   </div>
                 </div>
               </div>
